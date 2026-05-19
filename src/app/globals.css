@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --color-accent: #00feff;
+  --color-surface: #09090b;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-zinc-950 text-zinc-100 antialiased font-sans;
+    background-color: var(--color-surface);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    color: #020617;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-[#00feff];
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility text-gradient-accent {
+  background: linear-gradient(120deg, #00feff 0%, #67f8ff 45%, #a5f3fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility mesh-bg {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, color-mix(in oklab, #00feff 22%, transparent), transparent 55%),
+    radial-gradient(900px 500px at 85% 10%, color-mix(in oklab, #6366f1 18%, transparent), transparent 50%),
+    radial-gradient(700px 400px at 50% 100%, color-mix(in oklab, #00feff 12%, transparent), transparent 45%),
+    #050507;
+}

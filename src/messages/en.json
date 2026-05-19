@@ -1,0 +1,117 @@
+{
+  "a11y": { "skip": "Skip to content" },
+  "nav": {
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "approach": "Approach",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "caseStudies": "Cases",
+    "menu": "Menu"
+  },
+  "hero": {
+    "kicker": "Senior Product Designer — Bogotá / remote",
+    "line1": "I design digital products",
+    "line2": "with intent, systems, and business sense.",
+    "lead": "UX/UI, cross-functional leadership, and technical execution—from strategy to pixels, without losing sight of metrics.",
+    "ctaCv": "View résumé",
+    "ctaProjects": "View projects",
+    "scroll": "Scroll",
+    "roles": "Product · UX/UI · Design Lead · AI-assisted",
+    "statYearsLabel": "Years in product",
+    "statYearsValue": "6+",
+    "statSectorsLabel": "Sectors",
+    "statSectorsValue": "Fintech · Health · PropTech",
+    "statCraftLabel": "Craft",
+    "statCraftValue": "Design system · Front-end",
+    "clients": "Compensar · Scotiabank Colpatria · ADL Digital Lab"
+  },
+  "about": {
+    "kicker": "About",
+    "title": "The problem matters more than the interface.",
+    "body": "I’ve spent 6+ years designing digital products—and what interests me most isn’t the interface, but the problem behind it.\n\nI’ve worked at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach connects product vision, multidisciplinary leadership, and technical execution—including design systems and front-end development.\n\nI understand technical constraints, speak the language of business, and make UX decisions oriented to metrics, experience, and product growth.",
+    "location": "Bogotá, Colombia",
+    "languages": "Native Spanish · English B1 (actively improving)",
+    "locationLabel": "Location"
+  },
+  "experience": {
+    "kicker": "Experience",
+    "title": "Impact on critical, regulated products.",
+    "subtitle": "A path where design is measured by clarity, trust, and team velocity."
+  },
+  "projects": {
+    "kicker": "Featured work",
+    "title": "A curated selection of recent projects.",
+    "subtitle": "Three pieces with deeper narrative and visual exploration—ready for recruiter and product-team review.",
+    "moreTitle": "More work",
+    "moreHeadline": "Other projects",
+    "moreSubtitle": "Additional explorations across health, property, and education.",
+    "viewCase": "View case study",
+    "viewAll": "View all case studies"
+  },
+  "approach": {
+    "kicker": "Approach",
+    "title": "Design as a decision system.",
+    "body": "I work with clear hypotheses, evidence, and shared success criteria. I build visual and interaction systems that enable fast iteration without sacrificing accessibility or consistency.\n\nI integrate AI as an accelerator—not a replacement—for research, variants, documentation, and visual QA, always with human review and product judgment.\n\nMy leadership shows up as less rework: early alignment with business and engineering, crisp handoff, and narrative that sells the decision—not just the screen.",
+    "pill1": "Strategy & prioritization",
+    "pill2": "Evidence-led UX",
+    "pill3": "Systems & scale",
+    "pill4": "AI-assisted workflows"
+  },
+  "testimonials": {
+    "kicker": "Testimonials",
+    "title": "What senior teams look for.",
+    "subtitle": "Temporary references while public cases are formalized—realistic tone and verification in progress."
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title": "Let’s talk product, UX, or design leadership.",
+    "subtitle": "Available for remote/international roles and premium freelance collaborations.",
+    "emailCta": "Email me",
+    "whatsappCta": "WhatsApp",
+    "linkedinCta": "LinkedIn",
+    "behanceCta": "Behance",
+    "footnote": "Typical reply within 24–48 business hours."
+  },
+  "footer": {
+    "title": "Cristian Hincapié",
+    "subtitle": "Senior Product Designer · UX/UI · Design Lead · AI-assisted workflows.",
+    "rights": "Built with intent—Next.js + motion + accessibility."
+  },
+  "caseStudy": {
+    "context": "Context",
+    "problem": "Problem",
+    "goals": "Goals",
+    "research": "Research",
+    "uxProcess": "UX process",
+    "wireframes": "Wireframes",
+    "uiExploration": "UI exploration",
+    "designSystem": "Design system",
+    "decisions": "Decisions",
+    "results": "Results",
+    "metrics": "Metrics",
+    "learnings": "Learnings",
+    "tools": "Tools",
+    "techStack": "Tech stack",
+    "gallery": "Gallery",
+    "links": "Links",
+    "openFigma": "Open in Figma",
+    "openPrototype": "View prototype",
+    "noLinks": "Figma/prototype links: add them in src/content/projects.ts",
+    "back": "Back to home",
+    "galleryNote": "Replace these frames with exported screens or WebP assets in a future iteration."
+  },
+  "projectsPage": {
+    "kicker": "Case studies",
+    "title": "Project index.",
+    "subtitle": "Each case includes narrative, decisions, and deliverables—optimized for fast recruiter review.",
+    "featured": "Featured",
+    "all": "All"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This route does not exist or has been moved.",
+    "cta": "Back to home"
+  }
+}
