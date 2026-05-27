@@ -21,7 +21,7 @@ export default async function ProjectsIndexPage() {
             {featured.map((project) => (
               <Link
                 key={project.slug}
-                href={`/projects/${project.slug}`}
+                href={`/${locale}/projects/${project.slug}`}
                 className="rounded-3xl border border-white/10 bg-zinc-950/60 p-5 transition hover:border-[#00feff]/50"
               >
                 <p className="text-xs text-zinc-500">{pickLocale(locale, project.company)}</p>
@@ -38,7 +38,7 @@ export default async function ProjectsIndexPage() {
             {rest.map((project) => (
               <Link
                 key={project.slug}
-                href={`/projects/${project.slug}`}
+                href={`/${locale}/projects/${project.slug}`}
                 className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-[#00feff]/40"
               >
                 <p className="text-xs text-zinc-500">{pickLocale(locale, project.company)}</p>

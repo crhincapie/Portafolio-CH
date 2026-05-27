@@ -2,6 +2,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { testimonials } from "@/content/testimonials";
 import { pickLocale } from "@/content/i18n";
+import { Reveal, StaggerReveal } from "@/components/ui/Reveal";
+import { AnimatedItem } from "@/components/ui/AnimatedItem";
 
 export async function TestimonialsSection() {
   const t = await getTranslations("testimonials");
@@ -10,12 +12,14 @@ export async function TestimonialsSection() {
   return (
     <section id="testimonios" className="scroll-mt-28 border-b border-white/5 py-20 md:py-28">
       <div className="mx-auto max-w-6xl space-y-12 px-4 md:px-6">
-        <SectionHeading kicker={t("kicker")} title={t("title")} description={t("subtitle")} />
+        <Reveal>
+          <SectionHeading kicker={t("kicker")} title={t("title")} description={t("subtitle")} />
+        </Reveal>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <StaggerReveal className="grid gap-6 md:grid-cols-2">
           {testimonials.map((item) => (
-            <figure
-              key={item.name}
+            <AnimatedItem
+              as="figure"
               className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-zinc-950/60 p-6"
             >
               <blockquote className="text-pretty text-base leading-relaxed text-zinc-200">
@@ -27,9 +31,9 @@ export async function TestimonialsSection() {
                   {pickLocale(locale, item.role)} · {item.company}
                 </p>
               </figcaption>
-            </figure>
+            </AnimatedItem>
           ))}
-        </div>
+        </StaggerReveal>
       </div>
     </section>
   );
