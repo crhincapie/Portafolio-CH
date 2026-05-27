@@ -98,7 +98,7 @@ export function ProjectCardClient({ project, children, featured = false }: Proje
     } else if (caseButton && featured) {
       setIsFlipped(!isFlipped);
     } else if (detailsButton) {
-      router.push(`/projects/${project.slug}`);
+      router.push(`/${locale}/projects/${project.slug}`);
     }
   };
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
@@ -70,8 +71,15 @@ export async function CaseStudyView({ slug }: Props) {
           </Link>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-zinc-950 to-zinc-950 shadow-[0_0_80px_rgba(0,254,255,0.12)]">
-          <div className="aspect-[21/9] w-full bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)]" />
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_0_80px_rgba(0,254,255,0.12)]">
+          <Image
+            src={`/images/projects/${project.slug}/home.png`}
+            alt={pickLocale(locale, project.title)}
+            width={1600}
+            height={900}
+            className="aspect-[21/9] w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80" />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
         </div>
 
@@ -103,12 +111,18 @@ export async function CaseStudyView({ slug }: Props) {
             <section className="space-y-4">
               <h2 className="text-sm font-semibold uppercase tracking-[0.25em] text-zinc-500">{t("gallery")}</h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                {Array.from({ length: 4 }).map((_, i) => (
+                {project.gallery?.map((src, i) => (
                   <div
                     key={i}
-                    className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-950"
+                    className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
                   >
-                    <div className="h-full w-full bg-[radial-gradient(circle_at_30%_0%,rgba(0,254,255,0.25),transparent_55%)]" />
+                    <Image
+                      src={src}
+                      alt={`${pickLocale(locale, project.title)} screenshot ${i + 1}`}
+                      width={800}
+                      height={600}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                 ))}
               </div>
