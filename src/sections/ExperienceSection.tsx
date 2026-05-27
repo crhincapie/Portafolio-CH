@@ -19,6 +19,7 @@ export async function ExperienceSection() {
         <StaggerReveal className="grid gap-6 md:grid-cols-3">
           {experienceItems.map((job) => (
             <AnimatedItem
+              key={job.company.es}
               as="article"
               className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-zinc-950 p-6 transition hover:border-[#00feff]/40"
             >

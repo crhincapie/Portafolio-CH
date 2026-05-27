@@ -29,7 +29,7 @@ export async function ProjectsSection() {
 
         <StaggerReveal className="grid gap-6 lg:grid-cols-3">
           {featured.map((project) => (
-            <AnimatedItem as="div">
+            <AnimatedItem key={project.slug} as="div">
               <ProjectCard project={project} locale={locale} t={t} featured={true} />
             </AnimatedItem>
           ))}
@@ -47,7 +47,7 @@ export async function ProjectsSection() {
         </Reveal>
         <StaggerReveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {others.map((project) => (
-            <AnimatedItem as="div">
+            <AnimatedItem key={project.slug} as="div">
               <ProjectCard project={project} locale={locale} t={t} featured={false} />
             </AnimatedItem>
           ))}

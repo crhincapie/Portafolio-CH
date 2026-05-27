@@ -19,6 +19,7 @@ export async function TestimonialsSection() {
         <StaggerReveal className="grid gap-6 md:grid-cols-2">
           {testimonials.map((item) => (
             <AnimatedItem
+              key={item.name}
               as="figure"
               className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-zinc-950/60 p-6"
             >
