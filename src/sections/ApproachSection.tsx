@@ -27,6 +27,7 @@ export async function ApproachSection() {
           <StaggerReveal className="grid gap-3 sm:grid-cols-2" staggerDelay={0.06}>
             {pills.map((pill) => (
               <AnimatedItem
+                key={pill}
                 as="li"
                 className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-zinc-950 px-4 py-4 text-sm font-medium text-white"
               >
