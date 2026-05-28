@@ -18,8 +18,8 @@
 
 Antes de comenzar, asegúrate de tener:
 
-- ✅ Cuenta en [GitHub](https://github.com) con el repositorio del proyecto
-- ✅ El repositorio debe ser público o privado con acceso adecuado
+- ✅ Cuenta en [GitHub](https://github.com) con el repositorio del proyectoo
+- ✅ El repositorio debe ser público o privado con acceso adecuadoo
 - ✅ El código debe estar actualizado en la rama principal (main o master)
 - ✅ El proyecto debe tener el archivo `package.json` configurado correctamente
 
