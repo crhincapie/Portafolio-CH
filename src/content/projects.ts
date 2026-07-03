@@ -236,6 +236,12 @@ export const PROJECTS: Project[] = [
     tags: ["UX", "UI", "Design system", "Health"],
     figmaUrl: null,
     prototypeUrl: "https://embed.figma.com/proto/0DrKFvC908Swabcxxdmnvz/BalanC-Funcional?node-id=12931-16913&scaling=scale-down-width&content-scaling=fixed&page-id=1%3A13&starting-point-node-id=12931%3A16913&embed-host=share",
+    gallery: [
+      "/images/projects/balanc-funcional/home.png",
+      "/images/projects/balanc-funcional/programa.png",
+      "/images/projects/balanc-funcional/cita.png",
+      "/images/projects/balanc-funcional/dashboard.png",
+    ],
     caseStudy: featuredBalanc,
   },
   {
@@ -251,7 +257,13 @@ export const PROJECTS: Project[] = [
     },
     tags: ["Editorial", "UX writing", "Web"],
     figmaUrl: null,
-    prototypeUrl: null,
+    prototypeUrl: "https://embed.figma.com/proto/eqRQy3rA4X0neJvazufTIB/Turismo-sostenible?node-id=2017-4742&p=f&viewport=892%2C491%2C0.06&t=ge0IH3JBQMqsOolV-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2017%3A4742&show-proto-sidebar=1&page-id=1%3A13&embed-host=share",
+    gallery: [
+      "/images/projects/turismo-sostenible/home.png",
+      "/images/projects/turismo-sostenible/programa.png",
+      "/images/projects/turismo-sostenible/cita.png",
+      "/images/projects/turismo-sostenible/dashboard.png",
+    ],
     caseStudy: featuredTurismo,
   },
   {
@@ -268,6 +280,12 @@ export const PROJECTS: Project[] = [
     tags: ["Fintech", "Service design", "Accessibility"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/agrocash/home.png",
+      "/images/projects/agrocash/programa.png",
+      "/images/projects/agrocash/cita.png",
+      "/images/projects/agrocash/dashboard.png",
+    ],
     caseStudy: featuredAgro,
   },
   {
@@ -284,6 +302,12 @@ export const PROJECTS: Project[] = [
     tags: ["Health", "UX"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/bienestar-a-la-carta/home.png",
+      "/images/projects/bienestar-a-la-carta/programa.png",
+      "/images/projects/bienestar-a-la-carta/cita.png",
+      "/images/projects/bienestar-a-la-carta/dashboard.png",
+    ],
     caseStudy: brief(
       "Bienestar a la Carta",
       "Bienestar a la Carta",
@@ -305,6 +329,12 @@ export const PROJECTS: Project[] = [
     tags: ["PropTech", "UI"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/hola-vivienda/home.png",
+      "/images/projects/hola-vivienda/programa.png",
+      "/images/projects/hola-vivienda/cita.png",
+      "/images/projects/hola-vivienda/dashboard.png",
+    ],
     caseStudy: brief(
       "Hola Vivienda",
       "Hola Vivienda",
@@ -326,6 +356,12 @@ export const PROJECTS: Project[] = [
     tags: ["UX", "Storytelling"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/un-asunto-de-dos/home.png",
+      "/images/projects/un-asunto-de-dos/programa.png",
+      "/images/projects/un-asunto-de-dos/cita.png",
+      "/images/projects/un-asunto-de-dos/dashboard.png",
+    ],
     caseStudy: brief(
       "Un asunto de dos",
       "Un asunto de dos",
@@ -347,6 +383,12 @@ export const PROJECTS: Project[] = [
     tags: ["UX", "Data viz"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/avaluador-playground/home.png",
+      "/images/projects/avaluador-playground/programa.png",
+      "/images/projects/avaluador-playground/cita.png",
+      "/images/projects/avaluador-playground/dashboard.png",
+    ],
     caseStudy: brief(
       "Avaluador Playground",
       "Avaluador Playground",
@@ -368,6 +410,12 @@ export const PROJECTS: Project[] = [
     tags: ["EdTech", "Enterprise"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/davivienda-e-learning/home.png",
+      "/images/projects/davivienda-e-learning/programa.png",
+      "/images/projects/davivienda-e-learning/cita.png",
+      "/images/projects/davivienda-e-learning/dashboard.png",
+    ],
     caseStudy: brief(
       "E-learning corporativo",
       "Corporate e-learning",
@@ -389,6 +437,12 @@ export const PROJECTS: Project[] = [
     tags: ["Forms", "PropTech"],
     figmaUrl: null,
     prototypeUrl: null,
+    gallery: [
+      "/images/projects/publicacion-inmueble/home.png",
+      "/images/projects/publicacion-inmueble/programa.png",
+      "/images/projects/publicacion-inmueble/cita.png",
+      "/images/projects/publicacion-inmueble/dashboard.png",
+    ],
     caseStudy: brief(
       "Publicación de Inmueble",
       "Property publishing",

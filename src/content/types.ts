@@ -30,5 +30,6 @@ export type Project = {
   tags: string[];
   figmaUrl?: string | null;
   prototypeUrl?: string | null;
+  gallery?: string[];
   caseStudy: CaseStudyContent;
 };

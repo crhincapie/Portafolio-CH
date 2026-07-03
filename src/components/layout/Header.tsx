@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations, useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -16,7 +18,6 @@ const NAV = [
 
 export function Header() {
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -32,7 +33,12 @@ export function Header() {
     setOpen(false);
   }, [pathname]);
 
-  const otherLocale = locale === "es" ? "en" : "es";
+  const segments = pathname.split("/").filter(Boolean);
+  const hasLocale = (routing.locales as readonly string[]).includes(segments[0] ?? "");
+  const currentLocale = hasLocale ? segments[0] : routing.defaultLocale;
+  const otherLocale = currentLocale === "es" ? "en" : "es";
+  const basePath = hasLocale ? "/" + segments.slice(1).join("/") : pathname;
+  const otherHref = `/${otherLocale}${basePath}`;
 
   return (
     <header
@@ -62,14 +68,13 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href={pathname}
-            locale={otherLocale}
+          <a
+            href={otherHref}
             className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium uppercase tracking-widest text-zinc-300 transition hover:border-[#00feff]/50 hover:text-white"
             hrefLang={otherLocale}
           >
             {otherLocale}
-          </Link>
+          </a>
 
           <button
             type="button"
