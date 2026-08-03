@@ -388,13 +388,15 @@ function ProcessVisual() {
   const cx = 200, cy = 200, circleR = 175, nodeR = 175;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-      className="flex w-full items-center justify-center"
-    >
+    <>
+      <style>{`@media(max-width:767px){.pv-node{left:calc(var(--pv-x)/480*100%)!important;top:calc(var(--pv-y)/480*100%)!important}}`}</style>
       <motion.div
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+        className="flex w-full items-center justify-center"
+      >
+        <motion.div
         className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -448,14 +450,14 @@ function ProcessVisual() {
           const y = cy + nodeR * Math.sin(a);
           return (
             <motion.div key={p.label}
-              className="absolute z-10 flex flex-col items-center"
-              style={{ left: x, top: y, transform: "translate(-50%, -50%)" }}
+              className="pv-node absolute z-10 flex flex-col items-center"
+              style={{ ...{ '--pv-x': x, '--pv-y': y } as React.CSSProperties, left: x, top: y, transform: "translate(-50%, -50%)" }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.35 }}
             >
               <motion.div
-                className="flex h-20 w-20 items-center justify-center rounded-[24px] border md:h-24 md:w-24"
+                className="flex h-[60px] w-[60px] items-center justify-center rounded-[18px] border md:h-24 md:w-24"
                 style={{
                   backgroundColor: `${p.color}14`,
                   borderColor: `${p.color}30`,
@@ -463,12 +465,12 @@ function ProcessVisual() {
                 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="text-xl font-bold md:text-2xl" style={{ color: p.color }}>
+                <span className="text-lg font-bold md:text-2xl" style={{ color: p.color }}>
                   {"0" + (i + 1)}
                 </span>
               </motion.div>
               <motion.span
-                className="mt-1.5 text-[11px] font-semibold uppercase tracking-wider md:text-sm"
+                className="mt-1.5 text-xs font-semibold uppercase tracking-wider md:mt-1.5 md:text-sm"
                 style={{ color: p.color }}
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 3 + i * 0.5, repeat: Infinity }}
@@ -476,7 +478,7 @@ function ProcessVisual() {
                 {p.label}
               </motion.span>
               <motion.span
-                className="text-[9px] text-zinc-500 md:text-[10px]"
+                className="text-[10px] text-zinc-500 md:text-[10px]"
                 animate={{ opacity: [0.5, 0.9, 0.5] }}
                 transition={{ duration: 2.5 + i * 0.3, repeat: Infinity }}
               >
@@ -487,6 +489,7 @@ function ProcessVisual() {
         })}
       </motion.div>
     </motion.div>
+    </>
   );
 }
 
@@ -504,17 +507,19 @@ function ServiceDesignVisual() {
   const cx = 200, cy = 200, circleR = 175, nodeR = 175;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-      className="flex w-full items-center justify-center"
-    >
+    <>
+      <style>{`@media(max-width:767px){.sv-node{left:calc(var(--sv-x)/480*100%)!important;top:calc(var(--sv-y)/480*100%)!important}}`}</style>
       <motion.div
-        className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+        className="flex w-full items-center justify-center"
       >
+        <motion.div
+          className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
         {/* SVG layers — viewBox 400 for 20% visual gain */}
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400">
           {/* Outer bounding circle */}
@@ -564,8 +569,8 @@ function ServiceDesignVisual() {
           const y = cy + nodeR * Math.sin(a);
           return (
             <motion.div key={p.label}
-              className="absolute z-10 flex flex-col items-center"
-              style={{ left: x, top: y, transform: "translate(-50%, -50%)" }}
+              className="sv-node absolute z-10 flex flex-col items-center"
+              style={{ ...{ '--sv-x': x, '--sv-y': y } as React.CSSProperties, left: x, top: y, transform: "translate(-50%, -50%)" }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.15 + i * 0.07, duration: 0.35 }}
@@ -616,6 +621,7 @@ function ServiceDesignVisual() {
         </motion.div>
       </motion.div>
     </motion.div>
+    </>
   );
 }
 
@@ -657,10 +663,11 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
 
       {logos.map((logo) => <FloatingLogo key={logo.label} logo={logo} />)}
 
-      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col px-4 md:px-6">
+      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col px-4 pb-20 md:px-6 md:pb-0">
+        {/* Mobile layout uses flex-col with visual flex-1 for consistent centering; desktop uses 3-col grid */}
         <div className="flex flex-1 flex-col items-center justify-center gap-6 md:grid md:grid-cols-[1fr_1.3fr_1fr] md:gap-6 lg:gap-10">
           {/* Left: Title */}
-          <motion.div className="w-full text-left md:text-right" variants={line1} initial="hidden" animate="visible">
+          <motion.div className="w-full pt-10 text-left md:pt-0 md:text-right" variants={line1} initial="hidden" animate="visible">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 md:text-[11px]">
               {slide.subtitle}
             </p>
@@ -672,48 +679,64 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           </motion.div>
 
           {/* Center: Hero visual */}
-          <motion.div className="flex w-full items-center justify-center" variants={line2} initial="hidden" animate="visible">
-            {slide.heroType === "profile" ? (
-              <div className="relative flex items-center justify-center">
-                <div className="absolute h-[700px] w-[700px] rounded-full blur-3xl" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
-                <div className="absolute h-[520px] w-[520px] rounded-full border border-[#00feff]/10" />
-                <motion.div className="absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
-                <motion.div className="absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 md:h-3 md:w-3"
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
-                  transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
-                />
-                <motion.div className="absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 md:h-2 md:w-2"
-                  animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.7, 0.4] }}
-                  transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
-                />
-                <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-                  <Image src="/images/hero/profile-cutout.png" alt="Cristian Hincapié" width={400} height={500} priority
-                    className="relative h-auto w-[300px] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px]" />
-                </motion.div>
-              </div>
-            ) : slide.heroType === "uxui" ? <UXUIVisual />
-            : slide.heroType === "process" ? <ProcessVisual />
-            : <ServiceDesignVisual />}
-          </motion.div>
+          <div className="flex w-full flex-1 items-center justify-center md:flex-none">
+            <motion.div variants={line2} initial="hidden" animate="visible" className="pb-20 md:pb-0">
+              {slide.heroType === "profile" ? (
+                <div className="relative flex items-center justify-center">
+                  <div className="absolute h-[700px] w-[700px] rounded-full blur-3xl" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
+                  <div className="absolute h-[520px] w-[520px] rounded-full border border-[#00feff]/10" />
+                  <motion.div className="absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                  <motion.div className="absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 md:h-3 md:w-3"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
+                    transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
+                  />
+                  <motion.div className="absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 md:h-2 md:w-2"
+                    animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.7, 0.4] }}
+                    transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
+                  />
+                  <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
+                    <Image src="/images/hero/profile-cutout.png" alt="Cristian Hincapié" width={400} height={500} priority
+                      className="relative h-auto w-[300px] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px]" />
+                  </motion.div>
+                  {slide.id === "product-designer" && (
+                    <div className="absolute left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 md:hidden" style={{ top: "calc(100% - 70px)" }}>
+                      <button onClick={onOpenCV}
+                        className="inline-flex items-center justify-center rounded-full bg-[#00feff] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition duration-200 hover:bg-[#7afcff] hover:shadow-lg active:scale-95">
+                        {t("ctaCv")}
+                      </button>
+                      <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
+                      <p className="max-w-[180px] text-center text-[10px] font-medium uppercase leading-relaxed tracking-[0.28em] text-zinc-600">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
+                    </div>
+                  )}
+                </div>
+              ) : slide.heroType === "uxui" ? <UXUIVisual />
+              : slide.heroType === "process" ? <ProcessVisual />
+              : <ServiceDesignVisual />}
+            </motion.div>
+          </div>
 
           {/* Right: Description */}
           <motion.div className="flex w-full flex-col gap-5" variants={line2} initial="hidden" animate="visible">
             <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{slide.desc}</p>
             {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3 md:justify-start">
               {slide.id === "product-designer" && (
                 <button onClick={onOpenCV}
-                  className="inline-flex items-center justify-center rounded-full bg-[#00feff] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition duration-200 hover:bg-[#7afcff] hover:shadow-lg active:scale-95">
+                  className="hidden rounded-full bg-[#00feff] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition duration-200 hover:bg-[#7afcff] hover:shadow-lg active:scale-95 md:inline-flex">
                   {t("ctaCv")}
                 </button>
               )}
-              <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
+              {slide.id === "product-designer" ? (
+                <Button href="#proyectos" variant="outline" className="hidden md:inline-flex">{t("ctaProjects")}</Button>
+              ) : (
+                <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
+              )}
             </div>
             {slide.id === "product-designer" && (
-              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
+              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 md:block">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
             )}
           </motion.div>
         </div>
@@ -757,7 +780,7 @@ export function Hero() {
       </div>
 
       {/* ── Floating stat cards ── */}
-      <div className="absolute bottom-16 right-4 z-30 flex gap-1.5 md:bottom-20 md:right-8">
+      <div className="absolute bottom-[88px] right-4 z-30 flex gap-1.5 md:bottom-20 md:right-8">
         {[
           { val: t("statYearsValue"), label: t("statYearsLabel") },
           { val: t("statSectorsValue"), label: t("statSectorsLabel") },

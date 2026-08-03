@@ -14,17 +14,25 @@ export function ProjectCard({ project, locale, t, featured = false }: ProjectCar
   return (
     <ProjectCardClient project={project} featured={featured}>
       <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition hover:border-[#00feff]/50">
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-950 to-black">
+        <div className="relative h-48 overflow-hidden rounded-t-3xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950">
           <Image
             src={`/images/projects/${project.slug}.png`}
             alt={pickLocale(locale, project.title)}
             fill
-            className="object-cover opacity-70"
+            className="object-cover object-top opacity-75"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80 transition group-hover:opacity-100" />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
-          <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-zinc-950/70 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-zinc-300">
+
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex h-7 items-center gap-1.5 bg-zinc-800/80 px-3 backdrop-blur-sm">
+            <span className="h-2 w-2 rounded-full bg-red-500/80" />
+            <span className="h-2 w-2 rounded-full bg-yellow-500/80" />
+            <span className="h-2 w-2 rounded-full bg-green-500/80" />
+            <span className="ml-2 h-3 flex-1 max-w-[40%] rounded bg-zinc-700/50" />
+          </div>
+
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80 transition group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+          <div className="absolute left-5 top-9 inline-flex items-center gap-2 rounded-full border border-white/10 bg-zinc-950/70 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-zinc-300">
             {project.year}
           </div>
         </div>

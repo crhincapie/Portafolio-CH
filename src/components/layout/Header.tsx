@@ -57,10 +57,10 @@ export function Header() {
 
         <nav className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
           {NAV.map((item) => (
-            <a key={item.id} href={`#${item.id}`} className="relative transition hover:text-white">
+            <Link key={item.id} href={`/#${item.id}`} className="relative transition hover:text-white">
               <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#00feff] transition-all duration-300 hover:w-full" />
               {t(item.key)}
-            </a>
+            </Link>
           ))}
           <Link href="/projects" className="text-zinc-500 transition hover:text-white">
             {t("caseStudies")}
@@ -102,9 +102,9 @@ export function Header() {
       >
         <div className="flex flex-col gap-3 text-sm text-zinc-300">
           {NAV.map((item) => (
-            <a key={item.id} className="py-1" href={`#${item.id}`}>
+            <Link key={item.id} className="py-1" href={`/#${item.id}`}>
               {t(item.key)}
-            </a>
+            </Link>
           ))}
           <Link href="/projects" className="py-1">
             {t("caseStudies")}
