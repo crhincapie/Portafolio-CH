@@ -30,6 +30,7 @@ export type Project = {
   tags: string[];
   figmaUrl?: string | null;
   prototypeUrl?: string | null;
+  heroImage?: string;
   gallery?: string[];
   caseStudy: CaseStudyContent;
 };

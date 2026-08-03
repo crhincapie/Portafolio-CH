@@ -20,7 +20,7 @@
     "scroll": "Scroll",
     "roles": "Product · UX/UI · Design Lead · AI-assisted",
     "statYearsLabel": "Years in product",
-    "statYearsValue": "6+",
+    "statYearsValue": "10+",
     "statSectorsLabel": "Sectors",
     "statSectorsValue": "Fintech · Health · PropTech",
     "statCraftLabel": "Craft",
@@ -30,7 +30,7 @@
   "about": {
     "kicker": "About",
     "title": "The problem matters more than the interface.",
-    "body": "I’ve spent 6+ years designing digital products—and what interests me most isn’t the interface, but the problem behind it.\n\nI’ve worked at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach connects product vision, multidisciplinary leadership, and technical execution—including design systems and front-end development.\n\nI understand technical constraints, speak the language of business, and make UX decisions oriented to metrics, experience, and product growth.",
+    "body": "I’ve spent 10+ years designing digital products—and what interests me most isn’t the interface, but the problem behind it.\n\nI’ve worked at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach connects product vision, multidisciplinary leadership, and technical execution—including design systems and front-end development.\n\nI understand technical constraints, speak the language of business, and make UX decisions oriented to metrics, experience, and product growth.",
     "location": "Bogotá, Colombia",
     "languages": "Native Spanish · English B1 (actively improving)",
     "locationLabel": "Location"
@@ -72,6 +72,7 @@
     "whatsappCta": "WhatsApp",
     "linkedinCta": "LinkedIn",
     "behanceCta": "Behance",
+    "availability": "Available for new projects",
     "footnote": "Typical reply within 24–48 business hours."
   },
   "footer": {
