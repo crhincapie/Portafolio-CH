@@ -81,7 +81,7 @@ export async function CaseStudyView({ slug }: Props) {
             className={
               project.heroImage
                 ? "aspect-video w-full object-contain"
-                : "aspect-[21/9] w-full object-cover"
+                : "aspect-[21/9] w-full object-cover object-top"
             }
           />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80" />
@@ -118,6 +118,7 @@ export async function CaseStudyView({ slug }: Props) {
               <GalleryCarousel
                 images={project.gallery ?? []}
                 title={pickLocale(locale, project.title)}
+                variant={project.galleryVariant}
               />
               <p className="text-xs text-zinc-500">{t("galleryNote")}</p>
             </section>

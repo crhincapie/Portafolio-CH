@@ -32,5 +32,6 @@ export type Project = {
   prototypeUrl?: string | null;
   heroImage?: string;
   gallery?: string[];
+  galleryVariant?: "mobile" | "desktop";
   caseStudy: CaseStudyContent;
 };

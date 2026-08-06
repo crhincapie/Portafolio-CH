@@ -708,7 +708,10 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
                         {t("ctaCv")}
                       </button>
                       <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
-                      <p className="max-w-[180px] text-center text-[10px] font-medium uppercase leading-relaxed tracking-[0.28em] text-zinc-600">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
+                      <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600">
+                        <span className="block whitespace-nowrap">Diseño centrado en el usuario</span>
+                        <span className="block whitespace-nowrap">Producto digital · Experiencia de marca</span>
+                      </p>
                     </div>
                   )}
                 </div>
@@ -719,7 +722,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           </div>
 
           {/* Right: Description */}
-          <motion.div className="flex w-full flex-col gap-5" variants={line2} initial="hidden" animate="visible">
+          <motion.div className="mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
             <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{slide.desc}</p>
             {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
@@ -780,7 +783,7 @@ export function Hero() {
       </div>
 
       {/* ── Floating stat cards ── */}
-      <div className="absolute bottom-[88px] right-4 z-30 flex gap-1.5 md:bottom-20 md:right-8">
+      <div className={`absolute bottom-[88px] right-4 z-30 gap-1.5 md:bottom-20 md:right-8 ${slide === 0 ? "flex" : "hidden md:flex"}`}>
         {[
           { val: t("statYearsValue"), label: t("statYearsLabel") },
           { val: t("statSectorsValue"), label: t("statSectorsLabel") },
