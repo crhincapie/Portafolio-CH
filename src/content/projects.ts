@@ -236,6 +236,7 @@ export const PROJECTS: Project[] = [
     tags: ["UX", "UI", "Design system", "Health"],
     figmaUrl: null,
     prototypeUrl: "https://embed.figma.com/proto/0DrKFvC908Swabcxxdmnvz/BalanC-Funcional?node-id=12931-16913&scaling=scale-down-width&content-scaling=fixed&page-id=1%3A13&starting-point-node-id=12931%3A16913&embed-host=share",
+    galleryVariant: "desktop",
     gallery: [
       "/images/projects/balanc-funcional/home.png",
       "/images/projects/balanc-funcional/programa.png",

@@ -6,32 +6,57 @@ import Image from "next/image";
 interface GalleryCarouselProps {
   images: string[];
   title: string;
+  variant?: "mobile" | "desktop";
 }
 
 const GAP = 40;
+const PHONE_WIDTH = 414;
 
-export function GalleryCarousel({ images, title }: GalleryCarouselProps) {
+export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCarouselProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, left: 0 });
   const [size, setSize] = useState<{ card: number; viewport: number } | null>(null);
 
+  const isDesktop = variant === "desktop";
+
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
+    const mq = window.matchMedia("(max-width: 767px)");
+
     const measure = () => {
       const w = wrapper.clientWidth;
-      const card = (1.4 * 0.8 * (w - 3 * GAP)) / 3.5;
-      setSize({ card, viewport: 3 * card + 2 * GAP });
+      if (isDesktop) {
+        if (mq.matches) {
+          const card = w - GAP;
+          setSize({ card, viewport: w });
+        } else {
+          const card = (w - GAP) / 1.5;
+          setSize({ card, viewport: 1.5 * card + GAP });
+        }
+      } else if (mq.matches) {
+        const card = 0.6 * PHONE_WIDTH;
+        setSize({ card, viewport: Math.min(w, 1.5 * card + GAP) });
+      } else {
+        const card = (1.4 * 0.8 * (w - 3 * GAP)) / 3.5;
+        setSize({ card, viewport: 3 * card + 2 * GAP });
+      }
     };
 
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(wrapper);
-    return () => ro.disconnect();
-  }, []);
+    window.addEventListener("resize", measure);
+    mq.addEventListener("change", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      mq.removeEventListener("change", measure);
+    };
+  }, [isDesktop]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -95,16 +120,20 @@ export function GalleryCarousel({ images, title }: GalleryCarouselProps) {
           {images.map((src, i) => (
             <div
               key={i}
-              className="aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
+              className={
+                isDesktop
+                  ? "aspect-square flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
+                  : "aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
+              }
               style={size ? { width: `${size.card}px` } : undefined}
             >
               <Image
                 src={src}
                 alt={`${title} screenshot ${i + 1}`}
-                width={414}
-                height={900}
+                width={isDesktop ? 1920 : 414}
+                height={isDesktop ? 1920 : 900}
                 draggable={false}
-                className="h-full w-full object-contain"
+                className={isDesktop ? "h-full w-full object-cover object-top" : "h-full w-full object-contain"}
               />
             </div>
           ))}
