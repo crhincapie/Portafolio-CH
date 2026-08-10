@@ -99,7 +99,10 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
 
   return (
     <div ref={wrapperRef} className="relative">
-      <div className="relative" style={size ? { width: `${size.viewport}px` } : undefined}>
+      <div
+        className={size ? "relative" : "relative w-full"}
+        style={size ? { width: `${size.viewport}px` } : undefined}
+      >
         <button
           type="button"
           onClick={() => scrollByStep(-1)}
@@ -122,8 +125,8 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
               key={i}
               className={
                 isDesktop
-                  ? "aspect-square flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
-                  : "aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950"
+                  ? "aspect-square flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 w-[calc(100%-2.5rem)] md:w-[calc((100%-2.5rem)/1.5)]"
+                  : "aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 w-[72%] max-w-[248px] md:w-[27%] md:max-w-[320px]"
               }
               style={size ? { width: `${size.card}px` } : undefined}
             >
@@ -132,7 +135,10 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
                 alt={`${title} screenshot ${i + 1}`}
                 width={isDesktop ? 1920 : 414}
                 height={isDesktop ? 1920 : 900}
+                sizes={isDesktop ? "66vw" : "(max-width: 768px) 248px, 27vw"}
+                quality={85}
                 draggable={false}
+                loading="eager"
                 className={isDesktop ? "h-full w-full object-cover object-top" : "h-full w-full object-contain"}
               />
             </div>
