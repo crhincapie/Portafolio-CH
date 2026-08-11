@@ -16,7 +16,7 @@ export function ProjectCard({ project, locale, t, featured = false }: ProjectCar
       <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition hover:border-[#00feff]/50">
         <div className="relative h-48 overflow-hidden rounded-t-3xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950">
           <Image
-            src={`/images/projects/${project.slug}.png`}
+            src={`/images/projects/${project.slug}.webp`}
             alt={pickLocale(locale, project.title)}
             fill
             className="object-cover object-top opacity-75"

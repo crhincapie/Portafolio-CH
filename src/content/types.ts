@@ -30,7 +30,10 @@ export type Project = {
   tags: string[];
   figmaUrl?: string | null;
   prototypeUrl?: string | null;
+  prototypeAspect?: number;
+  prototypeZoom?: number;
   heroImage?: string;
+  heroCrop?: "cover" | "contain";
   gallery?: string[];
   galleryVariant?: "mobile" | "desktop";
   caseStudy: CaseStudyContent;

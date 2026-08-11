@@ -682,18 +682,18 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           <div className="flex w-full flex-1 items-center justify-center md:flex-none">
             <motion.div variants={line2} initial="hidden" animate="visible" className="pb-20 md:pb-0">
               {slide.heroType === "profile" ? (
-                <div className="relative flex items-center justify-center">
-                  <div className="absolute h-[700px] w-[700px] rounded-full blur-3xl" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
-                  <div className="absolute h-[520px] w-[520px] rounded-full border border-[#00feff]/10" />
-                  <motion.div className="absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
+                  <div className="relative flex items-center justify-center">
+                  <div className="pointer-events-none absolute h-[700px] w-[700px] rounded-full blur-3xl" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
+                  <div className="pointer-events-none absolute h-[520px] w-[520px] rounded-full border border-[#00feff]/10" />
+                  <motion.div className="pointer-events-none absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
                     animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 3, repeat: Infinity }}
                   />
-                  <motion.div className="absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 md:h-3 md:w-3"
+                  <motion.div className="pointer-events-none absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 md:h-3 md:w-3"
                     animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
                     transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
                   />
-                  <motion.div className="absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 md:h-2 md:w-2"
+                  <motion.div className="pointer-events-none absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 md:h-2 md:w-2"
                     animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.7, 0.4] }}
                     transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
                   />
@@ -722,7 +722,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           </div>
 
           {/* Right: Description */}
-          <motion.div className="mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
+          <motion.div className="relative z-10 mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
             <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{slide.desc}</p>
             {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
