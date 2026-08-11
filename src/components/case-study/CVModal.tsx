@@ -12,13 +12,11 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex h-full flex-col">
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-hidden">
-          <embed
+        <div className="relative flex-1 overflow-hidden">
+          <iframe
             src="/cv.pdf#toolbar=0&navpanes=0"
-            type="application/pdf"
-            width="100%"
-            height="100%"
-            className="h-full w-full"
+            title="CV"
+            className="absolute inset-0 h-full w-full"
           />
         </div>
 
