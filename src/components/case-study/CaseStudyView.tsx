@@ -82,8 +82,8 @@ export async function CaseStudyView({ slug }: Props) {
             sizes="100vw"
             quality={85}
             className={
-              project.heroImage && project.heroCrop !== "cover"
-                ? "aspect-video w-full object-contain"
+              project.heroImage
+                ? "aspect-video w-full object-cover object-top"
                 : "aspect-[21/9] w-full object-cover object-top"
             }
           />

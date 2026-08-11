@@ -6,11 +6,13 @@ import { PrototypeModal } from "@/components/case-study/PrototypeModal";
 import type { Project } from "@/content/types";
 import { pickLocale } from "@/content/i18n";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 interface ProjectCardClientProps {
   project: Project;
   children: ReactNode;
   featured?: boolean;
+  className?: string;
 }
 
 // Contenido detallado de proyectos
@@ -76,7 +78,7 @@ function getProjectContent(slug: string, type: "problematic" | "solution" | "abo
   return content || "";
 }
 
-export function ProjectCardClient({ project, children, featured = false }: ProjectCardClientProps) {
+export function ProjectCardClient({ project, children, featured = false, className }: ProjectCardClientProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -96,21 +98,28 @@ export function ProjectCardClient({ project, children, featured = false }: Proje
     if (prototypeButton) {
       setIsModalOpen(true);
     } else if (caseButton && featured) {
-      setIsFlipped(!isFlipped);
+      setIsFlipped((prev) => !prev);
     } else if (detailsButton) {
       router.push(`/${locale}/projects/${project.slug}`);
     }
+  };
+
+  const handleFlipBack = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsFlipped(false);
   };
 
   return (
     <>
       <div
         onClick={handleClick}
+        className={cn("h-full", className)}
         style={{
           perspective: "1000px",
         }}
       >
         <div
+          className="h-full"
           style={{
             transformStyle: "preserve-3d",
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -118,7 +127,10 @@ export function ProjectCardClient({ project, children, featured = false }: Proje
           }}
         >
           {/* Front face */}
-          <div style={{ backfaceVisibility: "hidden" }}>
+          <div
+            className="h-full"
+            style={{ backfaceVisibility: "hidden", pointerEvents: isFlipped ? "none" : "auto" }}
+          >
             {children}
           </div>
 
@@ -132,6 +144,7 @@ export function ProjectCardClient({ project, children, featured = false }: Proje
               left: 0,
               right: 0,
               bottom: 0,
+              pointerEvents: isFlipped ? "auto" : "none",
             }}
           >
             <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/20 backdrop-blur-2xl transition">
@@ -162,6 +175,7 @@ export function ProjectCardClient({ project, children, featured = false }: Proje
               <div className="flex items-center justify-center gap-3 border-t border-white/10 p-4">
                 <button
                   data-case
+                  onClick={handleFlipBack}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]"
                   title="Volver"
                 >

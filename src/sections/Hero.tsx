@@ -66,24 +66,41 @@ const SLIDES: SlideDef[] = [
 ];
 
 // ─── Particles ────────────────────────────────────────────────
-function useParticles(count: number) {
+function hashSeed(str: string) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+  return h >>> 0;
+}
+
+function mulberry32(seed: number) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function useParticles(count: number, seed: string) {
   return useMemo(
-    () =>
-      Array.from({ length: count }, () => ({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: 1 + Math.random() * 2.5,
-        delay: Math.random() * 4,
-        duration: 4 + Math.random() * 4,
-        drift: -15 + Math.random() * 30,
-      })),
-    [count],
+    () => {
+      const rand = mulberry32(hashSeed(seed));
+      return Array.from({ length: count }, () => ({
+        x: rand() * W,
+        y: rand() * H,
+        r: 1 + rand() * 2.5,
+        delay: rand() * 4,
+        duration: 4 + rand() * 4,
+        drift: -15 + rand() * 30,
+      }));
+    },
+    [count, seed],
   );
 }
 
 // ─── Animated background ──────────────────────────────────────
 function BgCanvas({ accent, gradient }: { accent: string; gradient: string[] }) {
-  const particles = useParticles(25);
+  const particles = useParticles(25, accent);
 
   const waves = useMemo(
     () => [
@@ -682,9 +699,9 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           <div className="flex w-full flex-1 items-center justify-center md:flex-none">
             <motion.div variants={line2} initial="hidden" animate="visible" className="pb-20 md:pb-0">
               {slide.heroType === "profile" ? (
-                  <div className="relative flex items-center justify-center">
-                  <div className="pointer-events-none absolute h-[700px] w-[700px] rounded-full blur-3xl" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
-                  <div className="pointer-events-none absolute h-[520px] w-[520px] rounded-full border border-[#00feff]/10" />
+                <div className="relative flex items-center justify-center">
+                  <div className="pointer-events-none absolute h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
+                  <div className="pointer-events-none absolute h-[min(520px,84vw)] w-[min(520px,84vw)] rounded-full border border-[#00feff]/10 md:h-[520px] md:w-[520px]" />
                   <motion.div className="pointer-events-none absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
                     animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 3, repeat: Infinity }}
@@ -699,7 +716,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
                   />
                   <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
                     <Image src="/images/hero/profile-cutout.png" alt="Cristian Hincapié" width={400} height={500} priority
-                      className="relative h-auto w-[300px] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px]" />
+                      className="relative h-auto w-[min(300px,80vw)] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px]" />
                   </motion.div>
                   {slide.id === "product-designer" && (
                     <div className="absolute left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 md:hidden" style={{ top: "calc(100% - 70px)" }}>
@@ -764,7 +781,7 @@ export function Hero() {
   }, [next]);
 
   return (
-    <section className="relative min-h-screen border-b border-white/5 bg-zinc-950 md:h-screen md:overflow-hidden">
+    <section className="relative min-h-screen overflow-x-hidden border-b border-white/5 bg-zinc-950 md:h-screen md:overflow-hidden">
       <AnimatePresence mode="wait" custom={direction}>
         <SlideContent key={slide} slide={SLIDES[slide]} onOpenCV={() => setIsCVModalOpen(true)} />
       </AnimatePresence>
