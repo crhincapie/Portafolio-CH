@@ -411,7 +411,7 @@ export const PROJECTS: Project[] = [
     year: "2022",
     company: { es: "PropTech / Data", en: "PropTech / Data" },
     role: { es: "UX/UI", en: "UX/UI" },
-    title: { es: "Avaluador Playground", en: "Avaluador Playground" },
+    title: { es: "Avaluador de Inmuebles", en: "Avaluador de Inmuebles" },
     summary: {
       es: "Herramienta exploratoria para entender modelos de valuación con feedback inmediato.",
       en: "Exploratory tool to understand valuation models with immediate feedback.",
@@ -432,8 +432,8 @@ export const PROJECTS: Project[] = [
       "/images/projects/Avaluador-inmuebles/Pago exitoso.webp",
     ],
     caseStudy: brief(
-      "Avaluador Playground",
-      "Avaluador Playground",
+      "Avaluador de Inmuebles",
+      "Avaluador de Inmuebles",
       "Traducir modelos complejos a interacciones comprensibles para usuarios no técnicos.",
       "Translate complex models into understandable interactions for non-technical users.",
     ),

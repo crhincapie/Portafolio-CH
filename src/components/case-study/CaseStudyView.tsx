@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { GalleryCarousel } from "@/components/case-study/GalleryCarousel";
+import { PrototypeLinkButton } from "@/components/case-study/PrototypeLinkButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/config/site";
 import { pickLocale } from "@/content/i18n";
@@ -78,6 +79,8 @@ export async function CaseStudyView({ slug }: Props) {
             alt={pickLocale(locale, project.title)}
             width={1600}
             height={900}
+            sizes="100vw"
+            quality={85}
             className={
               project.heroImage
                 ? "aspect-video w-full object-cover object-top"
@@ -155,14 +158,12 @@ export async function CaseStudyView({ slug }: Props) {
                   </a>
                 ) : null}
                 {prototype ? (
-                  <a
-                    className="block rounded-2xl border border-white/10 bg-zinc-950/60 px-4 py-3 text-[#00feff] transition hover:border-[#00feff]/50"
-                    href={prototype}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {t("openPrototype")}
-                  </a>
+                  <PrototypeLinkButton
+                    label={t("openPrototype")}
+                    url={prototype}
+                    aspectRatio={project.prototypeAspect}
+                    zoom={project.prototypeZoom}
+                  />
                 ) : null}
                 {!figma && !prototype ? <p className="text-xs leading-relaxed text-zinc-500">{t("noLinks")}</p> : null}
               </div>

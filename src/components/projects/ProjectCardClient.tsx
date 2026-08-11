@@ -196,6 +196,8 @@ export function ProjectCardClient({ project, children, featured = false, classNa
         isOpen={isModalOpen && !!project.prototypeUrl}
         onClose={() => setIsModalOpen(false)}
         prototypeUrl={project.prototypeUrl || ""}
+        aspectRatio={project.prototypeAspect}
+        zoom={project.prototypeZoom}
       />
     </>
   );
