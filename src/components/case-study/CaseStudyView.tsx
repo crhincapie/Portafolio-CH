@@ -74,13 +74,13 @@ export async function CaseStudyView({ slug }: Props) {
 
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_0_80px_rgba(0,254,255,0.12)]">
           <Image
-            src={project.heroImage ?? `/images/projects/${project.slug}/home.png`}
+            src={project.heroImage ?? `/images/projects/${project.slug}/home.webp`}
             alt={pickLocale(locale, project.title)}
             width={1600}
             height={900}
             className={
               project.heroImage
-                ? "aspect-video w-full object-contain"
+                ? "aspect-video w-full object-cover object-top"
                 : "aspect-[21/9] w-full object-cover object-top"
             }
           />

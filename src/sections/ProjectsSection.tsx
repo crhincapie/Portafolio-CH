@@ -1,16 +1,26 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { PROJECTS, getFeaturedProjects } from "@/content/projects";
-import { ProjectCard } from "@/components/projects/ProjectCard";
+import { PROJECTS } from "@/content/projects";
+import { BentoProjectCard, type BentoVariant } from "@/components/projects/BentoProjectCard";
 import { Reveal, StaggerReveal } from "@/components/ui/Reveal";
 import { AnimatedItem } from "@/components/ui/AnimatedItem";
+import { cn } from "@/lib/utils";
+
+const BENTO_LAYOUT: Record<string, { span: string; variant: BentoVariant }> = {
+  "balanc-funcional": { span: "sm:col-span-2 lg:col-span-7 lg:row-span-2", variant: "flagship" },
+  "turismo-sostenible": { span: "lg:col-span-5", variant: "featured" },
+  agrocash: { span: "lg:col-span-5", variant: "featured" },
+  "bienestar-a-la-carta": { span: "lg:col-span-8", variant: "secondary" },
+  "avaluador-playground": { span: "lg:col-span-8", variant: "secondary" },
+  "publicacion-inmueble": { span: "lg:col-span-8", variant: "secondary" },
+};
+
+const DEFAULT_LAYOUT = { span: "lg:col-span-4", variant: "secondary" as BentoVariant };
 
 export async function ProjectsSection() {
   const t = await getTranslations("projects");
   const locale = await getLocale();
-  const featured = getFeaturedProjects();
-  const others = PROJECTS.filter((p) => !p.featured);
 
   return (
     <section id="proyectos" className="scroll-mt-28 border-b border-white/5 py-20 md:py-28">
@@ -27,30 +37,21 @@ export async function ProjectsSection() {
           </div>
         </Reveal>
 
-        <StaggerReveal className="grid gap-6 lg:grid-cols-3">
-          {featured.map((project) => (
-            <AnimatedItem key={project.slug} as="div">
-              <ProjectCard project={project} locale={locale} t={t} featured={true} />
-            </AnimatedItem>
-          ))}
-        </StaggerReveal>
-
-        <Reveal delay={0.15}>
-          <div className="space-y-6">
-            <SectionHeading
-              kicker={t("moreTitle")}
-              title={t("moreHeadline")}
-              description={t("moreSubtitle")}
-              className="max-w-2xl"
-            />
-          </div>
-        </Reveal>
-        <StaggerReveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {others.map((project) => (
-            <AnimatedItem key={project.slug} as="div">
-              <ProjectCard project={project} locale={locale} t={t} featured={false} />
-            </AnimatedItem>
-          ))}
+        <StaggerReveal className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-12">
+          {PROJECTS.map((project) => {
+            const layout = BENTO_LAYOUT[project.slug] ?? DEFAULT_LAYOUT;
+            return (
+              <AnimatedItem key={project.slug} as="div" className={cn("h-full", layout.span)}>
+                <BentoProjectCard
+                  project={project}
+                  locale={locale}
+                  t={t}
+                  variant={layout.variant}
+                  className="h-full"
+                />
+              </AnimatedItem>
+            );
+          })}
         </StaggerReveal>
       </div>
     </section>
