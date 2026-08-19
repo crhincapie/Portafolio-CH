@@ -1,5 +1,6 @@
-import Image from "next/image";
 import { ProjectCardClient } from "@/components/projects/ProjectCardClient";
+import { AnimatedIllustration } from "@/components/projects/AnimatedIllustration";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import type { Project } from "@/content/types";
 import { pickLocale } from "@/content/i18n";
 import { cn } from "@/lib/utils";
@@ -100,21 +101,18 @@ interface OverlayCardProps {
 
 function OverlayCard({ project, locale, t, compact = false }: OverlayCardProps) {
   return (
-    <div
+    <SpotlightCard
       className={cn(
-        "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition duration-300 hover:border-[#00feff]/50 hover:shadow-[0_0_50px_rgba(0,254,255,0.1)]",
+        "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.22)]",
         compact ? "min-h-[340px]" : "min-h-[460px]",
       )}
     >
-      <Image
-        src={`/images/projects/${project.slug}.webp`}
-        alt={pickLocale(locale, project.title)}
-        fill
-        className="object-cover object-top opacity-70 transition duration-700 group-hover:scale-[1.04] group-hover:opacity-90"
-        sizes={compact ? "(max-width: 1024px) 100vw, 42vw" : "(max-width: 1024px) 100vw, 55vw"}
+      <AnimatedIllustration
+        slug={project.slug}
+        title={pickLocale(locale, project.title)}
       />
       <BrowserChrome />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition duration-300 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20" />
 
       <div className="relative z-10 flex flex-col gap-3 p-6 md:p-7">
@@ -144,7 +142,7 @@ function OverlayCard({ project, locale, t, compact = false }: OverlayCardProps) 
           <CardActions featured={project.featured} t={t} />
         </div>
       </div>
-    </div>
+    </SpotlightCard>
   );
 }
 

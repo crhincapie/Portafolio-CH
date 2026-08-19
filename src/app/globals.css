@@ -51,3 +51,47 @@
     radial-gradient(700px 400px at 50% 100%, color-mix(in oklab, #00feff 12%, transparent), transparent 45%),
     #050507;
 }
+
+/* ─── Animated gradient border (buttons / cards) ───────────── */
+@utility btn-border-animate {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 9999px;
+  padding: 1.5px;
+}
+
+.btn-border-animate::before {
+  content: "";
+  position: absolute;
+  inset: -250%;
+  z-index: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #00feff 30deg,
+    #a5f3fc 55deg,
+    transparent 100deg,
+    transparent 140deg,
+    #c084fc 175deg,
+    #f0abfc 200deg,
+    transparent 250deg,
+    transparent 300deg,
+    #00feff 330deg,
+    #a5f3fc 355deg,
+    transparent 360deg
+  );
+  animation: btn-border-spin 4s linear infinite;
+  will-change: transform;
+}
+
+.btn-border-animate:hover::before {
+  animation-duration: 1.6s;
+}
+
+@keyframes btn-border-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

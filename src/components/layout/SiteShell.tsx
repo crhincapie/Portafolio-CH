@@ -1,6 +1,7 @@
 "use client";
 
 import { LenisProvider } from "@/components/motion/LenisProvider";
+import { ParallaxProvider } from "@/components/motion/Parallax";
 import { CustomCursor } from "@/components/motion/CustomCursor";
 import { PageLoader } from "@/components/motion/PageLoader";
 import { Header } from "@/components/layout/Header";
@@ -12,14 +13,16 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
     <MotionConfig reducedMotion="user">
       <LenisProvider>
-        <PageLoader />
-        <CustomCursor />
-        <SkipToContent />
-        <Header />
-        <main id="contenido-principal" className="relative">
-          {children}
-        </main>
-        <Footer />
+        <ParallaxProvider>
+          <PageLoader />
+          <CustomCursor />
+          <SkipToContent />
+          <Header />
+          <main id="contenido-principal" className="relative">
+            {children}
+          </main>
+          <Footer />
+        </ParallaxProvider>
       </LenisProvider>
     </MotionConfig>
   );

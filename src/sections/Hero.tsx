@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { ParallaxLayer, Tilt, MouseGlow } from "@/components/motion/Parallax";
 import { CVModal } from "@/components/case-study/CVModal";
 
 // ─── Config ──────────────────────────────────────────────────
@@ -114,8 +115,11 @@ function BgCanvas({ accent, gradient }: { accent: string; gradient: string[] }) 
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${gradient[0]}, ${gradient[1]})` }} />
-      <div className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]" style={{ background: `radial-gradient(ellipse at 20% 0%, ${accent}, transparent 70%)` }} />
-      <div className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]" style={{ background: `radial-gradient(ellipse at 100% 100%, ${accent}, transparent 70%)` }} />
+      <ParallaxLayer depth={0.6} className="absolute inset-0">
+        <div className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]" style={{ background: `radial-gradient(ellipse at 20% 0%, ${accent}, transparent 70%)` }} />
+        <div className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]" style={{ background: `radial-gradient(ellipse at 100% 100%, ${accent}, transparent 70%)` }} />
+      </ParallaxLayer>
+      <MouseGlow color={`${accent}14`} size={620} className="opacity-70" />
       <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
         {particles.map((p, i) => (
           <motion.circle key={i} cx={p.x} cy={p.y} r={p.r} fill={accent}
@@ -255,17 +259,20 @@ const LOGOS: Record<string, LogoDef[]> = {
 };
 
 function FloatingLogo({ logo }: { logo: LogoDef }) {
+  const depth = logo.x > 50 ? -0.5 : 0.5;
   return (
-    <motion.div
-      className="pointer-events-none absolute z-10 hidden items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl md:inline-flex"
-      style={{ left: `${logo.x}%`, top: `${logo.y}%`, color: logo.color, backgroundColor: logo.bg }}
-      initial={{ opacity: 0, scale: 0.3 }}
-      animate={{ opacity: [0, 1, 1, 1], scale: [0.3, 1, 1.05, 1], x: [0, 8, -6, 0], y: [0, -6, 4, 0] }}
-      transition={{ duration: 5 + logo.delay, repeat: Infinity, delay: logo.delay, ease: "easeInOut", times: [0, 0.2, 0.5, 1] }}
-    >
-      <BrandLogo brand={logo.brand} color={logo.color} />
-      <span>{logo.label}</span>
-    </motion.div>
+    <ParallaxLayer depth={depth} className="pointer-events-none absolute z-10 hidden md:block" style={{ left: `${logo.x}%`, top: `${logo.y}%` }}>
+      <motion.div
+        className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl"
+        style={{ color: logo.color, backgroundColor: logo.bg }}
+        initial={{ opacity: 0, scale: 0.3 }}
+        animate={{ opacity: [0, 1, 1, 1], scale: [0.3, 1, 1.05, 1], x: [0, 8, -6, 0], y: [0, -6, 4, 0] }}
+        transition={{ duration: 5 + logo.delay, repeat: Infinity, delay: logo.delay, ease: "easeInOut", times: [0, 0.2, 0.5, 1] }}
+      >
+        <BrandLogo brand={logo.brand} color={logo.color} />
+        <span>{logo.label}</span>
+      </motion.div>
+    </ParallaxLayer>
   );
 }
 
@@ -685,6 +692,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
         <div className="flex flex-1 flex-col items-center justify-center gap-6 md:grid md:grid-cols-[1fr_1.3fr_1fr] md:gap-6 lg:gap-10">
           {/* Left: Title */}
           <motion.div className="w-full pt-10 text-left md:pt-0 md:text-right" variants={line1} initial="hidden" animate="visible">
+            <ParallaxLayer depth={-0.35} className="inline-block">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 md:text-[11px]">
               {slide.subtitle}
             </p>
@@ -693,11 +701,13 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
               <br />
               <span className="text-gradient-accent">{slide.title[1]}</span>
             </h1>
+            </ParallaxLayer>
           </motion.div>
 
           {/* Center: Hero visual */}
           <div className="flex w-full flex-1 items-center justify-center md:flex-none">
             <motion.div variants={line2} initial="hidden" animate="visible" className="pb-20 md:pb-0">
+              <Tilt max={5}>
               {slide.heroType === "profile" ? (
                 <div className="relative flex items-center justify-center">
                   <div className="pointer-events-none absolute h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
@@ -720,11 +730,8 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
                   </motion.div>
                   {slide.id === "product-designer" && (
                     <div className="absolute left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 md:hidden" style={{ top: "calc(100% - 70px)" }}>
-                      <button onClick={onOpenCV}
-                        className="inline-flex items-center justify-center rounded-full bg-[#00feff] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition duration-200 hover:bg-[#7afcff] hover:shadow-lg active:scale-95">
-                        {t("ctaCv")}
-                      </button>
-                      <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
+                      <Button animated onClick={onOpenCV}>{t("ctaCv")}</Button>
+                      <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
                       <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600">
                         <span className="block whitespace-nowrap">Diseño centrado en el usuario</span>
                         <span className="block whitespace-nowrap">Producto digital · Experiencia de marca</span>
@@ -735,26 +742,26 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
               ) : slide.heroType === "uxui" ? <UXUIVisual />
               : slide.heroType === "process" ? <ProcessVisual />
               : <ServiceDesignVisual />}
+              </Tilt>
             </motion.div>
           </div>
 
           {/* Right: Description */}
           <motion.div className="relative z-10 mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
+            <ParallaxLayer depth={-0.45} className="flex flex-col gap-5">
             <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{slide.desc}</p>
             {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
               {slide.id === "product-designer" && (
-                <button onClick={onOpenCV}
-                  className="hidden rounded-full bg-[#00feff] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition duration-200 hover:bg-[#7afcff] hover:shadow-lg active:scale-95 md:inline-flex">
-                  {t("ctaCv")}
-                </button>
+                <Button animated onClick={onOpenCV} className="hidden md:inline-flex">{t("ctaCv")}</Button>
               )}
               {slide.id === "product-designer" ? (
-                <Button href="#proyectos" variant="outline" className="hidden md:inline-flex">{t("ctaProjects")}</Button>
+                <Button href="#proyectos" variant="outline" animated className="hidden md:inline-flex">{t("ctaProjects")}</Button>
               ) : (
-                <Button href="#proyectos" variant="outline">{t("ctaProjects")}</Button>
+                <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
               )}
             </div>
+            </ParallaxLayer>
             {slide.id === "product-designer" && (
               <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 md:block">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
             )}
@@ -776,7 +783,7 @@ export function Hero() {
   const prev = useCallback(() => setSlide(([c]) => [(c - 1 + SLIDES.length) % SLIDES.length, -1]), []);
 
   useEffect(() => {
-    const timer = setInterval(next, 12000);
+    const timer = setInterval(next, 24000);
     return () => clearInterval(timer);
   }, [next]);
 
@@ -800,7 +807,7 @@ export function Hero() {
       </div>
 
       {/* ── Floating stat cards ── */}
-      <div className={`absolute bottom-[88px] right-4 z-30 gap-1.5 md:bottom-20 md:right-8 ${slide === 0 ? "flex" : "hidden md:flex"}`}>
+      <ParallaxLayer depth={-0.6} className={`absolute bottom-[88px] right-4 z-30 gap-1.5 md:bottom-20 md:right-8 ${slide === 0 ? "flex" : "hidden md:flex"}`}>
         {[
           { val: t("statYearsValue"), label: t("statYearsLabel") },
           { val: t("statSectorsValue"), label: t("statSectorsLabel") },
@@ -812,7 +819,7 @@ export function Hero() {
             <p className="text-[7px] leading-tight text-zinc-500 md:text-[8px]">{card.label}</p>
           </div>
         ))}
-      </div>
+      </ParallaxLayer>
 
       {/* Scroll */}
       <div className="pointer-events-none absolute bottom-5 left-1/2 z-20 hidden -translate-x-1/2 md:block">
