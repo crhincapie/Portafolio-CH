@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/config/site";
 import { Reveal } from "@/components/ui/Reveal";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { ContactBackground } from "@/components/contact/ContactBackground";
 import {
   ArrowRightIcon,
@@ -22,7 +23,9 @@ export async function ContactSection() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60">
+          <SpotlightCard
+            className="group relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.25)]"
+          >
             <ContactBackground />
 
             <div className="relative grid gap-8 p-8 md:grid-cols-[1.1fr_0.9fr] md:items-center md:p-12">
@@ -87,7 +90,7 @@ export async function ContactSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
         </Reveal>
       </div>
     </section>

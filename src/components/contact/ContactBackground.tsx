@@ -1,22 +1,58 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
+import { useSpotlightCard, useSpotlightCardSafe } from "@/components/ui/SpotlightCard";
+
+function ParallaxBlobs() {
+  const { x, y } = useSpotlightCard();
+  const blobX = useTransform(x, (v) => (v - 0.5) * -44);
+  const blobY = useTransform(y, (v) => (v - 0.5) * -32);
+  const glowX = useTransform(x, (v) => (v - 0.5) * 32);
+  const glowY = useTransform(y, (v) => (v - 0.5) * 24);
+
+  return (
+    <>
+      <motion.div style={{ x: blobX, y: blobY }}>
+        <div
+          className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]"
+          style={{ background: "radial-gradient(ellipse at 20% 0%, #00feff, transparent 70%)" }}
+        />
+        <div
+          className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]"
+          style={{ background: "radial-gradient(ellipse at 100% 100%, #00feff, transparent 70%)" }}
+        />
+      </motion.div>
+
+      <motion.div style={{ x: glowX, y: glowY }}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80" />
+      </motion.div>
+    </>
+  );
+}
 
 export function ContactBackground() {
+  const hasContext = useSpotlightCardSafe() !== null;
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div className="absolute inset-0 bg-[linear-gradient(135deg,#0a0e1a,#0d0f1a)]" />
 
-      <div
-        className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]"
-        style={{ background: "radial-gradient(ellipse at 20% 0%, #00feff, transparent 70%)" }}
-      />
-      <div
-        className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]"
-        style={{ background: "radial-gradient(ellipse at 100% 100%, #00feff, transparent 70%)" }}
-      />
+      {hasContext ? (
+        <ParallaxBlobs />
+      ) : (
+        <>
+          <div
+            className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]"
+            style={{ background: "radial-gradient(ellipse at 20% 0%, #00feff, transparent 70%)" }}
+          />
+          <div
+            className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]"
+            style={{ background: "radial-gradient(ellipse at 100% 100%, #00feff, transparent 70%)" }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80" />
+        </>
+      )}
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-80" />
       <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-zinc-950/40" />
 
       <motion.div
