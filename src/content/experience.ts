@@ -11,8 +11,8 @@ export const experienceItems: {
     period: { es: "Reciente", en: "Recent" },
     role: { es: "Product / UX Lead", en: "Product / UX Lead" },
     summary: {
-      es: "Dirección de experiencia en productos digitales complejos, alineando negocio, ingeniería y diseño con entregables medibles.",
-      en: "Leading experience for complex digital products, aligning business, engineering, and design with measurable outcomes.",
+      es: "Liderazgo de Product Design en productos digitales complejos, alineando negocio, ingeniería y diseño desde discovery hasta ejecución.",
+      en: "Product Design leadership for complex digital products, aligning business, engineering, and design from discovery to execution.",
     },
   },
   {
@@ -20,8 +20,8 @@ export const experienceItems: {
     period: { es: "Fintech", en: "Fintech" },
     role: { es: "UX/UI & Product Design", en: "UX/UI & Product Design" },
     summary: {
-      es: "Flujos críticos, confianza y claridad en contextos regulados; diseño orientado a conversión y reducción de fricción.",
-      en: "Critical flows, trust, and clarity in regulated contexts; design aimed at conversion and friction reduction.",
+      es: "Diseño de productos financieros centrados en confianza, claridad y conversión, reduciendo fricción en flujos críticos y contextos regulados.",
+      en: "Financial product design focused on trust, clarity, and conversion, reducing friction in critical flows and regulated contexts.",
     },
   },
   {
@@ -29,8 +29,8 @@ export const experienceItems: {
     period: { es: "Salud & servicios", en: "Health & services" },
     role: { es: "Product Designer", en: "Product Designer" },
     summary: {
-      es: "Productos de bienestar y servicios con alta demanda de accesibilidad, consistencia y operación a escala.",
-      en: "Wellbeing and service products with strong demands for accessibility, consistency, and scale.",
+      es: "Evolución de productos digitales de bienestar y servicios, impulsando innovación, accesibilidad, automatización e IA aplicada.",
+      en: "Evolution of digital wellbeing and service products, driving innovation, accessibility, automation, and applied AI.",
     },
   },
 ];

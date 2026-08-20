@@ -23,6 +23,11 @@ export async function TestimonialsSection() {
               as="figure"
               className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-zinc-950/60 p-6"
             >
+              {item.sectionTitle && (
+                <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#00feff]/80">
+                  {pickLocale(locale, item.sectionTitle)}
+                </p>
+              )}
               <blockquote className="text-pretty text-base leading-relaxed text-zinc-200">
                 {pickLocale(locale, item.quote)}
               </blockquote>

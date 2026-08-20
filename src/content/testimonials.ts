@@ -5,43 +5,48 @@ export type Testimonial = {
   role: Localized;
   company: string;
   quote: Localized;
+  sectionTitle?: Localized;
 };
 
 export const testimonials: Testimonial[] = [
   {
-    name: "Laura Méndez",
-    company: "Series B Fintech",
+    name: "Yasmin Ayala",
+    company: "Compensar",
+    role: { es: "Profesional Senior", en: "Senior Professional" },
+    sectionTitle: { es: "Perspectiva de Producto / Negocio", en: "Product / Business Perspective" },
+    quote: {
+      es: "Cristian tiene una visión de producto que va más allá del diseño. Entiende las necesidades del negocio, cuestiona con criterio, estructura las decisiones y logra convertir problemas complejos en propuestas claras, viables y accionables.",
+      en: "Cristian has a product vision that goes beyond design. He understands business needs, questions with judgment, structures decisions, and turns complex problems into clear, viable, and actionable proposals.",
+    },
+  },
+  {
+    name: "Johan Patiño",
+    company: "Mercado Libre",
+    role: { es: "Desarrollador Full Stack", en: "Full Stack Developer" },
+    sectionTitle: { es: "Alineación con Tecnología", en: "Technology Alignment" },
+    quote: {
+      es: "Su fortaleza está en conectar diseño y tecnología. Cristian entiende las restricciones técnicas, anticipa dependencias y facilita la conversación con ingeniería, logrando acuerdos sobre alcance, tiempos y prioridades sin perder de vista la experiencia.",
+      en: "His strength lies in connecting design and technology. Cristian understands technical constraints, anticipates dependencies, and facilitates conversation with engineering, reaching agreements on scope, timelines, and priorities without losing sight of the experience.",
+    },
+  },
+  {
+    name: "Daniel Flechas",
+    company: "Globant",
     role: { es: "Product Manager", en: "Product Manager" },
+    sectionTitle: { es: "Planeación y Liderazgo", en: "Planning and Leadership" },
     quote: {
-      es: "Cristian no solo entrega interfaces impecables: traduce incertidumbre en decisiones, prioriza con criterio y empuja al equipo hacia un estándar de calidad que se nota en cada release.",
-      en: "Cristian doesn't just ship polished interfaces—he turns ambiguity into decisions, prioritizes with judgment, and raises the team's quality bar in every release.",
+      es: "Cristian lidera desde la claridad y la organización. Sabe estructurar equipos, priorizar, negociar tiempos y mantener el foco en los objetivos. Su capacidad para alinear diferentes perfiles hace que los equipos avancen con mayor autonomía y dirección.",
+      en: "Cristian leads through clarity and organization. He knows how to structure teams, prioritize, negotiate timelines, and keep focus on objectives. His ability to align different profiles makes teams move forward with greater autonomy and direction.",
     },
   },
   {
-    name: "Daniel Ortega",
-    company: "Banco regional",
-    role: { es: "Tech Lead", en: "Tech Lead" },
+    name: "Brayhan Garcia",
+    company: "Evertec",
+    role: { es: "Diseñador UX/UI", en: "UX/UI Designer" },
+    sectionTitle: { es: "Proceso de Diseño", en: "Design Process" },
     quote: {
-      es: "Habla el idioma del sistema: entiende trade-offs, documenta bien y colabora con ingeniería sin fricción. Eso acelera delivery y reduce retrabajo.",
-      en: "He speaks system language: understands trade-offs, documents well, and collaborates with engineering without friction—faster delivery, less rework.",
-    },
-  },
-  {
-    name: "Valentina Ríos",
-    company: "HealthTech",
-    role: { es: "CEO", en: "CEO" },
-    quote: {
-      es: "Necesitábamos claridad para inversionistas y usuarios al mismo tiempo. Cristian conectó narrativa, UX y métricas con un roadmap que el equipo pudo ejecutar.",
-      en: "We needed clarity for investors and users at the same time. Cristian connected narrative, UX, and metrics with a roadmap the team could actually execute.",
-    },
-  },
-  {
-    name: "Andrés Páez",
-    company: "Scale-up LATAM",
-    role: { es: "Head of Design", en: "Head of Design" },
-    quote: {
-      es: "Es el tipo de senior que eleva el craft del equipo: sistemas, crítica constructiva y una mirada de producto que va más allá del layout.",
-      en: "The kind of senior who elevates team craft—systems, constructive critique, and product thinking beyond the layout.",
+      es: "Tiene una mirada de diseño profundamente orientada a producto. No se limita a resolver interfaces: investiga, cuestiona, construye sistemas y eleva el estándar del equipo, incorporando nuevas metodologías, tecnología e IA cuando realmente aportan valor.",
+      en: "He has a design perspective deeply oriented to product. He doesn't just solve interfaces: he researches, questions, builds systems, and raises the team's standard, incorporating new methodologies, technology, and AI when they truly add value.",
     },
   },
 ];

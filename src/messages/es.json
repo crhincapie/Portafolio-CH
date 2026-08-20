@@ -11,63 +11,63 @@
     "menu": "Menú"
   },
   "hero": {
-    "kicker": "Senior Product Designer — Bogotá / remoto",
+    "kicker": "Product Design Lead — Bogotá / remoto",
     "line1": "Diseño productos digitales",
-    "line2": "con intención, sistema y negocio.",
-    "lead": "UX/UI, liderazgo multidisciplinario y ejecución técnica — de la estrategia al pixel, sin perder de vista las métricas.",
+    "line2": "con estrategia, experiencia y tecnología.",
+    "lead": "Product Design, UX/UI y liderazgo de diseño — de la estrategia al pixel, conectando negocio, usuarios y tecnología.",
     "ctaCv": "Ver CV",
-    "ctaProjects": "Ver proyectos",
+    "ctaProjects": "Ver casos",
     "scroll": "Scroll",
-    "roles": "Product · UX/UI · Design Lead · AI-assisted",
+    "roles": "Product Design · UX/UI · Design Lead · IA aplicada",
     "statYearsLabel": "Años en producto",
     "statYearsValue": "10+",
     "statSectorsLabel": "Sectores",
     "statSectorsValue": "Fintech · Salud · PropTech",
     "statCraftLabel": "Craft",
-    "statCraftValue": "Design system · Front-end",
+    "statCraftValue": "Design Systems · IA · Front-end",
     "clients": "Compensar · Scotiabank Colpatria · ADL Digital Lab"
   },
   "about": {
     "kicker": "Sobre mí",
     "title": "El problema importa más que la interfaz.",
-    "body": "Llevo más de 10 años diseñando productos digitales — y lo que más me interesa de ese trabajo no es la interfaz, sino el problema que está detrás de ella.\n\nHe trabajado en Compensar, Scotiabank Colpatria y ADL Digital Lab, en sectores como fintech, salud, inmobiliario y servicios.\n\nMi enfoque conecta visión de producto, liderazgo multidisciplinario y ejecución técnica — incluyendo sistemas de diseño y desarrollo front-end.\n\nEntiendo restricciones técnicas, hablo el idioma del negocio y tomo decisiones UX orientadas a métricas, experiencia y crecimiento de producto.",
+    "body": "Llevo más de 10 años diseñando productos digitales, y lo que más me interesa no es la interfaz, sino entender el problema, tomar mejores decisiones y convertir necesidades reales en soluciones de producto.\n\nHe liderado iniciativas de producto en Compensar, Scotiabank Colpatria y ADL Digital Lab, en sectores como fintech, salud, inmobiliario y servicios.\n\nMi enfoque integra estrategia de producto, liderazgo multidisciplinario y ejecución técnica, incluyendo Design Systems, IA aplicada y desarrollo front-end.\n\nConecto negocio, tecnología y experiencia para tomar decisiones basadas en evidencia, optimizar procesos y construir productos digitales escalables.",
     "location": "Bogotá, Colombia",
     "languages": "Español nativo · Inglés B1 (en mejora activa)",
     "locationLabel": "Base"
   },
   "experience": {
     "kicker": "Experiencia",
-    "title": "Impacto en productos críticos y regulados.",
-    "subtitle": "Un recorrido donde el diseño se mide por claridad, confianza y velocidad de equipo."
+    "title": "Diseño y liderazgo en productos digitales.",
+    "subtitle": "Experiencia conectando estrategia, diseño y tecnología para convertir problemas complejos en productos claros y escalables."
   },
   "projects": {
     "kicker": "Proyectos destacados",
-    "title": "Selección de trabajo reciente.",
-    "subtitle": "Tres piezas con mayor profundidad narrativa y exploración visual — listas para revisión con reclutadores y equipos de producto.",
+    "title": "Casos que muestran cómo pienso y diseño productos.",
+    "subtitle": "Una selección de casos donde investigación, estrategia y diseño se convierten en decisiones de producto.",
     "moreTitle": "Más trabajo",
-    "moreHeadline": "Otros proyectos",
-    "moreSubtitle": "Exploraciones adicionales en salud, propiedad y educación.",
+    "moreHeadline": "Otros casos",
+    "moreSubtitle": "Exploraciones de producto en salud, PropTech, educación y experiencias digitales.",
     "viewCase": "Ver caso",
     "viewAll": "Ver todos los casos"
   },
   "approach": {
     "kicker": "Enfoque",
     "title": "Diseño como sistema de decisiones.",
-    "body": "Trabajo con hipótesis claras, evidencia y criterios de éxito compartidos. Construyo sistemas visuales y de interacción que permiten iterar rápido sin sacrificar accesibilidad ni consistencia.\n\nIntegro IA como acelerador — no como reemplazo —: research, variantes, documentación y QA visual, siempre con revisión humana y criterio de producto.\n\nMi liderazgo se traduce en menos retrabajo: alineación temprana con negocio e ingeniería, handoff impecable y narrativa que vende la decisión, no solo la pantalla.",
+    "body": "Transformo problemas complejos en decisiones de producto claras, utilizando investigación, evidencia y objetivos compartidos para construir soluciones escalables.\n\nIntegro IA como acelerador del proceso de diseño: research, síntesis, ideación, documentación y QA, siempre con criterio humano y visión de producto.\n\nMi liderazgo conecta negocio, diseño e ingeniería desde etapas tempranas, reduciendo retrabajo, acelerando decisiones y elevando la calidad del producto.",
     "pill1": "Estrategia & priorización",
     "pill2": "UX basada en evidencia",
-    "pill3": "Sistemas & escalabilidad",
-    "pill4": "AI-assisted workflows"
+    "pill3": "Design Systems & escalabilidad",
+    "pill4": "IA aplicada al producto"
   },
   "testimonials": {
     "kicker": "Testimonios",
-    "title": "Lo que buscan equipos senior.",
-    "subtitle": "Referencias temporales mientras se formalizan casos públicos — tono realista y verificable en proceso."
+    "title": "Diseño que genera confianza.",
+    "subtitle": "Perspectivas de quienes han trabajado conmigo en producto, tecnología y diseño."
   },
   "contact": {
     "kicker": "Contacto",
-    "title": "Hablemos de producto, UX o liderazgo de diseño.",
-    "subtitle": "Disponible para roles remotos/internacionales y colaboraciones freelance premium.",
+    "title": "Hablemos de producto, estrategia o liderazgo de diseño.",
+    "subtitle": "Disponible para oportunidades en Product Design, liderazgo de diseño y proyectos digitales estratégicos.",
     "emailCta": "Enviar email",
     "whatsappCta": "WhatsApp",
     "linkedinCta": "LinkedIn",
@@ -77,7 +77,7 @@
   },
   "footer": {
     "title": "Cristian Hincapié",
-    "subtitle": "Senior Product Designer · UX/UI · Design Lead · AI-assisted workflows.",
+    "subtitle": "Product Design Lead · Senior Product Designer · UX/UI · IA aplicada",
     "rights": "Hecho con intención — Next.js + motion + accesibilidad."
   },
   "caseStudy": {
@@ -99,14 +99,14 @@
     "links": "Enlaces",
     "openFigma": "Abrir en Figma",
     "openPrototype": "Ver prototipo",
-    "noLinks": "Enlaces de Figma/prototipo: añádelos en src/content/projects.ts",
+    "noLinks": "Enlaces de Figma y prototipo disponibles bajo solicitud.",
     "back": "Volver al inicio",
-    "galleryNote": "Sustituye estos frames por pantallas exportadas o assets WebP en una iteración futura."
+    "galleryNote": ""
   },
   "projectsPage": {
     "kicker": "Casos",
     "title": "Índice de proyectos.",
-    "subtitle": "Cada caso incluye narrativa, decisiones y entregables — optimizado para revisión rápida por reclutadores.",
+    "subtitle": "Cada caso incluye narrativa, decisiones y entregables.",
     "featured": "Destacados",
     "all": "Todos"
   },

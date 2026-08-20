@@ -11,63 +11,63 @@
     "menu": "Menu"
   },
   "hero": {
-    "kicker": "Senior Product Designer — Bogotá / remote",
+    "kicker": "Product Design Lead — Bogotá / remote",
     "line1": "I design digital products",
-    "line2": "with intent, systems, and business sense.",
-    "lead": "UX/UI, cross-functional leadership, and technical execution—from strategy to pixels, without losing sight of metrics.",
+    "line2": "with strategy, experience, and technology.",
+    "lead": "Product Design, UX/UI, and design leadership — from strategy to pixels, connecting business, users, and technology.",
     "ctaCv": "View résumé",
-    "ctaProjects": "View projects",
+    "ctaProjects": "View cases",
     "scroll": "Scroll",
-    "roles": "Product · UX/UI · Design Lead · AI-assisted",
+    "roles": "Product Design · UX/UI · Design Lead · AI-applied",
     "statYearsLabel": "Years in product",
     "statYearsValue": "10+",
     "statSectorsLabel": "Sectors",
     "statSectorsValue": "Fintech · Health · PropTech",
     "statCraftLabel": "Craft",
-    "statCraftValue": "Design system · Front-end",
+    "statCraftValue": "Design Systems · AI · Front-end",
     "clients": "Compensar · Scotiabank Colpatria · ADL Digital Lab"
   },
   "about": {
     "kicker": "About",
     "title": "The problem matters more than the interface.",
-    "body": "I’ve spent 10+ years designing digital products—and what interests me most isn’t the interface, but the problem behind it.\n\nI’ve worked at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach connects product vision, multidisciplinary leadership, and technical execution—including design systems and front-end development.\n\nI understand technical constraints, speak the language of business, and make UX decisions oriented to metrics, experience, and product growth.",
+    "body": "I've spent 10+ years designing digital products, and what interests me most isn't the interface—it's understanding the problem, making better decisions, and turning real needs into product solutions.\n\nI've led product initiatives at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach integrates product strategy, multidisciplinary leadership, and technical execution, including Design Systems, applied AI, and front-end development.\n\nI connect business, technology, and experience to make evidence-based decisions, optimize processes, and build scalable digital products.",
     "location": "Bogotá, Colombia",
     "languages": "Native Spanish · English B1 (actively improving)",
     "locationLabel": "Location"
   },
   "experience": {
     "kicker": "Experience",
-    "title": "Impact on critical, regulated products.",
-    "subtitle": "A path where design is measured by clarity, trust, and team velocity."
+    "title": "Design and leadership in digital products.",
+    "subtitle": "Experience connecting strategy, design, and technology to turn complex problems into clear, scalable products."
   },
   "projects": {
     "kicker": "Featured work",
-    "title": "A curated selection of recent projects.",
-    "subtitle": "Three pieces with deeper narrative and visual exploration—ready for recruiter and product-team review.",
+    "title": "Cases that show how I think about and design products.",
+    "subtitle": "A selection of cases where research, strategy, and design become product decisions.",
     "moreTitle": "More work",
-    "moreHeadline": "Other projects",
-    "moreSubtitle": "Additional explorations across health, property, and education.",
+    "moreHeadline": "Other cases",
+    "moreSubtitle": "Product explorations across health, PropTech, education, and digital experiences.",
     "viewCase": "View case study",
     "viewAll": "View all case studies"
   },
   "approach": {
     "kicker": "Approach",
     "title": "Design as a decision system.",
-    "body": "I work with clear hypotheses, evidence, and shared success criteria. I build visual and interaction systems that enable fast iteration without sacrificing accessibility or consistency.\n\nI integrate AI as an accelerator—not a replacement—for research, variants, documentation, and visual QA, always with human review and product judgment.\n\nMy leadership shows up as less rework: early alignment with business and engineering, crisp handoff, and narrative that sells the decision—not just the screen.",
+    "body": "I turn complex problems into clear product decisions, using research, evidence, and shared goals to build scalable solutions.\n\nI integrate AI as a design process accelerator: research, synthesis, ideation, documentation, and QA — always with human judgment and product vision.\n\nMy leadership connects business, design, and engineering from early stages, reducing rework, accelerating decisions, and elevating product quality.",
     "pill1": "Strategy & prioritization",
     "pill2": "Evidence-led UX",
-    "pill3": "Systems & scale",
-    "pill4": "AI-assisted workflows"
+    "pill3": "Design Systems & scale",
+    "pill4": "AI applied to product"
   },
   "testimonials": {
     "kicker": "Testimonials",
-    "title": "What senior teams look for.",
-    "subtitle": "Temporary references while public cases are formalized—realistic tone and verification in progress."
+    "title": "Design that builds trust.",
+    "subtitle": "Perspectives from those who have worked with me in product, technology, and design."
   },
   "contact": {
     "kicker": "Contact",
-    "title": "Let’s talk product, UX, or design leadership.",
-    "subtitle": "Available for remote/international roles and premium freelance collaborations.",
+    "title": "Let's talk product, strategy, or design leadership.",
+    "subtitle": "Available for Product Design roles, design leadership, and strategic digital projects.",
     "emailCta": "Email me",
     "whatsappCta": "WhatsApp",
     "linkedinCta": "LinkedIn",
@@ -77,7 +77,7 @@
   },
   "footer": {
     "title": "Cristian Hincapié",
-    "subtitle": "Senior Product Designer · UX/UI · Design Lead · AI-assisted workflows.",
+    "subtitle": "Product Design Lead · Senior Product Designer · UX/UI · AI applied",
     "rights": "Built with intent—Next.js + motion + accessibility."
   },
   "caseStudy": {
@@ -99,14 +99,14 @@
     "links": "Links",
     "openFigma": "Open in Figma",
     "openPrototype": "View prototype",
-    "noLinks": "Figma/prototype links: add them in src/content/projects.ts",
+    "noLinks": "Figma and prototype links available upon request.",
     "back": "Back to home",
-    "galleryNote": "Replace these frames with exported screens or WebP assets in a future iteration."
+    "galleryNote": ""
   },
   "projectsPage": {
     "kicker": "Case studies",
     "title": "Project index.",
-    "subtitle": "Each case includes narrative, decisions, and deliverables—optimized for fast recruiter review.",
+    "subtitle": "Each case includes narrative, decisions, and deliverables.",
     "featured": "Featured",
     "all": "All"
   },
