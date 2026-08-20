@@ -15,13 +15,14 @@
 
 import {
   motion,
+  useInView,
   useReducedMotion,
   type MotionStyle,
   type TargetAndTransition,
   type Transition,
   type Variants,
 } from "framer-motion";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { useSpotlightCardSafe } from "@/components/ui/SpotlightCard";
 
 /** Presets de easing de LottieLab. */
@@ -179,12 +180,17 @@ interface SceneProps {
 
 /**
  * Raíz de cada escena: SVG de 800×600 que cubre la card (slice) y orquesta
- * la entrada escalonada de todas las capas (whileInView, una sola vez).
+ * la entrada escalonada de todas las capas. Usa useInView en el SVG (elemento
+ * HTML) en vez de whileInView en motion.g para mayor compatibilidad cross-browser
+ * (especialmente en mobile Safari).
  */
 export function Scene({ children }: SceneProps) {
   const reduce = useReducedMotion();
+  const svgRef = useRef<SVGSVGElement>(null);
+  const isInView = useInView(svgRef, { once: true, margin: "-40px" });
   return (
     <svg
+      ref={svgRef}
       viewBox="0 0 800 600"
       preserveAspectRatio="xMidYMid slice"
       className="absolute inset-0 h-full w-full"
@@ -192,8 +198,7 @@ export function Scene({ children }: SceneProps) {
     >
       <motion.g
         initial={reduce ? false : "hidden"}
-        whileInView={reduce ? undefined : "show"}
-        viewport={{ once: true, margin: "-40px" }}
+        animate={reduce ? undefined : isInView ? "show" : "hidden"}
         style={{ willChange: "transform" }}
       >
         {children}

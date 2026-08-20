@@ -92,60 +92,6 @@ function CardActions({ featured, t }: CardActionsProps) {
   );
 }
 
-interface OverlayCardProps {
-  project: Project;
-  locale: string;
-  t: (key: string) => string;
-  compact?: boolean;
-}
-
-function OverlayCard({ project, locale, t, compact = false }: OverlayCardProps) {
-  return (
-    <SpotlightCard
-      className={cn(
-        "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.22)]",
-        compact ? "min-h-[340px]" : "min-h-[460px]",
-      )}
-    >
-      <AnimatedIllustration
-        slug={project.slug}
-        title={pickLocale(locale, project.title)}
-      />
-      <BrowserChrome />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20" />
-
-      <div className="relative z-10 flex flex-col gap-3 p-6 md:p-7">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-zinc-500">{pickLocale(locale, project.company)}</span>
-          <span className="h-1 w-1 rounded-full bg-zinc-600" />
-          <span className="font-medium uppercase tracking-[0.25em] text-[#00feff]/80">{project.year}</span>
-        </div>
-        <h3
-          className={cn(
-            "font-semibold tracking-tight text-white",
-            compact ? "text-xl md:text-2xl" : "text-2xl md:text-3xl",
-          )}
-        >
-          {pickLocale(locale, project.title)}
-        </h3>
-        <p
-          className={cn(
-            "max-w-2xl text-sm leading-relaxed text-zinc-300",
-            compact ? "line-clamp-2" : "line-clamp-3",
-          )}
-        >
-          {pickLocale(locale, project.summary)}
-        </p>
-        <Tags tags={project.tags} />
-        <div className="pt-1">
-          <CardActions featured={project.featured} t={t} />
-        </div>
-      </div>
-    </SpotlightCard>
-  );
-}
-
 export function BentoProjectCard({
   project,
   locale,
@@ -153,9 +99,55 @@ export function BentoProjectCard({
   variant = "secondary",
   className,
 }: BentoProjectCardProps) {
+  const compact = variant !== "flagship";
+
   return (
-    <ProjectCardClient project={project} featured={project.featured} className={className}>
-      <OverlayCard project={project} locale={locale} t={t} compact={variant !== "flagship"} />
-    </ProjectCardClient>
+    <SpotlightCard
+      className={cn(
+        "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.22)]",
+        compact ? "min-h-[340px]" : "min-h-[460px]",
+        className,
+      )}
+    >
+      <AnimatedIllustration
+        slug={project.slug}
+        title={pickLocale(locale, project.title)}
+      />
+
+      <BrowserChrome />
+
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20" />
+
+      <ProjectCardClient project={project} featured={project.featured} className="relative z-10 h-full">
+        <div className="flex h-full flex-col justify-end gap-3 p-6 md:p-7">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-zinc-500">{pickLocale(locale, project.company)}</span>
+            <span className="h-1 w-1 rounded-full bg-zinc-600" />
+            <span className="font-medium uppercase tracking-[0.25em] text-[#00feff]/80">{project.year}</span>
+          </div>
+          <h3
+            className={cn(
+              "font-semibold tracking-tight text-white",
+              compact ? "text-xl md:text-2xl" : "text-2xl md:text-3xl",
+            )}
+          >
+            {pickLocale(locale, project.title)}
+          </h3>
+          <p
+            className={cn(
+              "max-w-2xl text-sm leading-relaxed text-zinc-300",
+              compact ? "line-clamp-2" : "line-clamp-3",
+            )}
+          >
+            {pickLocale(locale, project.summary)}
+          </p>
+          <Tags tags={project.tags} />
+          <div className="pt-1">
+            <CardActions featured={project.featured} t={t} />
+          </div>
+        </div>
+      </ProjectCardClient>
+    </SpotlightCard>
   );
 }

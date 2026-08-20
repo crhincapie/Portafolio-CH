@@ -20,55 +20,55 @@ const projectContent: Record<string, Record<string, Record<string, string>>> = {
   "balanc-funcional": {
     es: {
       problematic:
-        "Los usuarios presentaban dificultades para mantener hábitos saludables debido a experiencias fragmentadas, baja motivación, falta de personalización y escasa orientación conductual.",
+        "Los usuarios tenían dificultades para mantener hábitos saludables debido a baja motivación, experiencias fragmentadas y poca personalización.",
       solution:
-        "Diseño de una plataforma wellness enfocada en mejorar retención, engagement y adopción de hábitos saludables mediante flujos personalizados y experiencias emocionales.",
+        "Diseño de una experiencia digital personalizada para facilitar la adopción de hábitos mediante flujos guiados y decisiones basadas en comportamiento.",
       about:
-        "Ecosistema digital enfocado en bienestar y salud diseñado para mejorar hábitos saludables mediante experiencias guiadas, personalización y diseño orientado al comportamiento del usuario.",
+        "Ecosistema digital de bienestar que combina personalización, guía y diseño conductual para acompañar al usuario en la construcción de hábitos.",
     },
     en: {
       problematic:
-        "Users faced difficulties maintaining healthy habits due to fragmented experiences, low motivation, lack of personalization, and poor behavioral guidance.",
+        "Users had difficulty maintaining healthy habits due to low motivation, fragmented experiences, and limited personalization.",
       solution:
-        "Design of a wellness platform focused on improving retention, engagement, and adoption of healthy habits through personalized flows and emotional experiences.",
+        "Design of a personalized digital experience to facilitate habit adoption through guided flows and behavior-based decisions.",
       about:
-        "Digital ecosystem focused on wellness and health designed to improve healthy habits through guided experiences, personalization, and user behavior-oriented design.",
+        "Digital wellness ecosystem combining personalization, guidance, and behavioral design to support users in building sustainable habits.",
     },
   },
   "turismo-sostenible": {
     es: {
       problematic:
-        "Los usuarios interesados en turismo sostenible no contaban con una plataforma centralizada, intuitiva y confiable para descubrir, comparar y reservar experiencias eco-responsables.",
+        "Los usuarios encontraban dificultades para descubrir y comparar experiencias sostenibles en un entorno confiable y fácil de explorar.",
       solution:
-        "Diseño de una plataforma escalable de turismo sostenible enfocada en mejorar el descubrimiento de destinos, conversión, confianza y engagement mediante UX estratégico y una interfaz moderna orientada a exploración.",
+        "Diseño de una plataforma centrada en descubrimiento, comparación y confianza, utilizando UX estratégico y una experiencia orientada a exploración.",
       about:
-        "Plataforma digital enfocada en turismo sostenible diseñada para conectar usuarios con experiencias eco-conscientes, mejorando descubrimiento, interacción, intención de reserva y engagement digital mediante una experiencia inmersiva y centrada en el usuario.",
+        "Plataforma digital que conecta usuarios con experiencias sostenibles mediante una experiencia clara, exploratoria y centrada en la toma de decisión.",
     },
     en: {
       problematic:
-        "Users interested in sustainable tourism lacked a centralized, intuitive, and reliable platform to discover, compare, and book eco-responsible experiences.",
+        "Users found it difficult to discover and compare sustainable experiences in a trustworthy, easy-to-explore environment.",
       solution:
-        "Design of a scalable sustainable tourism platform focused on improving destination discovery, conversion, trust, and engagement through strategic UX and a modern exploration-oriented interface.",
+        "Design of a platform focused on discovery, comparison, and trust, using strategic UX and an exploration-oriented experience.",
       about:
-        "Digital platform focused on sustainable tourism designed to connect users with eco-conscious experiences, improving discovery, interaction, booking intent, and digital engagement through an immersive, user-centered experience.",
+        "Digital platform connecting users with sustainable experiences through a clear, exploratory, and decision-focused experience.",
     },
   },
   agrocash: {
     es: {
       problematic:
-        "Los usuarios agrícolas presentan barreras de acceso a servicios financieros digitales debido a complejidad operativa, baja alfabetización digital y ecosistemas fragmentados.",
+        "Los usuarios agrícolas enfrentaban barreras de acceso financiero por procesos complejos, baja familiaridad digital y servicios fragmentados.",
       solution:
-        "Diseño de producto agrotech-fintech enfocado en inclusión financiera, simplificación operativa y accesibilidad digital para usuarios del sector agrícola.",
+        "Diseño de una solución agrotech-fintech enfocada en inclusión financiera, simplificación operativa y accesibilidad digital.",
       about:
-        "Concepto fintech/agrotech diseñado para facilitar acceso financiero y gestión operativa a usuarios agrícolas mediante servicios digitales simples, accesibles y escalables.",
+        "Concepto fintech para facilitar el acceso financiero y la gestión operativa mediante servicios digitales simples, accesibles y escalables.",
     },
     en: {
       problematic:
-        "Agricultural users face barriers to accessing digital financial services due to operational complexity, low digital literacy, and fragmented ecosystems.",
+        "Agricultural users faced financial access barriers due to complex processes, low digital familiarity, and fragmented services.",
       solution:
-        "Design of an agrotech-fintech product focused on financial inclusion, operational simplification, and digital accessibility for agricultural sector users.",
+        "Design of an agrotech-fintech solution focused on financial inclusion, operational simplification, and digital accessibility.",
       about:
-        "Fintech/agrotech concept designed to facilitate financial access and operational management for agricultural users through simple, accessible, and scalable digital services.",
+        "Fintech concept to facilitate financial access and operational management through simple, accessible, and scalable digital services.",
     },
   },
 };

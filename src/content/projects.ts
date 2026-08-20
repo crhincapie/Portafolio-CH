@@ -17,8 +17,8 @@ const featuredBalanc: CaseStudyContent = cs({
     en: "BalanC Funcional is a digital health proposition focused on habits and adherence, with emphasis on trust and operational clarity.",
   },
   problem: {
-    es: "Equilibrar tono clínico y humano, reducir ansiedad en flujos largos y construir una identidad fresca sin sacrificar credibilidad.",
-    en: "Balance clinical and human tone, reduce anxiety in long flows, and build a fresh identity without sacrificing credibility.",
+    es: "Los usuarios tenían dificultades para mantener hábitos saludables debido a baja motivación, experiencias fragmentadas y poca personalización.",
+    en: "Users had difficulty maintaining healthy habits due to low motivation, fragmented experiences, and limited personalization.",
   },
   goals: {
     es: "Mejorar comprensión del valor, completitud de onboarding y una base UI escalable para iteraciones futuras.",
@@ -72,8 +72,8 @@ const featuredTurismo: CaseStudyContent = cs({
     en: "Sustainable tourism needs inspiration with evidence—destinations and decisions without greenwashing.",
   },
   problem: {
-    es: "Desconfianza ante claims ambientales vagos; necesidad de datos verificables y opciones accionables.",
-    en: "Distrust of vague environmental claims—need for verifiable data and actionable options.",
+    es: "Los usuarios encontraban dificultades para descubrir y comparar experiencias sostenibles en un entorno confiable y fácil de explorar.",
+    en: "Users found it difficult to discover and compare sustainable experiences in a trustworthy, easy-to-explore environment.",
   },
   goals: {
     es: "Mejorar comprensión de rutas sostenibles, engagement en itinerarios y plantillas para partners.",
@@ -121,8 +121,8 @@ const featuredAgro: CaseStudyContent = cs({
     en: "AgroCash connects rural financial services with field operations—simplicity, local trust, and low error tolerance.",
   },
   problem: {
-    es: "Alta carga cognitiva en desembolso y validación; necesidad de claridad inmediata y estados explícitos.",
-    en: "High cognitive load in disbursement and validation—need for immediate clarity and explicit states.",
+    es: "Los usuarios agrícolas enfrentaban barreras de acceso financiero por procesos complejos, baja familiaridad digital y servicios fragmentados.",
+    en: "Agricultural users faced financial access barriers due to complex processes, low digital familiarity, and fragmented services.",
   },
   goals: {
     es: "Reducir errores de entrada, acelerar validación y estandarizar patrones multi-rol.",
@@ -230,8 +230,8 @@ export const PROJECTS: Project[] = [
     role: { es: "Lead Product & UX/UI", en: "Lead Product & UX/UI" },
     title: { es: "BalanC Funcional", en: "BalanC Funcional" },
     summary: {
-      es: "Salud digital con adherencia, confianza e identidad futurista pero humana.",
-      en: "Digital health focused on adherence, trust, and a futuristic yet human identity.",
+      es: "Producto digital de salud enfocado en adherencia, personalización y construcción de hábitos sostenibles.",
+      en: "Digital health product focused on adherence, personalization, and sustainable habit building.",
     },
     tags: ["UX", "UI", "Design system", "Health"],
     figmaUrl: null,
@@ -253,8 +253,8 @@ export const PROJECTS: Project[] = [
     role: { es: "Product Designer", en: "Product Designer" },
     title: { es: "Turismo Sostenible", en: "Sustainable Tourism" },
     summary: {
-      es: "Editorial digital con evidencia, itinerarios y narrativa responsable.",
-      en: "Digital editorial with evidence, itineraries, and responsible narrative.",
+      es: "Experiencia digital para descubrir, comparar y planificar turismo sostenible con mayor confianza.",
+      en: "Digital experience to discover, compare, and plan sustainable tourism with greater confidence.",
     },
     tags: ["Editorial", "UX writing", "Web"],
     figmaUrl: null,
@@ -276,8 +276,8 @@ export const PROJECTS: Project[] = [
     role: { es: "UX/UI Lead", en: "UX/UI Lead" },
     title: { es: "AgroCash", en: "AgroCash" },
     summary: {
-      es: "Flujos financieros claros para operación en campo y confianza local.",
-      en: "Clear financial flows for field operations and local trust.",
+      es: "Producto fintech para el sector agrícola, diseñado para simplificar operaciones financieras y fortalecer la confianza digital.",
+      en: "Fintech product for the agricultural sector, designed to simplify financial operations and strengthen digital trust.",
     },
     tags: ["Fintech", "Service design", "Accessibility"],
     figmaUrl: null,
@@ -324,8 +324,8 @@ export const PROJECTS: Project[] = [
     role: { es: "Product Designer", en: "Product Designer" },
     title: { es: "Bienestar a la Carta", en: "Bienestar a la Carta" },
     summary: {
-      es: "Experiencia modular de bienestar con foco en claridad y personalización.",
-      en: "Modular wellbeing experience focused on clarity and personalization.",
+      es: "Experiencia modular de bienestar enfocada en claridad, personalización y adopción.",
+      en: "Modular wellbeing experience focused on clarity, personalization, and adoption.",
     },
     tags: ["Health", "UX"],
     figmaUrl: null,
@@ -353,8 +353,8 @@ export const PROJECTS: Project[] = [
     role: { es: "UX/UI", en: "UX/UI" },
     title: { es: "Hola Vivienda", en: "Hola Vivienda" },
     summary: {
-      es: "Onboarding y exploración de inmuebles con foco en confianza y comparación.",
-      en: "Onboarding and property exploration focused on trust and comparison.",
+      es: "Experiencia PropTech para explorar inmuebles con foco en confianza, comparación y decisión.",
+      en: "PropTech experience for exploring properties focused on trust, comparison, and decision-making.",
     },
     tags: ["PropTech", "UI"],
     figmaUrl: null,
@@ -383,8 +383,8 @@ export const PROJECTS: Project[] = [
     role: { es: "Product Designer", en: "Product Designer" },
     title: { es: "Un asunto de dos", en: "Un asunto de dos" },
     summary: {
-      es: "Producto consumer con narrativa emocional y flujos conversacionales.",
-      en: "Consumer product with emotional narrative and conversational flows.",
+      es: "Producto consumer que combina narrativa emocional, conversación y experiencias digitales.",
+      en: "Consumer product combining emotional narrative, conversation, and digital experiences.",
     },
     tags: ["UX", "Storytelling"],
     figmaUrl: null,
@@ -413,8 +413,8 @@ export const PROJECTS: Project[] = [
     role: { es: "UX/UI", en: "UX/UI" },
     title: { es: "Avaluador de Inmuebles", en: "Avaluador de Inmuebles" },
     summary: {
-      es: "Herramienta exploratoria para entender modelos de valuación con feedback inmediato.",
-      en: "Exploratory tool to understand valuation models with immediate feedback.",
+      es: "Experiencia exploratoria para comprender modelos de valuación mediante visualización y feedback inmediato.",
+      en: "Exploratory experience to understand valuation models through visualization and immediate feedback.",
     },
     tags: ["UX", "Data viz"],
     figmaUrl: null,
@@ -446,8 +446,8 @@ export const PROJECTS: Project[] = [
     role: { es: "UX/UI", en: "UX/UI" },
     title: { es: "Davivienda E-learning", en: "Davivienda E-learning" },
     summary: {
-      es: "Plataforma de aprendizaje con rutas claras, progreso visible y accesibilidad.",
-      en: "Learning platform with clear paths, visible progress, and accessibility.",
+      es: "Plataforma de aprendizaje con rutas claras, progreso visible y experiencia accesible.",
+      en: "Learning platform with clear paths, visible progress, and accessible experience.",
     },
     tags: ["EdTech", "Enterprise"],
     figmaUrl: null,
@@ -479,8 +479,8 @@ export const PROJECTS: Project[] = [
     role: { es: "Product Designer", en: "Product Designer" },
     title: { es: "Publicación de Inmueble", en: "Property publishing" },
     summary: {
-      es: "Flujo guiado para publicar inmuebles con validaciones y claridad legal básica.",
-      en: "Guided flow to publish properties with validations and basic legal clarity.",
+      es: "Flujo guiado para publicar inmuebles con validaciones, claridad y reducción de errores.",
+      en: "Guided flow to publish properties with validations, clarity, and error reduction.",
     },
     tags: ["Forms", "PropTech"],
     figmaUrl: null,

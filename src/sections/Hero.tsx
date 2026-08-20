@@ -57,8 +57,8 @@ const SLIDES: SlideDef[] = [
   {
     id: "service-design",
     title: ["Service", "Design"],
-    subtitle: "Service Design",
-    desc: "Diseño de servicios centrados en el usuario. Mapeo de journeys, blueprints y transformación de experiencias integrales.",
+    subtitle: "Service Design — Product Design",
+    desc: "Diseño de servicios centrados en el usuario. Mapeo de journeys, blueprints y transformación de experiencias integrales como parte de un enfoque integral de producto.",
     heroType: "sd",
     accent: "#c084fc",
     gradient: ["#0e0a14", "#120e0a"],
