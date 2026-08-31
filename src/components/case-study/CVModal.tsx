@@ -1,6 +1,7 @@
 "use client";
 
 import { Modal } from "@/components/ui/Modal";
+import { useTranslations } from "next-intl";
 
 interface CVModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface CVModalProps {
 }
 
 export function CVModal({ isOpen, onClose }: CVModalProps) {
+  const t = useTranslations("contact");
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex h-full flex-col">
@@ -40,7 +42,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                 d="M12 16v-4m0 0V8m0 4h4m-4 0H8"
               />
             </svg>
-            Descargar CV
+            {t("downloadCV")}
           </a>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
 import { ExperienceSection } from "@/sections/ExperienceSection";
@@ -6,7 +7,11 @@ import { ApproachSection } from "@/sections/ApproachSection";
 import { TestimonialsSection } from "@/sections/TestimonialsSection";
 import { ContactSection } from "@/sections/ContactSection";
 
-export default async function HomePage() {
+type Props = { params: Promise<{ locale: string }> };
+
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   return (
     <>
       <Hero />
