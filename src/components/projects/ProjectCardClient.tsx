@@ -5,8 +5,8 @@ import { useRouter } from "@/i18n/navigation";
 import { PrototypeModal } from "@/components/case-study/PrototypeModal";
 import type { Project } from "@/content/types";
 import { pickLocale } from "@/content/i18n";
-import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
 
 interface ProjectCardClientProps {
   project: Project;
@@ -71,6 +71,114 @@ const projectContent: Record<string, Record<string, Record<string, string>>> = {
         "Fintech concept to facilitate financial access and operational management through simple, accessible, and scalable digital services.",
     },
   },
+  "bienestar-a-la-carta": {
+    es: {
+      problematic:
+        "Personalización sin complejidad: control sin abrumar con opciones.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: Bienestar a la Carta. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Personalization without complexity—control without option overload.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Bienestar a la Carta. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
+  "hola-vivienda": {
+    es: {
+      problematic:
+        "Reducir incertidumbre en etapas tempranas del funnel inmobiliario.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: Hola Vivienda. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Reduce uncertainty in early stages of the real-estate funnel.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Hola Vivienda. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
+  "un-asunto-de-dos": {
+    es: {
+      problematic:
+        "Equilibrar tono emocional con claridad de tareas para retención saludable.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: Un asunto de dos. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Balance emotional tone with task clarity for healthy retention.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Un asunto de dos. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
+  "avaluador-playground": {
+    es: {
+      problematic:
+        "Traducir modelos complejos a interacciones comprensibles para usuarios no técnicos.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: Avaluador de Inmuebles. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Translate complex models into understandable interactions for non-technical users.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Avaluador de Inmuebles. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
+  "davivienda-e-learning": {
+    es: {
+      problematic:
+        "Reducir abandono con micro-lecciones y patrones consistentes.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: E-learning corporativo. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Reduce churn with micro-lessons and consistent patterns.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Corporate e-learning. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
+  "publicacion-inmueble": {
+    es: {
+      problematic:
+        "Formularios largos en pasos comprensibles con recuperación de contexto.",
+      solution:
+        "Se alinearon negocio y usuarios con entregables incrementales y métricas claras de adopción, mediante benchmark, entrevistas y priorización por impacto/esfuerzo. Se iteró con prototipos navegables y validación continua con stakeholders.",
+      about:
+        "Resumen del proyecto: Publicación de Inmueble. Entrega lista para iteración con patrones compartidos. Velocidad sostenible nace de sistemas claros y comunicación honesta diseño–negocio.",
+    },
+    en: {
+      problematic:
+        "Long forms split into understandable steps with context recovery.",
+      solution:
+        "Business and users were aligned with incremental deliverables and clear adoption metrics, through benchmarking, interviews, and impact/effort prioritization to focus the roadmap. Iteration with navigable prototypes and continuous stakeholder validation.",
+      about:
+        "Project summary: Property publishing. Delivery ready for iteration with shared patterns. Sustainable speed comes from clear systems and honest design–business communication.",
+    },
+  },
 };
 
 function getProjectContent(slug: string, type: "problematic" | "solution" | "about", locale: string): string {
@@ -82,13 +190,8 @@ export function ProjectCardClient({ project, children, featured = false, classNa
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [locale, setLocale] = useState("es");
-
-  // Get locale from localStorage or detect
-  useEffect(() => {
-    const lang = localStorage.getItem("NEXT_LOCALE") || document.documentElement.lang || "es";
-    setLocale(lang);
-  }, []);
+  const t = useTranslations("projects");
+  const locale = useLocale();
 
   const handleClick = (e: React.MouseEvent) => {
     const prototypeButton = (e.target as HTMLElement).closest("button[data-prototype]");
@@ -100,7 +203,7 @@ export function ProjectCardClient({ project, children, featured = false, classNa
     } else if (caseButton && featured) {
       setIsFlipped((prev) => !prev);
     } else if (detailsButton) {
-      router.push(`/${locale}/projects/${project.slug}`);
+      router.push(`/projects/${project.slug}`);
     }
   };
 
@@ -152,21 +255,21 @@ export function ProjectCardClient({ project, children, featured = false, classNa
               <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
                 <h3 className="text-lg font-semibold text-white">{pickLocale(locale, project.title)}</h3>
                 
-                {/* Problemática */}
+                {/* Problem */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">Problemática</h4>
+                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("problem")}</h4>
                   <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "problematic", locale)}</p>
                 </div>
                 
-                {/* Solución */}
+                {/* Solution */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">Solución</h4>
+                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("solution")}</h4>
                   <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "solution", locale)}</p>
                 </div>
                 
-                {/* Sobre el proyecto */}
+                {/* About */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">Sobre el proyecto</h4>
+                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("aboutProject")}</h4>
                   <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "about", locale)}</p>
                 </div>
               </div>
@@ -177,13 +280,13 @@ export function ProjectCardClient({ project, children, featured = false, classNa
                   data-case
                   onClick={handleFlipBack}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]"
-                  title="Volver"
+                  title={t("back")}
                 >
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
-                  <span>Volver</span>
+                  <span>{t("back")}</span>
                 </button>
               </div>
             </div>

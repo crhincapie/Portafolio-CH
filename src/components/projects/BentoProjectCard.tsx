@@ -60,17 +60,17 @@ function CardActions({ featured, t }: CardActionsProps) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
-          <span>Caso</span>
+          <span>{t("case")}</span>
         </button>
-        <button data-prototype className={cn(solidBtn, "flex-1")} title="Ver prototipo">
+        <button data-prototype className={cn(solidBtn, "flex-1")} title={t("prototypeTitle")}>
           <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
-          <span>Prototipo</span>
+          <span>{t("prototype")}</span>
         </button>
-        <button data-details className={cn(solidBtn, "flex-1 lg:basis-full")} title="Ver detalles del proyecto">
-          Ver Detalles
+        <button data-details className={cn(solidBtn, "flex-1 lg:basis-full")} title={t("viewDetailsTitle")}>
+          {t("viewDetails")}
         </button>
       </div>
     );
@@ -78,15 +78,15 @@ function CardActions({ featured, t }: CardActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <button data-prototype className={cn(solidBtn, "flex-1")} title="Ver prototipo">
+      <button data-prototype className={cn(solidBtn, "flex-1")} title={t("prototypeTitle")}>
         <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
-        <span>Prototipo</span>
+        <span>{t("prototype")}</span>
       </button>
-      <button data-details className={cn(solidBtn, "flex-1")} title="Ver detalles del proyecto">
-        Ver Detalles
+      <button data-details className={cn(solidBtn, "flex-1")} title={t("viewDetailsTitle")}>
+        {t("viewDetails")}
       </button>
     </div>
   );

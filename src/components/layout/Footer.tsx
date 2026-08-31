@@ -35,7 +35,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/5 py-6 text-center text-xs text-zinc-500">
-        © {year} {siteConfig.name}. {t("rights")}
+        © {year}. {t("rights")}
       </div>
     </footer>
   );

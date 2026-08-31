@@ -15,7 +15,7 @@
     "line1": "I design digital products",
     "line2": "with strategy, experience, and technology.",
     "lead": "Product Design, UX/UI, and design leadership — from strategy to pixels, connecting business, users, and technology.",
-    "ctaCv": "View résumé",
+    "ctaCv": "View resume",
     "ctaProjects": "View cases",
     "scroll": "Scroll",
     "roles": "Product Design · UX/UI · Design Lead · AI-applied",
@@ -25,7 +25,34 @@
     "statSectorsValue": "Fintech · Health · PropTech",
     "statCraftLabel": "Craft",
     "statCraftValue": "Design Systems · AI · Front-end",
-    "clients": "Compensar · Scotiabank Colpatria · ADL Digital Lab"
+    "clients": "Compensar · Scotiabank Colpatria · ADL Digital Lab",
+    "slide1Title1": "Product",
+    "slide1Title2": "Designer",
+    "slide1Subtitle": "Senior Product Designer — Bogotá / remote",
+    "slide1Desc": "UX/UI, multidisciplinary leadership, and technical execution — from strategy to pixels, never losing sight of metrics.",
+    "slide2Title1": "Product",
+    "slide2Title2": "Design",
+    "slide2Subtitle": "Product Design",
+    "slide2Desc": "From strategy to pixel. I lead digital products with business vision, design systems, and technical execution.",
+    "slide3Title1": "UX/UI",
+    "slide3Title2": "Design",
+    "slide3Subtitle": "UX/UI Design",
+    "slide3Desc": "Research, prototyping, and high-fidelity visual design. Intuitive, accessible experiences that connect with real users.",
+    "slide4Title1": "Service",
+    "slide4Title2": "Design",
+    "slide4Subtitle": "Service Design — Product Design",
+    "slide4Desc": "User-centered service design. Journey mapping, blueprints, and holistic experience transformation as part of an integrated product approach.",
+    "tagline1": "User-centered design",
+    "tagline2": "Digital product · Brand experience",
+    "processPhase1Desc": "Discover",
+    "processPhase2Desc": "Conceive",
+    "processPhase3Desc": "Create",
+    "processPhase4Desc": "Validate",
+    "servicePhase1Desc": "Research",
+    "servicePhase2Desc": "Synthesize",
+    "servicePhase3Desc": "Prototype",
+    "servicePhase4Desc": "Implement",
+    "servicePhase5Desc": "Evaluate"
   },
   "about": {
     "kicker": "About",
@@ -47,8 +74,17 @@
     "moreTitle": "More work",
     "moreHeadline": "Other cases",
     "moreSubtitle": "Product explorations across health, PropTech, education, and digital experiences.",
-    "viewCase": "View case study",
-    "viewAll": "View all case studies"
+    "viewCase": "View case",
+    "viewAll": "View all",
+    "case": "Case",
+    "prototype": "Prototype",
+    "viewDetails": "View details",
+    "viewDetailsTitle": "View project details",
+    "prototypeTitle": "View prototype",
+    "problem": "Problem",
+    "solution": "Solution",
+    "aboutProject": "About the project",
+    "back": "Back"
   },
   "approach": {
     "kicker": "Approach",
@@ -73,12 +109,13 @@
     "linkedinCta": "LinkedIn",
     "behanceCta": "Behance",
     "availability": "Available for new projects",
-    "footnote": "Typical reply within 24–48 business hours."
+    "footnote": "Typical reply within 24–48 business hours.",
+    "downloadCV": "Download CV"
   },
   "footer": {
     "title": "Cristian Hincapié",
     "subtitle": "Product Design Lead · Senior Product Designer · UX/UI · AI applied",
-    "rights": "Built with intent—Next.js + motion + accessibility."
+    "rights": "Cristian Hincapie - The problem matters. The experience transforms"
   },
   "caseStudy": {
     "context": "Context",

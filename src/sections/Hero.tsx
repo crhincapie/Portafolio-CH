@@ -14,9 +14,10 @@ const H = 1080;
 
 interface SlideDef {
   id: string;
-  title: string[];
-  subtitle: string;
-  desc: string;
+  titleKey1: string;
+  titleKey2: string;
+  subtitleKey: string;
+  descKey: string;
   heroType: "profile" | "uxui" | "sd" | "process";
   accent: string;
   gradient: string[];
@@ -26,9 +27,10 @@ interface SlideDef {
 const SLIDES: SlideDef[] = [
   {
     id: "product-designer",
-    title: ["Product", "Designer"],
-    subtitle: "Senior Product Designer — Bogotá / remoto",
-    desc: "UX/UI, liderazgo multidisciplinario y ejecución técnica — de la estrategia al pixel, sin perder de vista las métricas.",
+    titleKey1: "slide1Title1",
+    titleKey2: "slide1Title2",
+    subtitleKey: "slide1Subtitle",
+    descKey: "slide1Desc",
     heroType: "profile",
     accent: "#00feff",
     gradient: ["#0a0e1a", "#0d0f1a"],
@@ -36,9 +38,10 @@ const SLIDES: SlideDef[] = [
   },
   {
     id: "product-design",
-    title: ["Diseño de", "Producto"],
-    subtitle: "Product Design",
-    desc: "De la estrategia al pixel. Lidero productos digitales con visión de negocio, sistemas de diseño y ejecución técnica.",
+    titleKey1: "slide2Title1",
+    titleKey2: "slide2Title2",
+    subtitleKey: "slide2Subtitle",
+    descKey: "slide2Desc",
     heroType: "process",
     accent: "#60a5fa",
     gradient: ["#0a0e1a", "#0d121a"],
@@ -46,9 +49,10 @@ const SLIDES: SlideDef[] = [
   },
   {
     id: "ux-ui",
-    title: ["Diseño", "UX/UI"],
-    subtitle: "UX/UI Design",
-    desc: "Investigación, prototipado y diseño visual de alta fidelidad. Experiencias intuitivas y accesibles que conectan con usuarios reales.",
+    titleKey1: "slide3Title1",
+    titleKey2: "slide3Title2",
+    subtitleKey: "slide3Subtitle",
+    descKey: "slide3Desc",
     heroType: "uxui",
     accent: "#00feff",
     gradient: ["#0a1418", "#0a1018"],
@@ -56,9 +60,10 @@ const SLIDES: SlideDef[] = [
   },
   {
     id: "service-design",
-    title: ["Service", "Design"],
-    subtitle: "Service Design — Product Design",
-    desc: "Diseño de servicios centrados en el usuario. Mapeo de journeys, blueprints y transformación de experiencias integrales como parte de un enfoque integral de producto.",
+    titleKey1: "slide4Title1",
+    titleKey2: "slide4Title2",
+    subtitleKey: "slide4Subtitle",
+    descKey: "slide4Desc",
     heroType: "sd",
     accent: "#c084fc",
     gradient: ["#0e0a14", "#120e0a"],
@@ -401,12 +406,12 @@ function UXUIVisual() {
 }
 
 // ─── Product design — nodes on circle perimeter ──────────────
-function ProcessVisual() {
+function ProcessVisual({ t }: { t: (key: string) => string }) {
   const phases = [
-    { label: "Research", desc: "Descubrir", color: "#60a5fa", angle: -90 },
-    { label: "Ideate", desc: "Concebir", color: "#818cf8", angle: 0 },
-    { label: "Design", desc: "Crear", color: "#a78bfa", angle: 90 },
-    { label: "Test", desc: "Validar", color: "#c084fc", angle: 180 },
+    { label: "Research", desc: t("processPhase1Desc"), color: "#60a5fa", angle: -90 },
+    { label: "Ideate", desc: t("processPhase2Desc"), color: "#818cf8", angle: 0 },
+    { label: "Design", desc: t("processPhase3Desc"), color: "#a78bfa", angle: 90 },
+    { label: "Test", desc: t("processPhase4Desc"), color: "#c084fc", angle: 180 },
   ];
 
   const cx = 200, cy = 200, circleR = 175, nodeR = 175;
@@ -518,14 +523,14 @@ function ProcessVisual() {
 }
 
 // ─── Service design — pentagon nodes on perimeter ────────────
-function ServiceDesignVisual() {
+function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
   const accent = "#c084fc";
   const phases = [
-    { label: "Discover", desc: "Investigar", color: "#c084fc", angle: -90 },
-    { label: "Define", desc: "Sintetizar", color: "#a78bfa", angle: -18 },
-    { label: "Develop", desc: "Prototipar", color: "#818cf8", angle: 54 },
-    { label: "Deliver", desc: "Implementar", color: "#6366f1", angle: 126 },
-    { label: "Measure", desc: "Evaluar", color: "#c084fc", angle: 198 },
+    { label: "Discover", desc: t("servicePhase1Desc"), color: "#c084fc", angle: -90 },
+    { label: "Define", desc: t("servicePhase2Desc"), color: "#a78bfa", angle: -18 },
+    { label: "Develop", desc: t("servicePhase3Desc"), color: "#818cf8", angle: 54 },
+    { label: "Deliver", desc: t("servicePhase4Desc"), color: "#6366f1", angle: 126 },
+    { label: "Measure", desc: t("servicePhase5Desc"), color: "#c084fc", angle: 198 },
   ];
 
   const cx = 200, cy = 200, circleR = 175, nodeR = 175;
@@ -694,12 +699,12 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           <motion.div className="w-full pt-10 text-left md:pt-0 md:text-right" variants={line1} initial="hidden" animate="visible">
             <ParallaxLayer depth={-0.35} className="inline-block">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 md:text-[11px]">
-              {slide.subtitle}
+              {t(slide.subtitleKey)}
             </p>
             <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl xl:text-7xl">
-              <span className="text-zinc-200">{slide.title[0]}</span>
+              <span className="text-zinc-200">{t(slide.titleKey1)}</span>
               <br />
-              <span className="text-gradient-accent">{slide.title[1]}</span>
+              <span className="text-gradient-accent">{t(slide.titleKey2)}</span>
             </h1>
             </ParallaxLayer>
           </motion.div>
@@ -733,15 +738,15 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
                       <Button animated onClick={onOpenCV}>{t("ctaCv")}</Button>
                       <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
                       <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600">
-                        <span className="block whitespace-nowrap">Diseño centrado en el usuario</span>
-                        <span className="block whitespace-nowrap">Producto digital · Experiencia de marca</span>
+                        <span className="block whitespace-nowrap">{t("tagline1")}</span>
+                        <span className="block whitespace-nowrap">{t("tagline2")}</span>
                       </p>
                     </div>
                   )}
                 </div>
               ) : slide.heroType === "uxui" ? <UXUIVisual />
-              : slide.heroType === "process" ? <ProcessVisual />
-              : <ServiceDesignVisual />}
+              : slide.heroType === "process" ? <ProcessVisual t={t} />
+              : <ServiceDesignVisual t={t} />}
               </Tilt>
             </motion.div>
           </div>
@@ -749,7 +754,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           {/* Right: Description */}
           <motion.div className="relative z-10 mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
             <ParallaxLayer depth={-0.45} className="flex flex-col gap-5">
-            <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{slide.desc}</p>
+            <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{t(slide.descKey)}</p>
             {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
               {slide.id === "product-designer" && (
@@ -763,7 +768,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
             </div>
             </ParallaxLayer>
             {slide.id === "product-designer" && (
-              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 md:block">Diseño centrado en el usuario · Producto digital · Experiencia de marca</p>
+              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 md:block">{t("tagline1")} · {t("tagline2")}</p>
             )}
           </motion.div>
         </div>

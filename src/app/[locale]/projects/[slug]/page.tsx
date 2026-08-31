@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { CaseStudyView } from "@/components/case-study/CaseStudyView";
 import { getAllProjectSlugs, getProjectBySlug } from "@/content/projects";
 import { pickLocale } from "@/content/i18n";
@@ -32,6 +33,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function ProjectCasePage({ params }: { params: Params }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
   return <CaseStudyView slug={slug} />;
 }
