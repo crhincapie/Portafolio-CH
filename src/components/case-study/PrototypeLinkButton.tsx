@@ -18,7 +18,7 @@ export function PrototypeLinkButton({ label, url, aspectRatio, zoom }: Prototype
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="block w-full rounded-2xl border border-white/10 bg-zinc-950/60 px-4 py-3 text-[#00feff] transition hover:border-[#00feff]/50"
+        className="block w-full rounded-2xl border border-transparent bg-zinc-900/85 px-4 py-3 text-[#00feff] transition hover:border-accent-strong light:bg-surface-2 light:text-[#0e7490]"
       >
         {label}
       </button>

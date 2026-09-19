@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { Elem, enterVariants, EASE, Scene } from "./motion";
 import { Card, Grid, Ping, Pill, SceneBg, Txt } from "./primitives";
+import { track, usePalette, useSceneTheme } from "./theme";
 
-const C = {
+const C_DARK = {
   top: "#14102a",
   bottom: "#0e0a22",
   card: "#221a44",
@@ -15,6 +16,19 @@ const C = {
   mint: "#6ee7b7",
   text: "#efecfb",
   dim: "#8479b8",
+};
+
+const C_LIGHT = {
+  top: "#ece9f8",
+  bottom: "#dedaf2",
+  card: "#ffffff",
+  cardHi: "#e9e5f7",
+  indigo: "#6d28d9",
+  cyan: "#0e7490",
+  gold: "#d97706",
+  mint: "#059669",
+  text: "#1f2937",
+  dim: "#6b7280",
 };
 
 const STEPS = [
@@ -31,6 +45,9 @@ const FIELDS = [
 ];
 
 export function InmuebleScene() {
+  const light = useSceneTheme();
+  const C = usePalette(C_DARK, C_LIGHT);
+  const accentInk = light ? "#ffffff" : "#14102a";
   return (
     <Scene>
       <Elem enter={enterVariants("fade", 0.05)}>
@@ -44,7 +61,7 @@ export function InmuebleScene() {
           <Card x={180} y={64} w={440} h={312} fill={C.card} rx={24} stroke={C.indigo} strokeOpacity={0.3} strokeWidth={1.5} />
 
           {/* Pasos */}
-          <line x1={266} y1={104} x2={474} y2={104} stroke="rgba(255,255,255,0.1)" strokeWidth={3} />
+          <line x1={266} y1={104} x2={474} y2={104} stroke={track(0.12, light)} strokeWidth={3} />
           <motion.line
             x1={266}
             y1={104}
@@ -67,7 +84,7 @@ export function InmuebleScene() {
                   <motion.path
                     d={`M${s.x - 5} 104 l4 4 8 -8`}
                     fill="none"
-                    stroke="#14102a"
+                    stroke={accentInk}
                     strokeWidth={3}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -91,7 +108,7 @@ export function InmuebleScene() {
           </Txt>
 
           {/* Barra de progreso */}
-          <rect x={200} y={176} width={400} height={8} rx={4} fill="rgba(255,255,255,0.09)" />
+          <rect x={200} y={176} width={400} height={8} rx={4} fill={track(0.12, light)} />
           <motion.rect
             x={200}
             y={176}
@@ -111,12 +128,12 @@ export function InmuebleScene() {
               <g>
                 <rect x={200} y={f.y} width={f.label} height={7} rx={3.5} fill={C.cardHi} />
                 <rect x={200} y={f.y + 14} width={400} height={26} rx={8} fill={C.cardHi} stroke={C.indigo} strokeOpacity={0.35} strokeWidth={1.5} />
-                <rect x={212} y={f.y + 23} width={160} height={8} rx={4} fill="rgba(255,255,255,0.14)" />
+                <rect x={212} y={f.y + 23} width={160} height={8} rx={4} fill={track(0.14, light)} />
               </g>
             </Elem>
           ))}
 
-          <Pill x={460} y={328} w={142} h={38} text="Publicar" fill={C.cyan} textFill="#14102a" fontSize={14} enter="pop" enterDelay={0.95} floatT={{ duration: 4.4, repeat: Infinity, ease: "easeInOut" }} />
+          <Pill x={460} y={328} w={142} h={38} text="Publicar" fill={C.cyan} textFill={accentInk} fontSize={14} enter="pop" enterDelay={0.95} floatT={{ duration: 4.4, repeat: Infinity, ease: "easeInOut" }} />
         </g>
       </Elem>
 

@@ -250,36 +250,36 @@ export function ProjectCardClient({ project, children, featured = false, classNa
               pointerEvents: isFlipped ? "auto" : "none",
             }}
           >
-            <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/20 backdrop-blur-2xl transition">
+            <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-canvas/85 backdrop-blur-2xl transition">
               {/* Scrollable content area */}
               <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
-                <h3 className="text-lg font-semibold text-white">{pickLocale(locale, project.title)}</h3>
+                <h3 className="text-lg font-semibold text-ink">{pickLocale(locale, project.title)}</h3>
                 
                 {/* Problem */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("problem")}</h4>
-                  <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "problematic", locale)}</p>
+                  <h4 className="accent-chip mb-2 text-sm font-semibold">{t("problem")}</h4>
+                  <p className="text-xs leading-relaxed text-soft">{getProjectContent(project.slug, "problematic", locale)}</p>
                 </div>
                 
                 {/* Solution */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("solution")}</h4>
-                  <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "solution", locale)}</p>
+                  <h4 className="accent-chip mb-2 text-sm font-semibold">{t("solution")}</h4>
+                  <p className="text-xs leading-relaxed text-soft">{getProjectContent(project.slug, "solution", locale)}</p>
                 </div>
                 
                 {/* About */}
                 <div>
-                  <h4 className="text-sm font-semibold text-[#00feff] mb-2">{t("aboutProject")}</h4>
-                  <p className="text-xs leading-relaxed text-zinc-300">{getProjectContent(project.slug, "about", locale)}</p>
+                  <h4 className="accent-chip mb-2 text-sm font-semibold">{t("aboutProject")}</h4>
+                  <p className="text-xs leading-relaxed text-soft">{getProjectContent(project.slug, "about", locale)}</p>
                 </div>
               </div>
 
               {/* Back button */}
-              <div className="flex items-center justify-center gap-3 border-t border-white/10 p-4">
+              <div className="flex items-center justify-center gap-3 border-t border-line p-4">
                 <button
                   data-case
                   onClick={handleFlipBack}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-line-strong bg-transparent px-6 py-3 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
                   title={t("back")}
                 >
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>

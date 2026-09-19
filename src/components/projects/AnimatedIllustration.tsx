@@ -15,6 +15,7 @@ import {
   hasVectorIllustration,
 } from "@/components/projects/illustrations";
 import { cn } from "@/lib/utils";
+import { useSceneTheme } from "@/components/projects/illustrations/theme";
 
 interface AnimatedIllustrationProps {
   slug: string;
@@ -250,6 +251,7 @@ export function AnimatedIllustration({ slug, title, className }: AnimatedIllustr
   const ctx = useSpotlightCardSafe();
   const hovered = ctx?.hovered ?? false;
   const reduce = useReducedMotion();
+  const light = useSceneTheme();
   const preset = PRESETS[slug] ?? PRESETS["balanc-funcional"];
   const entrance = ENTRANCE[preset.entrance];
   const vector = hasVectorIllustration(slug);
@@ -294,7 +296,7 @@ export function AnimatedIllustration({ slug, title, className }: AnimatedIllustr
               <VectorIllustration slug={slug} />
             ) : (
               <Image
-                src={`/images/projects/${slug}.webp`}
+                src={light ? `/images/projects/${slug}-light.webp` : `/images/projects/${slug}.webp`}
                 alt={title}
                 fill
                 priority={false}
@@ -307,18 +309,19 @@ export function AnimatedIllustration({ slug, title, className }: AnimatedIllustr
         </motion.div>
       </motion.div>
 
-      {/* Velo oscuro que se levanta al hover: la ilustración "prende" */}
+      {/* Velo que se levanta al hover: la ilustración "prende" */}
       <div
-        className="pointer-events-none absolute inset-0 bg-zinc-950/50 transition-opacity duration-700"
-        style={{ opacity: hovered ? 0 : 1 }}
+        className="pointer-events-none absolute inset-0 transition-opacity duration-700"
+        style={{ opacity: hovered ? 0 : 1, backgroundColor: light ? "rgba(255,255,255,0.55)" : "rgba(9,9,11,0.5)" }}
       />
 
       {/* Viñeta para profundidad */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,0.35) 100%)",
+          backgroundImage: light
+            ? "radial-gradient(circle at 50% 50%, transparent 45%, rgba(24,24,27,0.10) 100%)"
+            : "radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,0.35) 100%)",
         }}
       />
     </motion.div>

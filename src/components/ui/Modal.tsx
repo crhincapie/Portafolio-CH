@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -38,7 +39,7 @@ export function Modal({ isOpen, onClose, children, aspectRatio }: ModalProps) {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop con glass effect mejorado */}
       <div
@@ -53,8 +54,8 @@ export function Modal({ isOpen, onClose, children, aspectRatio }: ModalProps) {
         <div
           className={
             aspectRatio && box
-              ? "relative overflow-hidden rounded-3xl border border-white/30 bg-black/20 backdrop-blur-2xl shadow-2xl"
-              : "relative h-[85vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-white/30 bg-black/20 backdrop-blur-2xl shadow-2xl"
+              ? "relative overflow-hidden rounded-3xl border border-line-strong bg-canvas/85 backdrop-blur-2xl shadow-2xl"
+              : "relative h-[85vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-line-strong bg-canvas/85 backdrop-blur-2xl shadow-2xl"
           }
           style={aspectRatio && box ? { width: box.w, height: box.h } : undefined}
         >
@@ -82,6 +83,7 @@ export function Modal({ isOpen, onClose, children, aspectRatio }: ModalProps) {
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

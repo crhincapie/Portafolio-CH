@@ -1,24 +1,88 @@
 @import "tailwindcss";
 
+@custom-variant light (&:where(.light, .light *));
+
 @theme {
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --color-accent: #00feff;
-  --color-surface: #09090b;
+}
+
+/*
+  ─── Semantic theme tokens ───────────────────────────────
+  Dark is the default (no class on <html>).
+  Adding `.light` to <html> flips the tokens to the warm
+  off-white / charcoal palette. Brand accents (#00feff and
+  its gradients/glows) stay identical across both themes.
+*/
+:root {
+  --canvas: #09090b;
+  --surface-1: rgba(255, 255, 255, 0.05);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --surface-3: rgba(255, 255, 255, 0.12);
+  --ink: #fafafa;
+  --soft: #d4d4d8;
+  --muted: #a1a1aa;
+  --faint: #71717a;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.15);
+  --overlay: rgba(255, 255, 255, 0.03);
+  --mesh-base: #050507;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --accent-text: #00feff;
+  --accent-soft: rgba(0, 254, 255, 0.08);
+  --accent-strong: rgba(0, 254, 255, 0.3);
+  color-scheme: dark;
+}
+
+.light {
+  --canvas: #fafaf9;
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f3;
+  --surface-3: #ececea;
+  --ink: #18181b;
+  --soft: #3f3f46;
+  --muted: #71717a;
+  --faint: #a1a1aa;
+  --line: rgba(24, 24, 27, 0.1);
+  --line-strong: rgba(24, 24, 27, 0.18);
+  --overlay: rgba(24, 24, 27, 0.035);
+  --mesh-base: #f4f3f0;
+  --shadow: rgba(24, 24, 27, 0.12);
+  --accent-text: #00feff;
+  --accent-soft: rgba(0, 254, 255, 0.12);
+  --accent-strong: rgba(0, 254, 255, 0.5);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-soft: var(--soft);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-overlay: var(--overlay);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-strong: var(--accent-strong);
 }
 
 @layer base {
-  :root {
-    color-scheme: dark;
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-zinc-950 text-zinc-100 antialiased font-sans;
-    background-color: var(--color-surface);
+    @apply bg-canvas text-ink antialiased font-sans;
   }
 
   ::selection {
     background: color-mix(in oklab, var(--color-accent) 35%, transparent);
-    color: #020617;
+    color: var(--ink);
   }
 
   :focus-visible {
@@ -44,12 +108,172 @@
   color: transparent;
 }
 
+/* Deeper turquoise gradient so the brand-accent headline stays legible
+   on the light canvas while preserving the turquoise identity. */
+.light .text-gradient-accent {
+  background: linear-gradient(120deg, #0e7490 0%, #0891b2 45%, #155e75 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Accent chip: dark container that keeps the neon turquoise (#00feff)
+   legible on light surfaces (and fades into the canvas on dark). */
+@utility accent-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background-color: rgba(9, 9, 11, 0.85);
+  color: #00feff;
+  padding: 0.125rem 0.625rem;
+  line-height: 1.4;
+}
+
+/* Testimonios: la barra oscura tras el título embarra el glass en dark.
+   Se elimina en dark; en claro queda una barra sutil solo para legibilidad. */
+#testimonios .accent-chip {
+  background-color: transparent;
+}
+
+.light #testimonios .accent-chip {
+  background-color: rgba(24, 24, 27, 0.05);
+  color: #0f766e;
+}
+
 @utility mesh-bg {
   background:
     radial-gradient(1200px 600px at 15% -10%, color-mix(in oklab, #00feff 22%, transparent), transparent 55%),
     radial-gradient(900px 500px at 85% 10%, color-mix(in oklab, #6366f1 18%, transparent), transparent 50%),
     radial-gradient(700px 400px at 50% 100%, color-mix(in oklab, #00feff 12%, transparent), transparent 45%),
-    #050507;
+    var(--mesh-base);
+}
+
+/* ─── Glassmorphism · Apple Liquid Glass ─────────────────────
+   Panels are near-transparent so the rich blurred color of
+   `glass-ambient` passes through them ("lensing"). A specular
+   top-edge highlight, a darkened rim and a grounding shadow
+   give the material depth. Dark is the default; `.light`
+   overrides the fills. */
+@utility glass-surface {
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 70%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 60%);
+  box-shadow:
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.04),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.1),
+    0 20px 40px -20px rgba(0, 0, 0, 0.4);
+}
+
+.light .glass-surface {
+  background-color: rgba(255, 255, 255, 0.14);
+  background-image:
+    radial-gradient(160% 120% at 50% 0%, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.1) 45%, transparent 70%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.05) 100%);
+  box-shadow:
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 0 rgba(24, 24, 27, 0.1),
+    inset 0 0 0 1px rgba(24, 24, 27, 0.1),
+    0 24px 48px -24px rgba(24, 24, 27, 0.45);
+}
+
+@utility glass-blur {
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.02);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.02);
+}
+
+.glass-ambient {
+  position: relative;
+  isolation: isolate;
+}
+
+.glass-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(840px 500px at 15% 30%, color-mix(in oklab, #00feff 26%, transparent), transparent 62%),
+    radial-gradient(800px 500px at 85% 34%, color-mix(in oklab, #6366f1 22%, transparent), transparent 60%),
+    radial-gradient(720px 460px at 52% 84%, color-mix(in oklab, #00feff 18%, transparent), transparent 56%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+}
+
+.light .glass-ambient::before {
+  background-image:
+    radial-gradient(900px 540px at 15% 30%, color-mix(in oklab, #0d9488 36%, transparent), transparent 62%),
+    radial-gradient(860px 520px at 85% 34%, color-mix(in oklab, #6366f1 32%, transparent), transparent 60%),
+    radial-gradient(780px 480px at 52% 84%, color-mix(in oklab, #0d9488 26%, transparent), transparent 56%);
+}
+
+/* ─── Liquid glass · detalle de proyecto ──────────────────
+   Capa de "lensado" + brillo especular superpuesta SIN
+   reemplazar el fondo/tinte del contenedor (preserva la
+   identidad de cada tarjeta). `liquid` añade el efecto;
+   `liquid-overlay` además lleva un fondo propio denso para
+   el texto sobre imágenes (legible en ambos modos). */
+.liquid {
+  position: relative;
+  isolation: isolate;
+  -webkit-backdrop-filter: blur(26px) saturate(1.75) brightness(1.02);
+  backdrop-filter: blur(26px) saturate(1.75) brightness(1.02);
+}
+
+.liquid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(130% 70% at 50% -12%, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.05) 38%, transparent 60%),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.12) 0%, transparent 46%),
+    linear-gradient(24deg, transparent 78%, rgba(255, 255, 255, 0.06) 100%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 1px 0 0 rgba(255, 255, 255, 0.18),
+    inset -1px 0 0 rgba(255, 255, 255, 0.18),
+    inset 0 4px 18px -8px rgba(255, 255, 255, 0.32);
+}
+
+.light .liquid::after {
+  background:
+    radial-gradient(130% 70% at 50% -12%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.24) 38%, transparent 60%),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.42) 0%, transparent 46%),
+    linear-gradient(24deg, transparent 78%, rgba(255, 255, 255, 0.22) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(24, 24, 27, 0.05),
+    inset 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset -1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 4px 18px -8px rgba(255, 255, 255, 0.85);
+}
+
+.liquid-overlay {
+  background-color: rgba(8, 9, 11, 0.44);
+  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+  backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 22px 44px -20px rgba(0, 0, 0, 0.55);
+}
+
+.light .liquid-overlay {
+  background-color: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(24, 24, 27, 0.05),
+    inset 0 0 0 1px rgba(24, 24, 27, 0.04),
+    0 22px 44px -20px rgba(24, 24, 27, 0.4);
 }
 
 /* ─── Animated gradient border (buttons / cards) ───────────── */
@@ -94,4 +318,879 @@
   to {
     transform: rotate(1turn);
   }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CV PRIVADO · Hoja (preview + impresión)
+   Copia fiel del CSS de public/cv/cv.html scoped bajo `.cv-sheet`.
+   Se renderiza en React desde CvSheet.tsx y se imprime en 594×1305 pt.
+   ════════════════════════════════════════════════════════════════════ */
+.cv-sheet {
+  position: relative;
+  width: 792px;
+  min-height: 1740px;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+
+  --canvas: #09090b;
+  --mesh-base: #050507;
+  --page-bg-img: url("/cv/assets/bg-dark.png");
+  --surface-1: rgba(255, 255, 255, 0.05);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --surface-3: rgba(255, 255, 255, 0.12);
+  --ink: #fafafa;
+  --soft: #d4d4d8;
+  --muted: #a1a1aa;
+  --faint: #71717a;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --accent: #00feff;
+  --accent-soft: rgba(0, 254, 255, 0.08);
+  --accent-strong: rgba(0, 254, 255, 0.3);
+  --indigo: #6366f1;
+  --purple: #c084fc;
+  --glow: rgba(0, 254, 255, 0.18);
+  --accent-grad: linear-gradient(120deg, #00feff 0%, #67f8ff 45%, #a5f3fc 100%);
+  --logo-filter: brightness(0) invert(0.92);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --glass-top: rgba(255, 255, 255, 0.17);
+  --glass-bot: rgba(255, 255, 255, 0.06);
+  --glass-hi: rgba(255, 255, 255, 0.38);
+  --glass-line: rgba(255, 255, 255, 0.24);
+  --glass-drop: drop-shadow(0 22px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+  --gs-top: rgba(255, 255, 255, 0.15);
+  --gs-bot: rgba(255, 255, 255, 0.05);
+  --gs-hi: rgba(255, 255, 255, 0.28);
+  --gs-line: rgba(255, 255, 255, 0.22);
+  --logo-chip: #ffffff;
+  --logo-chip-brd: rgba(0, 0, 0, 0.14);
+  --logo-chip-dk: rgba(9, 9, 11, 0.92);
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+.cv-sheet[data-theme="light"] {
+  --canvas: #e9eef0;
+  --mesh-base: #e3eaec;
+  --page-bg-img: url("/cv/assets/bg-light.png");
+  --surface-1: rgba(255, 255, 255, 0.72);
+  --surface-2: rgba(244, 244, 243, 0.85);
+  --surface-3: #ececea;
+  --ink: #18181b;
+  --soft: #3f3f46;
+  --muted: #71717a;
+  --faint: #a1a1aa;
+  --line: rgba(24, 24, 27, 0.1);
+  --line-strong: rgba(24, 24, 27, 0.18);
+  --accent: #0e7490;
+  --accent-soft: rgba(14, 116, 144, 0.1);
+  --accent-strong: rgba(14, 116, 144, 0.42);
+  --indigo: #4f46e5;
+  --purple: #7c3aed;
+  --glow: rgba(14, 116, 144, 0.14);
+  --accent-grad: linear-gradient(120deg, #0e7490 0%, #0891b2 45%, #155e75 100%);
+  --logo-filter: brightness(0) saturate(1) contrast(1.15);
+  --shadow: rgba(24, 24, 27, 0.14);
+  --glass-top: rgba(255, 255, 255, 0.7);
+  --glass-bot: rgba(228, 242, 246, 0.58);
+  --glass-hi: rgba(255, 255, 255, 1);
+  --glass-line: rgba(14, 116, 144, 0.62);
+  --glass-drop: drop-shadow(0 26px 34px rgba(14, 116, 144, 0.45)) drop-shadow(0 12px 22px rgba(24, 24, 27, 0.25));
+  --gs-top: rgba(255, 255, 255, 0.68);
+  --gs-bot: rgba(230, 243, 247, 0.56);
+  --gs-hi: rgba(255, 255, 255, 1);
+  --gs-line: rgba(14, 116, 144, 0.52);
+  --logo-chip: #ffffff;
+  --logo-chip-brd: rgba(24, 24, 27, 0.14);
+  --logo-chip-dk: rgba(9, 9, 11, 0.92);
+  color-scheme: light;
+}
+
+.cv-sheet * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-sheet .page {
+  position: relative;
+  width: 792px;
+  min-height: 1740px;
+  overflow: hidden;
+  background: var(--canvas);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+.cv-sheet[data-theme="light"] .page {
+  box-shadow: 0 30px 80px rgba(24, 24, 27, 0.18);
+}
+
+.cv-sheet .page-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--mesh-base);
+  background-image: var(--page-bg-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cv-sheet .topline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 3;
+  background: linear-gradient(90deg, #00feff, #6366f1 45%, #c084fc 70%, #00feff);
+  background-size: 220% 100%;
+  animation: cv-slide 8s linear infinite;
+}
+@keyframes cv-slide {
+  to {
+    background-position: 220% 0;
+  }
+}
+
+.cv-sheet .frame {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 246px 1fr;
+  gap: 18px;
+  padding: 24px;
+}
+
+.cv-sheet .glass {
+  position: relative;
+  border-radius: 18px;
+}
+.cv-sheet .glass-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--glass-hi) 0 1px, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(180deg, var(--glass-top), var(--glass-bot));
+  border: 1px solid var(--glass-line);
+  filter: var(--glass-drop);
+}
+.cv-sheet .glass > *:not(.glass-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.cv-sheet .side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 16px 15px;
+}
+.cv-sheet .side > section + section {
+  border-top: 1px solid var(--line);
+  padding-top: 11px;
+}
+.cv-sheet .side > .cv-editable + .cv-editable {
+  border-top: 1px solid var(--line);
+  padding-top: 11px;
+}
+.cv-sheet .side > .cv-editable.no-border {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.cv-sheet .id {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+.cv-sheet .avatar {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 24px;
+}
+.cv-sheet .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 24px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 0 30px -6px var(--glow);
+}
+.cv-sheet .avatar::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 28px;
+  z-index: -1;
+  background: conic-gradient(from 0deg, transparent, var(--accent) 22%, transparent 42%, var(--indigo) 62%, transparent 82%);
+  animation: cv-spin 10s linear infinite;
+  filter: blur(0.2px);
+}
+@keyframes cv-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.cv-sheet .id h1 {
+  font-size: 27px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.cv-sheet .id h1 .g {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.cv-sheet .id .role,
+.cv-sheet .id .role2 {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.cv-sheet .id .chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+.cv-sheet .id .chips span {
+  font-size: 8.6px;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--soft);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+.cv-sheet .id .tagline {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.cv-sheet .id .tagline b {
+  color: var(--soft);
+  font-weight: 700;
+}
+
+.cv-sheet .side .label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 8.4px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.cv-sheet .side .label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.cv-sheet .contact {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.cv-sheet .contact div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--soft);
+  line-height: 1.3;
+}
+.cv-sheet .contact .ic {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.cv-sheet .contact .ic svg {
+  width: 11px;
+  height: 11px;
+}
+.cv-sheet .contact .ct {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cv-sheet .langs {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.cv-sheet .lang {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.cv-sheet .lang .n {
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.cv-sheet .lang .n small {
+  display: block;
+  font-size: 8px;
+  font-weight: 500;
+  color: var(--faint);
+  font-family: var(--mono);
+}
+.cv-sheet .lang .bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.cv-sheet .lang .bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent-grad);
+  box-shadow: 0 0 8px var(--glow);
+  border-radius: 2px;
+}
+
+.cv-sheet .refs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cv-sheet .ref {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  padding: 8px 9px;
+}
+.cv-sheet .ref .av {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-strong);
+}
+.cv-sheet .ref .rn {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.cv-sheet .ref .rr {
+  font-size: 8.6px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.cv-sheet .ref .rr b {
+  color: var(--accent);
+  font-weight: 700;
+}
+.cv-sheet .ref .rt {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--faint);
+}
+
+.cv-sheet .social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cv-sheet .social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-family: var(--mono);
+  color: var(--soft);
+  text-decoration: none;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+.cv-sheet .social a svg {
+  width: 11px;
+  height: 11px;
+}
+
+.cv-sheet .main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cv-sheet .main .panel:last-child {
+  flex: 1;
+}
+.cv-sheet .panel {
+  padding: 15px 17px;
+}
+
+.cv-sheet .sec {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 12px;
+}
+.cv-sheet .sec .n {
+  font-family: var(--mono);
+  font-size: 8.4px;
+  font-weight: 800;
+  color: var(--accent);
+  border: 1px solid var(--accent-strong);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 3px 9px;
+  letter-spacing: 0.12em;
+}
+.cv-sheet .sec h2 {
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+}
+.cv-sheet .sec .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line-strong);
+  position: relative;
+}
+
+.cv-sheet .perfil p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--soft);
+  margin-bottom: 10px;
+}
+.cv-sheet .perfil p:last-child {
+  margin-bottom: 0;
+}
+.cv-sheet .perfil p b {
+  color: var(--accent);
+  font-weight: 800;
+}
+.cv-sheet .perfil p strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.cv-sheet .jobs {
+  display: flex;
+  flex-direction: column;
+}
+.cv-sheet .job {
+  padding: 13px 0 14px;
+}
+.cv-sheet .jobs > .cv-editable + .cv-editable {
+  border-top: 1px dashed var(--line);
+}
+.cv-sheet .job .hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cv-sheet .job .hinfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.cv-sheet .job .when {
+  margin-left: auto;
+  text-align: right;
+  padding-left: 12px;
+  flex: none;
+}
+.cv-sheet .job .when .d {
+  font-family: var(--mono);
+  font-size: 9.4px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.cv-sheet .job .when .loc {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--faint);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.cv-sheet .job .logo {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--logo-chip-brd);
+  background: var(--logo-chip);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cv-sheet .job .logo img {
+  max-width: 78%;
+  max-height: 78%;
+  object-fit: contain;
+}
+.cv-sheet .job .logo.dk {
+  background: var(--logo-chip-dk);
+  border-color: var(--line-strong);
+}
+.cv-sheet .job .logo.mono {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 9px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-strong);
+}
+.cv-sheet .job .role {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.cv-sheet .job .co {
+  font-size: 9.6px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.cv-sheet .job ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.cv-sheet .job li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 11.2px;
+  line-height: 1.44;
+  color: var(--soft);
+}
+.cv-sheet .job li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--accent);
+  opacity: 0.8;
+  box-shadow: 0 0 7px var(--glow);
+}
+.cv-sheet .job li b {
+  color: var(--soft);
+  font-weight: 800;
+}
+
+.cv-sheet .skills {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.cv-sheet .skillgrp {
+  display: block;
+}
+.cv-sheet .skillgrp .gt {
+  font-family: var(--mono);
+  font-size: 7.7px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.cv-sheet .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.cv-sheet .tag {
+  font-size: 7.7px;
+  line-height: 1;
+  color: var(--soft);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+.cv-sheet .tag.hl {
+  border-color: var(--accent-strong);
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.cv-sheet .tools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.cv-sheet .tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 2px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  min-height: 40px;
+}
+.cv-sheet .tool .ic {
+  width: 15px;
+  height: 15px;
+  display: flex;
+}
+.cv-sheet .tool .ic img {
+  max-width: 100%;
+  max-height: 100%;
+  filter: var(--logo-filter);
+}
+.cv-sheet .tool .tn {
+  font-size: 6.6px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.05;
+}
+
+.cv-sheet .edu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cv-sheet .edu .row {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: start;
+  gap: 8px;
+}
+.cv-sheet .edu .row .logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 1px solid var(--logo-chip-brd);
+  background: var(--logo-chip);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cv-sheet .edu .row .logo img {
+  max-width: 76%;
+  max-height: 76%;
+  object-fit: contain;
+}
+.cv-sheet .edu .row .logo.dk {
+  background: var(--logo-chip-dk);
+  border-color: var(--line-strong);
+}
+.cv-sheet .edu .row .logo.mono {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 6.6px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-strong);
+}
+.cv-sheet .edu .row .t {
+  font-size: 9.1px;
+  font-weight: 800;
+  line-height: 1.18;
+}
+.cv-sheet .edu .row .s {
+  font-size: 7.8px;
+  color: var(--muted);
+  line-height: 1.28;
+}
+.cv-sheet .edu .row .d {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 7.1px;
+  color: var(--faint);
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+  border-radius: 999px;
+  margin-top: 2px;
+}
+
+.cv-sheet .ref,
+.cv-sheet .tool,
+.cv-sheet .social a,
+.cv-sheet .tag {
+  background: linear-gradient(180deg, var(--gs-top), var(--gs-bot));
+  border: 1px solid var(--gs-line);
+}
+.cv-sheet .tag.hl {
+  background: var(--accent-soft);
+  border-color: var(--accent-strong);
+}
+
+/* ─── Impresión del editor privado (solo hoja) ─── */
+@page {
+  size: 594pt 1305pt;
+  margin: 0;
+}
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .cv-layout-row {
+    display: block !important;
+    height: auto !important;
+  }
+  .cv-print-area {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .cv-sheet-stage {
+    transform: none !important;
+    width: auto !important;
+    height: auto !important;
+    position: static !important;
+    margin: 0 !important;
+  }
+  .cv-sheet .page {
+    box-shadow: none !important;
+  }
+  .cv-sheet .avatar::before,
+  .cv-sheet .topline {
+    animation: none !important;
+  }
+  .cv-sheet .cv-editable {
+    cursor: default;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  /* Compresión: fuera del PDF las imágenes raster pesadas (fondo + avatar) */
+  .cv-sheet .page-bg {
+    background-image: none !important;
+  }
+  .cv-sheet .avatar img {
+    display: none !important;
+  }
+  .cv-sheet .avatar::after {
+    content: "CH";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    font-family: var(--mono);
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    background-image: linear-gradient(160deg, var(--glass-top), var(--glass-bot));
+    border: 1px solid var(--line-strong);
+  }
+  /* Compresión: los drop-shadows/filtros rasterizan páginas enteras en el PDF */
+  .cv-sheet .glass-bg,
+  .cv-sheet .avatar::before {
+    filter: none !important;
+  }
+}
+
+/* ─── Secciones editables de la hoja (editor privado) ─── */
+.cv-sheet .cv-editable {
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 0 0 0 rgba(0, 254, 255, 0);
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition:
+    box-shadow 0.18s ease,
+    outline-color 0.18s ease;
+}
+.cv-sheet .cv-editable:hover,
+.cv-sheet .cv-editable:focus-visible {
+  outline-color: rgba(0, 254, 255, 0.45);
+  box-shadow:
+    0 0 0 2px rgba(0, 254, 255, 0.55),
+    0 10px 34px rgba(0, 254, 255, 0.14);
+}
+.cv-sheet .cv-editable:hover::after {
+  content: "Editar";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #03272a;
+  background: #00feff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ─── Panel flotante del editor ─── */
+@keyframes cv-editor-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.cv-editor-panel {
+  animation: cv-editor-in 0.18s ease-out;
 }

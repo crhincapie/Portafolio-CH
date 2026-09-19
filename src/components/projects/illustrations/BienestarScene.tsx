@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { Elem, enterVariants, Scene } from "./motion";
 import { Card, Grid, Ping, Pill, SceneBg, Txt } from "./primitives";
+import { usePalette } from "./theme";
 
-const C = {
+const C_DARK = {
   top: "#171233",
   bottom: "#100d26",
   card: "#221b40",
@@ -17,44 +18,59 @@ const C = {
   dim: "#7d749e",
 };
 
-const ICONS = [
-  {
-    x: 112,
-    y: 136,
-    color: C.coral,
-    d: "M12 21.3s-6.8-4.4-9.5-8.2C.8 10.4 1.6 6.5 4.6 4.9 6.7 3.7 9.2 4.2 10.7 6c1.5-1.8 4-2.3 6.1-1.1 3 1.6 3.8 5.5 2.1 8.2-2.7 3.8-9.5 8.2-9.5 8.2z",
-    label: "Cuerpo",
-  },
-  {
-    x: 208,
-    y: 136,
-    color: C.mint,
-    d: "M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10zM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12",
-    label: "Naturaleza",
-  },
-  {
-    x: 112,
-    y: 214,
-    color: C.lavender,
-    d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z",
-    label: "Sueño",
-  },
-  {
-    x: 208,
-    y: 214,
-    color: C.gold,
-    d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
-    label: "Energía",
-  },
-];
-
-const ROWS = [
-  { y: 164, w: 130, price: "$ 45", color: C.coral },
-  { y: 196, w: 104, price: "$ 60", color: C.mint },
-  { y: 228, w: 118, price: "$ 38", color: C.lavender },
-];
+const C_LIGHT = {
+  top: "#f1effa",
+  bottom: "#e4e1f4",
+  card: "#ffffff",
+  cardHi: "#eceaf6",
+  lavender: "#6d28d9",
+  mint: "#059669",
+  coral: "#e11d48",
+  gold: "#d97706",
+  text: "#1f2937",
+  dim: "#6b7280",
+};
 
 export function BienestarScene() {
+  const C = usePalette(C_DARK, C_LIGHT);
+
+  const ICONS = [
+    {
+      x: 112,
+      y: 136,
+      color: C.coral,
+      d: "M12 21.3s-6.8-4.4-9.5-8.2C.8 10.4 1.6 6.5 4.6 4.9 6.7 3.7 9.2 4.2 10.7 6c1.5-1.8 4-2.3 6.1-1.1 3 1.6 3.8 5.5 2.1 8.2-2.7 3.8-9.5 8.2-9.5 8.2z",
+      label: "Cuerpo",
+    },
+    {
+      x: 208,
+      y: 136,
+      color: C.mint,
+      d: "M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10zM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12",
+      label: "Naturaleza",
+    },
+    {
+      x: 112,
+      y: 214,
+      color: C.lavender,
+      d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z",
+      label: "Sueño",
+    },
+    {
+      x: 208,
+      y: 214,
+      color: C.gold,
+      d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
+      label: "Energía",
+    },
+  ];
+
+  const ROWS = [
+    { y: 164, w: 130, price: "$ 45", color: C.coral },
+    { y: 196, w: 104, price: "$ 60", color: C.mint },
+    { y: 228, w: 118, price: "$ 38", color: C.lavender },
+  ];
+
   return (
     <Scene>
       <Elem enter={enterVariants("fade", 0.05)}>

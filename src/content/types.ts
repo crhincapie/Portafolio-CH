@@ -13,6 +13,10 @@ export type CaseStudyContent = {
   results: Localized;
   learnings: Localized;
   metrics?: Localized[];
+  /** Nº de interfaces (pantallas) del prototipo real. */
+  interfaces: number;
+  /** Nº de componentes de UI del prototipo real. */
+  components: number;
   tools: string[];
   techStack: string[];
   figmaUrl?: string | null;

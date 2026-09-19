@@ -6,6 +6,8 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeScript } from "@/components/theme/ThemeScript";
 import { siteConfig } from "@/config/site";
 import { buildPersonJsonLd, buildWebSiteJsonLd } from "@/lib/structured-data";
 
@@ -69,10 +71,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={locale} className={figtree.variable} suppressHydrationWarning>
-      <body className="min-h-dvh bg-zinc-950 text-zinc-100 antialiased">
+      <body className="min-h-dvh">
+        <ThemeScript />
         <JsonLd data={[personLd, siteLd]} />
         <NextIntlClientProvider messages={messages}>
-          <SiteShell>{children}</SiteShell>
+          <ThemeProvider>
+            <SiteShell>{children}</SiteShell>
+          </ThemeProvider>
         </NextIntlClientProvider>
         <Analytics />
       </body>

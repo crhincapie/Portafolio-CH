@@ -23,14 +23,14 @@ export async function ProjectsSection() {
   const locale = await getLocale();
 
   return (
-    <section id="proyectos" className="scroll-mt-28 border-b border-white/5 py-20 md:py-28">
+    <section id="proyectos" className="glass-ambient scroll-mt-28 border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-6xl space-y-14 px-4 md:px-6">
         <Reveal>
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionHeading kicker={t("kicker")} title={t("title")} description={t("subtitle")} />
             <Link
               href="/projects"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]"
+              className="inline-flex items-center justify-center rounded-full border border-line-strong px-5 py-2 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
             >
               {t("viewAll")}
             </Link>
