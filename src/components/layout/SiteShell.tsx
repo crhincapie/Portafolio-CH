@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import { ParallaxProvider } from "@/components/motion/Parallax";
 import { CustomCursor } from "@/components/motion/CustomCursor";
@@ -10,6 +11,13 @@ import { SkipToContent } from "@/components/layout/SkipToContent";
 import { MotionConfig } from "framer-motion";
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isPrivateCvEditor = pathname.includes("/cv/editar");
+
+  if (isPrivateCvEditor) {
+    return <>{children}</>;
+  }
+
   return (
     <MotionConfig reducedMotion="user">
       <LenisProvider>

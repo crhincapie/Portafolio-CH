@@ -6,12 +6,12 @@ export default async function NotFound() {
 
   return (
     <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-24 text-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#00feff]/90">404</p>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-4xl">{t("title")}</h1>
-      <p className="mt-4 text-sm leading-relaxed text-zinc-400">{t("description")}</p>
+      <p className="accent-chip text-xs font-semibold uppercase tracking-[0.35em]">404</p>
+      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink md:text-4xl">{t("title")}</h1>
+      <p className="mt-4 text-sm leading-relaxed text-muted">{t("description")}</p>
       <Link
         href="/"
-        className="mt-8 inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]"
+        className="mt-8 inline-flex items-center justify-center rounded-full border border-line-strong px-6 py-3 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
       >
         {t("cta")}
       </Link>

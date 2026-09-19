@@ -9,6 +9,7 @@
 import { motion, type Transition } from "framer-motion";
 import type { ReactNode } from "react";
 import { Elem, EASE, enterVariants, type EnterKind } from "./motion";
+import { useSceneTheme } from "./theme";
 
 /* ------------------------------- Líneas ------------------------------- */
 
@@ -226,11 +227,13 @@ export function ArcRing({
   delay = 0,
   rotate = -90,
   track = false,
-  trackStroke = "rgba(255,255,255,0.07)",
+  trackStroke,
 }: ArcRingProps) {
+  const light = useSceneTheme();
+  const usedTrack = trackStroke ?? (light ? "rgba(24,24,27,0.08)" : "rgba(255,255,255,0.07)");
   return (
     <g transform={`rotate(${rotate} ${cx} ${cy})`}>
-      {track && <circle cx={cx} cy={cy} r={r} fill="none" stroke={trackStroke} strokeWidth={width} />}
+      {track && <circle cx={cx} cy={cy} r={r} fill="none" stroke={usedTrack} strokeWidth={width} />}
       <motion.circle
         cx={cx}
         cy={cy}
@@ -258,12 +261,15 @@ interface PhoneProps {
   children?: ReactNode;
 }
 
-export function Phone({ x, y, w, h, bezel = "#0f1622", screen = "#0b1422", children }: PhoneProps) {
+export function Phone({ x, y, w, h, bezel, screen, children }: PhoneProps) {
+  const light = useSceneTheme();
+  const usedBezel = bezel ?? (light ? "#c3d0d3" : "#0f1622");
+  const usedScreen = screen ?? (light ? "#eef4f5" : "#0b1422");
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} rx={30} fill={bezel} />
-      <rect x={x + 5} y={y + 5} width={w - 10} height={h - 10} rx={25} fill={screen} />
-      <rect x={x + w / 2 - 28} y={y + 14} width={56} height={8} rx={4} fill={bezel} />
+      <rect x={x} y={y} width={w} height={h} rx={30} fill={usedBezel} />
+      <rect x={x + 5} y={y + 5} width={w - 10} height={h - 10} rx={25} fill={usedScreen} />
+      <rect x={x + w / 2 - 28} y={y + 14} width={56} height={8} rx={4} fill={usedBezel} />
       {children}
     </g>
   );

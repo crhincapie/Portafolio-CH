@@ -24,23 +24,23 @@ export async function ContactSection() {
 
         <Reveal delay={0.1}>
           <SpotlightCard
-            className="group relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.25)]"
+            className="group relative overflow-hidden rounded-3xl border border-line bg-surface-1 transition-[border-color,box-shadow] duration-300 hover:border-[#00feff]/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.18)]"
           >
             <ContactBackground />
 
             <div className="relative grid gap-8 p-8 md:grid-cols-[1.1fr_0.9fr] md:items-center md:p-12">
               <div className="flex flex-col justify-between gap-8">
                 <div className="space-y-4">
-                  <p className="max-w-md text-sm leading-relaxed text-zinc-300">{t("footnote")}</p>
+                  <p className="max-w-md text-sm leading-relaxed text-soft">{t("footnote")}</p>
                   <a
                     href={`mailto:${siteConfig.email}`}
-                    className="inline-flex items-center gap-2.5 text-sm font-medium text-zinc-100 transition hover:text-[#00feff]"
+                    className="inline-flex items-center gap-2.5 text-sm font-medium text-ink transition hover:text-accent-text"
                   >
                     <MailIcon className="h-4.5 w-4.5 text-[#00feff]" />
                     {siteConfig.email}
                   </a>
                 </div>
-                <div className="inline-flex w-fit items-center gap-2.5 rounded-full border border-[#00feff]/25 bg-[#00feff]/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-[#00feff]">
+                <div className="inline-flex w-fit items-center gap-2.5 rounded-full border border-[#00feff]/40 bg-zinc-900/85 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-[#00feff]">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00feff] opacity-60" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00feff]" />
@@ -64,7 +64,7 @@ export async function ContactSection() {
                     href={`https://wa.me/${siteConfig.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-3 py-4 text-xs font-medium text-zinc-200 transition hover:border-[#00feff]/60 hover:bg-[#00feff]/5 hover:text-[#00feff]"
+                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-line-strong bg-surface-1 px-3 py-4 text-xs font-medium text-soft transition hover:border-accent-strong hover:bg-accent-soft hover:text-accent-text"
                   >
                     <WhatsAppIcon className="h-5 w-5 transition-transform group-hover:scale-110" />
                     <span>{t("whatsappCta")}</span>
@@ -73,7 +73,7 @@ export async function ContactSection() {
                     href={siteConfig.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-3 py-4 text-xs font-medium text-zinc-200 transition hover:border-[#00feff]/60 hover:bg-[#00feff]/5 hover:text-[#00feff]"
+                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-line-strong bg-surface-1 px-3 py-4 text-xs font-medium text-soft transition hover:border-accent-strong hover:bg-accent-soft hover:text-accent-text"
                   >
                     <LinkedinIcon className="h-5 w-5 transition-transform group-hover:scale-110" />
                     <span>{t("linkedinCta")}</span>
@@ -82,7 +82,7 @@ export async function ContactSection() {
                     href={siteConfig.behance}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-3 py-4 text-xs font-medium text-zinc-200 transition hover:border-[#00feff]/60 hover:bg-[#00feff]/5 hover:text-[#00feff]"
+                    className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-line-strong bg-surface-1 px-3 py-4 text-xs font-medium text-soft transition hover:border-accent-strong hover:bg-accent-soft hover:text-accent-text"
                   >
                     <BehanceIcon className="h-5 w-5 transition-transform group-hover:scale-110" />
                     <span>{t("behanceCta")}</span>

@@ -17,11 +17,11 @@ interface BentoProjectCardProps {
 
 function BrowserChrome() {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex h-7 items-center gap-1.5 bg-zinc-800/80 px-3 backdrop-blur-sm">
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex h-7 items-center gap-1.5 bg-zinc-800/80 px-3 backdrop-blur-sm light:bg-white/85 light:backdrop-blur-md">
       <span className="h-2 w-2 rounded-full bg-red-500/80" />
       <span className="h-2 w-2 rounded-full bg-yellow-500/80" />
       <span className="h-2 w-2 rounded-full bg-green-500/80" />
-      <span className="ml-2 h-3 flex-1 max-w-[40%] rounded bg-zinc-700/50" />
+      <span className="ml-2 h-3 flex-1 max-w-[40%] rounded bg-zinc-700/50 light:bg-zinc-300/60" />
     </div>
   );
 }
@@ -32,7 +32,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <span
           key={tag}
-          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-zinc-300"
+          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-zinc-300 light:border-zinc-900/10 light:bg-zinc-900/[0.04] light:text-zinc-600"
         >
           {tag}
         </span>
@@ -48,9 +48,9 @@ interface CardActionsProps {
 
 function CardActions({ featured, t }: CardActionsProps) {
   const outlineBtn =
-    "inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff]";
+    "inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff] light:border-zinc-900/20 light:text-ink light:hover:border-[#0e7490]/70 light:hover:text-[#0e7490]";
   const solidBtn =
-    "inline-flex items-center justify-center gap-2 rounded-full bg-[#00feff] px-6 py-3 text-sm font-medium text-zinc-950 shadow-[0_0_40px_rgba(0,254,255,0.25)] transition hover:bg-[#7afcff]";
+    "inline-flex items-center justify-center gap-2 rounded-full bg-[#00feff] px-6 py-3 text-sm font-medium text-zinc-950 shadow-[0_0_40px_rgba(0,254,255,0.25)] transition hover:bg-[#7afcff] light:shadow-[0_6px_24px_rgba(13,148,136,0.25)]";
 
   if (featured) {
     return (
@@ -104,7 +104,7 @@ export function BentoProjectCard({
   return (
     <SpotlightCard
       className={cn(
-        "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/60 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#00feff]/80 hover:bg-zinc-900/70 hover:shadow-[0_0_60px_rgba(0,254,255,0.22)]",
+        "glass-surface glass-blur group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border border-white/15 transition hover:border-[#00feff]/80 hover:shadow-[0_0_60px_rgba(0,254,255,0.22)] light:border-zinc-400/50 light:hover:shadow-[0_18px_50px_rgba(13,148,136,0.16)]",
         compact ? "min-h-[340px]" : "min-h-[460px]",
         className,
       )}
@@ -116,19 +116,19 @@ export function BentoProjectCard({
 
       <BrowserChrome />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(0,254,255,0.45),transparent_55%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100 light:bg-[radial-gradient(circle_at_20%_0%,rgba(13,148,136,0.18),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20 light:from-white light:via-white/80 light:to-transparent" />
 
       <ProjectCardClient project={project} featured={project.featured} className="relative z-10 h-full">
         <div className="flex h-full flex-col justify-end gap-3 p-6 md:p-7">
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-zinc-500">{pickLocale(locale, project.company)}</span>
-            <span className="h-1 w-1 rounded-full bg-zinc-600" />
-            <span className="font-medium uppercase tracking-[0.25em] text-[#00feff]/80">{project.year}</span>
+            <span className="text-zinc-500 light:text-muted">{pickLocale(locale, project.company)}</span>
+            <span className="h-1 w-1 rounded-full bg-zinc-600 light:bg-zinc-400" />
+            <span className="font-medium uppercase tracking-[0.25em] text-[#00feff]/80 light:text-[#0e7490]">{project.year}</span>
           </div>
           <h3
             className={cn(
-              "font-semibold tracking-tight text-white",
+              "font-semibold tracking-tight text-white light:text-ink",
               compact ? "text-xl md:text-2xl" : "text-2xl md:text-3xl",
             )}
           >
@@ -136,7 +136,7 @@ export function BentoProjectCard({
           </h3>
           <p
             className={cn(
-              "max-w-2xl text-sm leading-relaxed text-zinc-300",
+              "max-w-2xl text-sm leading-relaxed text-zinc-300 light:text-soft",
               compact ? "line-clamp-2" : "line-clamp-3",
             )}
           >

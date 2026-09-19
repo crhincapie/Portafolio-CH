@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const NAV = [
   { id: "sobre", key: "about" as const },
@@ -44,33 +45,34 @@ export function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 border-b border-transparent transition-colors",
-        scrolled && "border-white/5 bg-zinc-950/75 backdrop-blur-xl",
+        scrolled && "border-line bg-canvas/75 backdrop-blur-xl",
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 md:px-6">
-        <Link href="/" className="group flex items-center gap-2 text-sm font-semibold tracking-tight text-white">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-[#00feff] transition group-hover:border-[#00feff]/40">
+        <Link href="/" className="group flex items-center gap-2 text-sm font-semibold tracking-tight text-ink">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900/85 text-xs text-[#00feff] transition group-hover:border group-hover:border-accent-strong">
             CH
           </span>
           <span className="hidden sm:inline">Cristian Hincapié</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
+        <nav className="hidden items-center gap-8 text-sm text-muted md:flex">
           {NAV.map((item) => (
-            <Link key={item.id} href={`/#${item.id}`} className="relative transition hover:text-white">
+            <Link key={item.id} href={`/#${item.id}`} className="relative transition hover:text-ink">
               <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#00feff] transition-all duration-300 hover:w-full" />
               {t(item.key)}
             </Link>
           ))}
-          <Link href="/projects" className="text-zinc-500 transition hover:text-white">
+          <Link href="/projects" className="text-faint transition hover:text-ink">
             {t("caseStudies")}
           </Link>
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <a
             href={otherHref}
-            className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium uppercase tracking-widest text-zinc-300 transition hover:border-[#00feff]/50 hover:text-white"
+            className="rounded-full border border-line-strong px-3 py-1.5 text-xs font-medium uppercase tracking-widest text-soft transition hover:border-[#00feff]/50 hover:text-ink"
             hrefLang={otherLocale}
           >
             {otherLocale}
@@ -78,7 +80,7 @@ export function Header() {
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-zinc-200 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong text-soft md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
@@ -96,11 +98,11 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          "border-t border-white/5 bg-zinc-950/95 px-4 py-4 backdrop-blur-xl md:hidden",
+          "border-t border-line bg-canvas/95 px-4 py-4 backdrop-blur-xl md:hidden",
           open ? "block" : "hidden",
         )}
       >
-        <div className="flex flex-col gap-3 text-sm text-zinc-300">
+        <div className="flex flex-col gap-3 text-sm text-soft">
           {NAV.map((item) => (
             <Link key={item.id} className="py-1" href={`/#${item.id}`}>
               {t(item.key)}

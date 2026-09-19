@@ -107,7 +107,7 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
           type="button"
           onClick={() => scrollByStep(-1)}
           aria-label="Previous image"
-          className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-zinc-950/80 text-xl leading-none text-white backdrop-blur transition hover:border-[#00feff]/60 hover:text-[#00feff]"
+          className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-canvas/80 text-xl leading-none text-ink backdrop-blur transition hover:border-accent-strong hover:text-accent-text"
         >
           ‹
         </button>
@@ -125,8 +125,8 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
               key={i}
               className={
                 isDesktop
-                  ? "aspect-square flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 w-[calc(100%-2.5rem)] md:w-[calc((100%-2.5rem)/1.5)]"
-                  : "aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 w-[72%] max-w-[248px] md:w-[27%] md:max-w-[320px]"
+                  ? "aspect-square flex-none overflow-hidden rounded-2xl border border-line bg-canvas w-[calc(100%-2.5rem)] md:w-[calc((100%-2.5rem)/1.5)]"
+                  : "aspect-[9/19] flex-none overflow-hidden rounded-2xl border border-line bg-canvas w-[72%] max-w-[248px] md:w-[27%] md:max-w-[320px]"
               }
               style={size ? { width: `${size.card}px` } : undefined}
             >
@@ -149,7 +149,7 @@ export function GalleryCarousel({ images, title, variant = "mobile" }: GalleryCa
           type="button"
           onClick={() => scrollByStep(1)}
           aria-label="Next image"
-          className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-zinc-950/80 text-xl leading-none text-white backdrop-blur transition hover:border-[#00feff]/60 hover:text-[#00feff]"
+          className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-canvas/80 text-xl leading-none text-ink backdrop-blur transition hover:border-accent-strong hover:text-accent-text"
         >
           ›
         </button>

@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { Elem, enterVariants, EASE, Scene } from "./motion";
 import { ArcRing, Card, DrawLine, GrowBars, Grid, Phone, Pill, Ping, SceneBg, Txt } from "./primitives";
+import { track, usePalette, useSceneTheme } from "./theme";
 
-const C = {
+const C_DARK = {
   top: "#0b1322",
   bottom: "#090f1c",
   card: "#12233b",
@@ -16,7 +17,21 @@ const C = {
   red: "#fb7185",
 };
 
+const C_LIGHT = {
+  top: "#eaf7f9",
+  bottom: "#dfeff2",
+  card: "#ffffff",
+  cardHi: "#e8f1f3",
+  cyan: "#0891b2",
+  mint: "#0d9488",
+  text: "#1f2937",
+  dim: "#6b7280",
+  red: "#e11d48",
+};
+
 export function BalancScene() {
+  const light = useSceneTheme();
+  const C = usePalette(C_DARK, C_LIGHT);
   return (
     <Scene>
       <Elem enter={enterVariants("fade", 0.05)}>
@@ -138,7 +153,7 @@ export function BalancScene() {
           <Txt x={540} y={358} size={12} fill={C.dim}>
             Semana 3 · 5 de 7 días
           </Txt>
-          <rect x={540} y={374} width={150} height={6} rx={3} fill="rgba(255,255,255,0.08)" />
+          <rect x={540} y={374} width={150} height={6} rx={3} fill={track(0.09, light)} />
           <motion.rect
             x={540}
             y={374}

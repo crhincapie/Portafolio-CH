@@ -6,8 +6,8 @@ const variants: Record<"primary" | "outline" | "ghost", string> = {
   primary:
     "bg-[#00feff] text-zinc-950 shadow-[0_0_40px_rgba(0,254,255,0.25)] hover:bg-[#7afcff]",
   outline:
-    "border border-white/15 bg-transparent text-white hover:border-[#00feff]/60 hover:text-[#00feff]",
-  ghost: "text-zinc-300 hover:text-white",
+    "border border-line-strong bg-transparent text-ink hover:border-accent-strong hover:text-accent-text",
+  ghost: "text-muted hover:text-ink",
 };
 
 type Props = {

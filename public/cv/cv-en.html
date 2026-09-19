@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cristian Hincapié — Senior Product Designer · CV</title>
+<meta name="description" content="Cristian Hincapié's CV — Senior Product Designer. UX/UI, Product Design, Design Systems, Applied AI." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ══════════════════════════════════════════════════════════════════
+     CV · Cristian Hincapié — Senior Product Designer
+     Estructura de la referencia (sidebar + principal · 594×1305 pt)
+     estética del portafolio: mesh cian/índigo, glass, chips, timeline,
+     ilustraciones SVG y micro-animaciones.
+     ══════════════════════════════════════════════════════════════════ */
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  :root {
+    --canvas: #09090b;
+    --mesh-base: #050507;
+    --page-bg-img: url("assets/bg-dark.png");
+    --surface-1: rgba(255,255,255,.05);
+    --surface-2: rgba(255,255,255,.08);
+    --surface-3: rgba(255,255,255,.12);
+    --ink: #fafafa;
+    --soft: #d4d4d8;
+    --muted: #a1a1aa;
+    --faint: #71717a;
+    --line: rgba(255,255,255,.10);
+    --line-strong: rgba(255,255,255,.16);
+    --accent: #00feff;
+    --accent-soft: rgba(0,254,255,.08);
+    --accent-strong: rgba(0,254,255,.30);
+    --indigo: #6366f1;
+    --purple: #c084fc;
+    --glow: rgba(0,254,255,.18);
+    --accent-grad: linear-gradient(120deg,#00feff 0%,#67f8ff 45%,#a5f3fc 100%);
+    --logo-filter: brightness(0) invert(.92);
+    --shadow: rgba(0,0,0,.45);
+    --glass-top: rgba(255,255,255,.17);
+    --glass-bot: rgba(255,255,255,.06);
+    --glass-hi: rgba(255,255,255,.38);
+    --glass-line: rgba(255,255,255,.24);
+    --glass-drop: drop-shadow(0 22px 30px rgba(0,0,0,.55)) drop-shadow(0 8px 16px rgba(0,0,0,.5));
+    --gs-top: rgba(255,255,255,.15);
+    --gs-bot: rgba(255,255,255,.05);
+    --gs-hi: rgba(255,255,255,.28);
+    --gs-line: rgba(255,255,255,.22);
+    --glass-blur: 22px;
+    --glass-sat: 185%;
+    --gs-blur: 11px;
+    --gs-sat: 170%;
+    --logo-chip: #ffffff;
+    --logo-chip-brd: rgba(0,0,0,.14);
+    --logo-chip-dk: rgba(9,9,11,.92);
+    --mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    --canvas: #e9eef0;
+    --mesh-base: #e3eaec;
+    --page-bg-img: url("assets/bg-light.png");
+    --surface-1: rgba(255,255,255,.72);
+    --surface-2: rgba(244,244,243,.85);
+    --surface-3: #ececea;
+    --ink: #18181b;
+    --soft: #3f3f46;
+    --muted: #71717a;
+    --faint: #a1a1aa;
+    --line: rgba(24,24,27,.10);
+    --line-strong: rgba(24,24,27,.18);
+    --accent: #0e7490;
+    --accent-soft: rgba(14,116,144,.10);
+    --accent-strong: rgba(14,116,144,.42);
+    --indigo: #4f46e5;
+    --purple: #7c3aed;
+    --glow: rgba(14,116,144,.14);
+    --accent-grad: linear-gradient(120deg,#0e7490 0%,#0891b2 45%,#155e75 100%);
+    --logo-filter: brightness(0) saturate(1) contrast(1.15);
+    --shadow: rgba(24,24,27,.14);
+    --glass-top: rgba(255,255,255,.70);
+    --glass-bot: rgba(228,242,246,.58);
+    --glass-hi: rgba(255,255,255,1);
+    --glass-line: rgba(14,116,144,.62);
+    --glass-drop: drop-shadow(0 26px 34px rgba(14,116,144,.45)) drop-shadow(0 12px 22px rgba(24,24,27,.25));
+    --gs-top: rgba(255,255,255,.68);
+    --gs-bot: rgba(230,243,247,.56);
+    --gs-hi: rgba(255,255,255,1);
+    --gs-line: rgba(14,116,144,.52);
+    --glass-blur: 26px;
+    --glass-sat: 200%;
+    --gs-blur: 13px;
+    --gs-sat: 185%;
+    --logo-chip: #ffffff;
+    --logo-chip-brd: rgba(24,24,27,.14);
+    --logo-chip-dk: rgba(9,9,11,.92);
+    color-scheme: light;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+    background: #d9d9d6;
+    color: var(--ink);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 92px 10px 40px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* ─── Toolbar (solo pantalla) ─── */
+  .toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 80;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 11px 18px;
+    background: rgba(9,9,11,.86); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,.08); color: #fafafa; font-size: 12.5px;
+  }
+  [data-theme="light"] .toolbar { background: rgba(250,250,249,.92); border-bottom-color: rgba(24,24,27,.1); color: #17171a; }
+  .toolbar .tb-brand { display: flex; align-items: center; gap: 9px; font-weight: 800; letter-spacing: .02em; }
+  .toolbar .tb-brand .dot { width: 9px; height: 9px; border-radius: 3px; background: var(--accent); box-shadow: 0 0 12px var(--glow); }
+  .toolbar .tb-right { display: flex; align-items: center; gap: 8px; }
+  .tb-btn { appearance: none; border: 1px solid rgba(255,255,255,.20); color: #fafafa; background: transparent; border-radius: 9px; padding: 7px 13px; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; transition: .15s; text-decoration: none; }
+  [data-theme="light"] .tb-btn { border-color: rgba(24,24,27,.22); color: #17171a; }
+  .tb-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tb-btn.primary { background: var(--accent); border-color: var(--accent); color: #060607 !important; font-weight: 800; }
+  [data-theme="light"] .tb-btn.primary { color: #fff !important; }
+  .tb-meta { font-family: var(--mono); font-size: 11px; opacity: .55; margin: 0 4px; }
+
+  /* ══════════════ HOJA (594×1305 pt = 792×1740 px) ══════════════ */
+  .page {
+    position: relative;
+    width: 792px; height: 1740px; overflow: hidden;
+    flex: 0 0 auto;
+    background: var(--canvas);
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  }
+  [data-theme="light"] .page { box-shadow: 0 30px 80px rgba(24,24,27,.18); }
+
+  /* fondo rasterizado (mesh + arte) para garantizar paridad web ↔ PDF */
+  .page-bg {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-color: var(--mesh-base);
+    background-image: var(--page-bg-img);
+    background-size: 792px 1740px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* barra de acento superior */
+  .topline { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 3;
+    background: linear-gradient(90deg,#00feff,#6366f1 45%,#c084fc 70%,#00feff);
+    background-size: 220% 100%; animation: slide 8s linear infinite; }
+  @keyframes slide { to { background-position: 220% 0; } }
+
+  /* ilustración de fondo (anillos + ondas + partículas) */
+  .bg-art { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .bg-art .ring { fill: none; stroke: var(--accent); stroke-width: 1; opacity: .22; }
+  .bg-art .ring2 { fill: none; stroke: var(--indigo); stroke-width: 1; opacity: .18; }
+  .bg-art .dotp { fill: var(--accent); opacity: .5; }
+  .bg-art .wave { fill: none; stroke: var(--accent); stroke-width: 1.2; opacity: .16; }
+
+  /* ══════════════ FRAME ══════════════ */
+  .frame {
+    position: relative; height: 100%;
+    display: grid; grid-template-columns: 246px 1fr; gap: 18px;
+    padding: 24px;
+  }
+
+  .glass {
+    position: relative;
+    border-radius: 18px;
+  }
+  .glass-bg {
+    position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none;
+    background:
+      linear-gradient(180deg, var(--glass-hi) 0 1px, rgba(0,0,0,0) 1px),
+      linear-gradient(180deg, var(--glass-top), var(--glass-bot));
+    border: 1px solid var(--glass-line);
+    filter: var(--glass-drop);
+  }
+  .glass > *:not(.glass-bg) { position: relative; z-index: 1; }
+
+  /* ══════════════ SIDEBAR ══════════════ */
+  .side { display: flex; flex-direction: column; justify-content: space-between; gap: 5px; padding: 16px 15px; }
+  .side > section + section { border-top: 1px solid var(--line); padding-top: 11px; }
+
+  .id { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  .avatar { position: relative; width: 92px; height: 92px; border-radius: 24px; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; border-radius: 24px; border: 1px solid var(--line-strong); box-shadow: 0 0 30px -6px var(--glow); }
+  .avatar::before {
+    content: ""; position: absolute; inset: -4px; border-radius: 28px; z-index: -1;
+    background: conic-gradient(from 0deg, transparent, var(--accent) 22%, transparent 42%, var(--indigo) 62%, transparent 82%);
+    animation: spin 10s linear infinite; filter: blur(.2px);
+  }
+  @keyframes spin { to { transform: rotate(1turn); } }
+  .id h1 { font-size: 27px; font-weight: 900; line-height: 1; letter-spacing: -.03em; }
+  .id h1 .g { background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .id .role, .id .role2 { font-size: 12.5px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+  .id .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+  .id .chips span { font-size: 8.6px; font-family: var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--soft); border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 999px; padding: 3px 8px; }
+  .id .tagline { font-size: 10.5px; line-height: 1.5; color: var(--muted); }
+  .id .tagline b { color: var(--soft); font-weight: 700; }
+
+  .side .label { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 8.4px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .side .label::after { content: ""; flex: 1; height: 1px; background: var(--line-strong); }
+
+  .contact { display: flex; flex-direction: column; gap: 7px; }
+  .contact a { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--soft); text-decoration: none; line-height: 1.3; transition: .18s; }
+  .contact a:hover { color: var(--accent); }
+  .contact a .ic { width: 20px; height: 20px; flex: none; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-strong); background: var(--accent-soft); color: var(--accent); }
+  .contact a .ic svg { width: 11px; height: 11px; }
+  .contact a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .langs { display: flex; flex-direction: column; gap: 9px; }
+  .lang { display: grid; grid-template-columns: 54px 1fr; align-items: center; gap: 8px; }
+  .lang .n { font-size: 10.5px; font-weight: 800; }
+  .lang .n small { display: block; font-size: 8px; font-weight: 500; color: var(--faint); font-family: var(--mono); }
+  .lang .bar { height: 6px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+  .lang .bar i { display: block; height: 100%; background: var(--accent-grad); box-shadow: 0 0 8px var(--glow); border-radius: 2px; }
+  .lang .bar i.es { width: 100%; } .lang .bar i.en { width: 55%; }
+
+  .refs { display: flex; flex-direction: column; gap: 8px; }
+  .ref { display: flex; gap: 9px; align-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); padding: 8px 9px; }
+  .ref .av { width: 26px; height: 26px; flex: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 9px; font-weight: 800; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-strong); }
+  .ref .rn { font-size: 10px; font-weight: 800; line-height: 1.15; }
+  .ref .rr { font-size: 8.6px; color: var(--muted); line-height: 1.3; }
+  .ref .rr b { color: var(--accent); font-weight: 700; }
+  .ref .rt { font-family: var(--mono); font-size: 8px; color: var(--faint); }
+
+  .social { display: flex; flex-wrap: wrap; gap: 6px; }
+  .social a { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; font-family: var(--mono); color: var(--soft); text-decoration: none; border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 999px; padding: 5px 10px; transition: .18s; }
+  .social a:hover { color: var(--accent); border-color: var(--accent-strong); box-shadow: 0 0 14px var(--glow); }
+  .social a svg { width: 11px; height: 11px; }
+
+  /* ══════════════ MAIN ══════════════ */
+  .main { display: flex; flex-direction: column; gap: 14px; }
+  .main .panel:last-child { flex: 1; }
+  .panel { padding: 15px 17px; }
+
+  .sec { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+  .sec .n { font-family: var(--mono); font-size: 8.4px; font-weight: 800; color: var(--accent); border: 1px solid var(--accent-strong); background: var(--accent-soft); border-radius: 999px; padding: 3px 9px; letter-spacing: .12em; }
+  .sec h2 { font-size: 12.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .26em; }
+  .sec .rule { flex: 1; height: 1px; background: var(--line-strong); position: relative; }
+
+  .perfil p { font-size: 12px; line-height: 1.6; color: var(--soft); margin-bottom: 10px; }
+  .perfil p:last-child { margin-bottom: 0; }
+  .perfil p b { color: var(--accent); font-weight: 800; }
+  .perfil p strong { color: var(--ink); font-weight: 700; }
+
+  /* experiencia */
+  .jobs { display: flex; flex-direction: column; }
+  .job { padding: 13px 0 14px; }
+  .job + .job { border-top: 1px dashed var(--line); }
+  .job .hd { display: flex; align-items: center; gap: 10px; }
+  .job .hinfo { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .job .when { margin-left: auto; text-align: right; padding-left: 12px; flex: none; }
+  .job .when .d { font-family: var(--mono); font-size: 9.4px; font-weight: 700; color: var(--accent); line-height: 1.3; white-space: nowrap; }
+  .job .when .loc { font-family: var(--mono); font-size: 8px; color: var(--faint); letter-spacing: .04em; margin-top: 2px; }
+  .job .logo { width: 28px; height: 28px; flex: none; border-radius: 8px; border: 1px solid var(--logo-chip-brd); background: var(--logo-chip); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .job .logo img { max-width: 78%; max-height: 78%; object-fit: contain; }
+  .job .logo.dk { background: var(--logo-chip-dk); border-color: var(--line-strong); }
+  .job .logo.mono { font-family: var(--mono); font-weight: 800; font-size: 9px; color: var(--accent); background: var(--accent-soft); border-color: var(--accent-strong); }
+  .job .role { font-size: 12px; font-weight: 800; line-height: 1.15; }
+  .job .co { font-size: 9.6px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+  .job ul { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+  .job li { position: relative; padding-left: 13px; font-size: 11.2px; line-height: 1.44; color: var(--soft); }
+  .job li::before { content: ""; position: absolute; left: 0; top: .58em; width: 4px; height: 4px; border-radius: 1px; background: var(--accent); opacity: .8; box-shadow: 0 0 7px var(--glow); }
+  .job li b { color: var(--soft); font-weight: 800; }
+
+  /* habilidades (sidebar) */
+  .skills { display: flex; flex-direction: column; gap: 7px; }
+  .skillgrp { display: block; }
+  .skillgrp .gt { font-family: var(--mono); font-size: 7.7px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 3px; }
+  .tag { font-size: 7.7px; line-height: 1; color: var(--soft); padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); }
+  .tag.hl { border-color: var(--accent-strong); color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+
+  /* herramientas (sidebar) */
+  .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .tool { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 5px 2px 5px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); min-height: 40px; transition: background .18s, border-color .18s, box-shadow .18s, transform .18s; }
+  .tool:hover { background: var(--accent-soft); border-color: var(--accent-strong); box-shadow: 0 0 14px var(--glow), 0 6px 16px -12px var(--shadow); transform: translateY(-1px); }
+  .tool .ic { width: 15px; height: 15px; display: flex; }
+  .tool .ic img { max-width: 100%; max-height: 100%; filter: var(--logo-filter); transition: filter .18s, transform .18s; }
+  .tool:hover .ic img { filter: none; transform: scale(1.12); }
+  .tool .tn { font-size: 6.6px; color: var(--muted); text-align: center; line-height: 1.05; transition: color .18s; }
+  .tool:hover .tn { color: var(--accent); }
+
+  /* educación (sidebar) */
+  .edu { display: flex; flex-direction: column; gap: 6px; }
+  .edu .row { display: grid; grid-template-columns: 24px 1fr; align-items: start; gap: 8px; }
+  .edu .row .logo { width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--logo-chip-brd); background: var(--logo-chip); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .edu .row .logo img { max-width: 76%; max-height: 76%; object-fit: contain; }
+  .edu .row .logo.dk { background: var(--logo-chip-dk); border-color: var(--line-strong); }
+  .edu .row .logo.mono { font-family: var(--mono); font-weight: 800; font-size: 6.6px; color: var(--accent); background: var(--accent-soft); border-color: var(--accent-strong); }
+  .edu .row .t { font-size: 9.1px; font-weight: 800; line-height: 1.18; }
+  .edu .row .s { font-size: 7.8px; color: var(--muted); line-height: 1.28; }
+  .edu .row .d { display: inline-block; font-family: var(--mono); font-size: 7.1px; color: var(--faint); border: 1px solid var(--line); padding: 2px 6px; border-radius: 999px; margin-top: 2px; }
+
+  /* recuadros glass (referencias, herramientas, redes, chips) */
+  .ref, .tool, .social a, .tag {
+    background: linear-gradient(180deg, var(--gs-top), var(--gs-bot));
+    border: 1px solid var(--gs-line);
+  }
+  .tag.hl { background: var(--accent-soft); border-color: var(--accent-strong); }
+
+  /* tarjetas flotantes decorativas (estética contacto del sitio) */
+  .deco { position: absolute; z-index: 1; border-radius: 16px; border: 1px solid var(--line); background: var(--surface-1); backdrop-filter: blur(8px); padding: 11px; box-shadow: 0 18px 50px -22px var(--shadow); opacity: .9; }
+  .deco .sk { border-radius: 999px; background: var(--ink); opacity: .16; }
+  .deco .bubble { border-radius: 12px; border: 1px solid var(--accent-strong); background: var(--accent-soft); }
+  .deco .pulse { display: flex; gap: 3px; }
+  .deco .pulse i { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: pulse 2.2s ease-in-out infinite; }
+  .deco .pulse i:nth-child(2) { animation-delay: .25s; } .deco .pulse i:nth-child(3) { animation-delay: .5s; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .deco.a { top: 30px; right: 34px; width: 148px; animation: float 6s ease-in-out infinite; }
+  .deco.b { bottom: 40px; left: 34px; width: 150px; animation: float 7s ease-in-out infinite .6s; }
+  @keyframes float { 50% { transform: translateY(-10px); } }
+
+  @media (prefers-reduced-motion: reduce) { .avatar::before, .topline, .deco, .deco .pulse i { animation: none; } }
+
+  /* ══════════════ PRINT ══════════════ */
+  @page { size: 594pt 1305pt; margin: 0; }
+  @media print {
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: var(--canvas); padding: 0; }
+    .toolbar { display: none !important; }
+    .page { box-shadow: none; }
+    a { color: inherit; text-decoration: none; }
+    .avatar::before, .topline, .deco, .deco .pulse i { animation: none; }
+  }
+
+  @media screen and (max-width: 880px) { body { overflow-x: auto; align-items: flex-start; } }
+
+  /* ─── Embed mode (inside the portfolio modal) ─── */
+  body.cv-embed { padding: 18px 10px 40px; }
+  body.cv-embed .toolbar { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ Toolbar (no se imprime) ═══════ -->
+<div class="toolbar">
+  <div class="tb-brand"><span class="dot"></span> Cristian Hincapié — CV</div>
+  <div class="tb-right">
+    <span class="tb-meta">594 × 1305 pt</span>
+    <button class="tb-btn" id="themeBtn" type="button">Light mode</button>
+    <a class="tb-btn" href="/" target="_blank" rel="noopener">Portfolio</a>
+    <button class="tb-btn primary" type="button" onclick="window.print()">Download PDF</button>
+  </div>
+</div>
+
+<!-- ════════════════ HOJA ════════════════ -->
+<section class="page" id="page">
+  <div class="page-bg"></div>
+  <div class="topline"></div>
+
+  <div class="frame">
+
+    <!-- ══════════ SIDEBAR ══════════ -->
+    <aside class="side glass">
+      <div class="glass-bg" aria-hidden="true"></div>
+
+      <div class="id">
+        <div class="avatar"><img src="../images/profile-cristian.png" alt="Cristian Hincapié" /></div>
+        <h1>Cristian <span class="g">Hincapié</span></h1>
+        <div class="role">Senior Product Designer</div>
+        <div class="role2">Design &amp; UX/UI Lead</div>
+        <div class="chips"><span>UX/UI</span><span>Digital Products</span><span>Design Systems</span></div>
+        <p class="tagline"><b>8+ years</b> designing digital products and human-centered experiences, connecting strategy, UX, UI, technology, and business.</p>
+      </div>
+
+      <section>
+        <div class="label">Contact</div>
+        <div class="contact">
+          <a href="mailto:c.hincapie.design@gmail.com">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5 12 13l8.5-6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span>c.hincapie.design@gmail.com</span>
+          </a>
+          <a href="tel:+573107502995">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z" stroke-linejoin="round"/></svg></span>
+            <span>(+57) 310 750 2995</span>
+          </a>
+          <a href="https://maps.google.com/?q=Bogota,Colombia" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <span>Bogotá, Colombia</span>
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Skills</div>
+        <div class="skills">
+          <div class="skillgrp">
+            <div class="gt">Product &amp; Design</div>
+            <div class="tags">
+              <span class="tag hl">Product Strategy</span><span class="tag hl">Product Discovery</span><span class="tag">UX Design</span><span class="tag">UI Design</span>
+              <span class="tag">Interaction Design</span><span class="tag">Information Architecture</span><span class="tag">User Flows</span><span class="tag">Wireframing</span>
+              <span class="tag">Prototyping</span><span class="tag">Usability Testing</span><span class="tag hl">Design Systems</span><span class="tag">Responsive</span><span class="tag">Mobile</span>
+            </div>
+          </div>
+          <div class="skillgrp">
+            <div class="gt">Research &amp; Validation</div>
+            <div class="tags">
+              <span class="tag hl">User Research</span><span class="tag">Usability Testing</span><span class="tag">Qualitative Research</span><span class="tag">Benchmarking</span>
+              <span class="tag">Journey Mapping</span><span class="tag">Data-informed Design</span><span class="tag">Digital Analytics</span>
+            </div>
+          </div>
+          <div class="skillgrp">
+            <div class="gt">Applied AI</div>
+            <div class="tags">
+              <span class="tag hl">AI-assisted Research</span><span class="tag hl">AI-assisted Ideation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Tools &amp; Technology</div>
+        <div class="tools">
+          <div class="tool"><span class="ic"><img src="logos/tools/figma.svg" alt="Figma" /></span><span class="tn">Figma</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/maze.svg" alt="Maze" /></span><span class="tn">Maze</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/miro.svg" alt="Miro" /></span><span class="tn">Miro</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/adobe.svg" alt="Adobe" /></span><span class="tn">Adobe</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/html5.svg" alt="HTML" /></span><span class="tn">HTML</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/css.svg" alt="CSS" /></span><span class="tn">CSS</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/javascript.svg" alt="JavaScript" /></span><span class="tn">JavaScript</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/react.svg" alt="React" /></span><span class="tn">React</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/angular.svg" alt="Angular" /></span><span class="tn">Angular</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/ionic.svg" alt="Ionic" /></span><span class="tn">Ionic</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/github.svg" alt="GitHub" /></span><span class="tn">GitHub</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/bitbucket.svg" alt="Bitbucket" /></span><span class="tn">Bitbucket</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/claude.svg" alt="Claude" /></span><span class="tn">Claude</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/googlegemini.svg" alt="Gemini" /></span><span class="tn">Gemini</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/copilot.svg" alt="Copilot" /></span><span class="tn">Copilot</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/openai.svg" alt="GPT" /></span><span class="tn">GPT</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/powerautomate.svg" alt="Power Automate" /></span><span class="tn">Power Autom.</span></div>
+          <div class="tool"><span class="ic"><img src="logos/tools/n8n.svg" alt="n8n" /></span><span class="tn">n8n</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Social</div>
+        <div class="social">
+          <a href="https://www.linkedin.com/in/cristian-camilo-hincapie-ciro" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3-.02-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21H9V9Z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://portafolio-ch.vercel.app/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4h4a2 2 0 0 1 2 2v4m0-6-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" stroke-linecap="round"/></svg>
+            Portfolio
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Languages</div>
+        <div class="langs">
+          <div class="lang">
+            <div class="n">Spanish<small>Native</small></div>
+            <div class="bar"><i class="es"></i></div>
+          </div>
+          <div class="lang">
+            <div class="n">English<small>Intermediate · B1</small></div>
+            <div class="bar"><i class="en"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">References</div>
+        <div class="refs">
+          <div class="ref">
+            <span class="av">JT</span>
+            <div>
+              <div class="rn">Julian Torres Gomez</div>
+              <div class="rr">CEO &amp; Founder · <b>Ontop</b></div>
+              <div class="rt">+1 (786) 922-1385</div>
+            </div>
+          </div>
+          <div class="ref">
+            <span class="av">YA</span>
+            <div>
+              <div class="rn">Yasmin Ayala Torres</div>
+              <div class="rr">Senior Innovation Professional · <b>Compensar</b></div>
+              <div class="rt">+1 (786) 922-1385</div>
+            </div>
+          </div>
+          <div class="ref">
+            <span class="av">EF</span>
+            <div>
+              <div class="rn">Edwin Nayib Fuentes</div>
+              <div class="rr">Technology Lead · <b>Ontop</b></div>
+              <div class="rt">300 871 8408</div>
+            </div>
+          </div>
+          <div class="ref">
+            <span class="av">BF</span>
+            <div>
+              <div class="rn">Brayhan Farid Garcia</div>
+              <div class="rr">UI Designer · <b>Evertec</b></div>
+              <div class="rt">319 257 9562</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Education</div>
+        <div class="edu">
+          <div class="row">
+            <div class="logo"><img src="logos/companies/poligran.png" alt="Politécnico Gran Colombiano" /></div>
+            <div><div class="t">Politécnico Gran Colombiano</div><div class="s">Professional Graphic Design</div><div class="d">March 2019</div></div>
+          </div>
+          <div class="row">
+            <div class="logo mono">CEN</div>
+            <div><div class="t">Cenigraf</div><div class="s">Multimedia Producer</div><div class="d">November 2016</div></div>
+          </div>
+          <div class="row">
+            <div class="logo"><img src="logos/companies/coursera.png" alt="Coursera" /></div>
+            <div><div class="t">Coursera</div><div class="s">UX Fundamentals</div><div class="d">June 2022</div></div>
+          </div>
+          <div class="row">
+            <div class="logo"><img src="logos/companies/santander.png" alt="Santander Open Academy" /></div>
+            <div><div class="t">Santander Open Academy</div><div class="s">Project Management &amp; Agile Fundamentals</div><div class="d">2026</div></div>
+          </div>
+          <div class="row">
+            <div class="logo"><img src="logos/companies/santander.png" alt="Santander Open Academy" /></div>
+            <div><div class="t">Santander Open Academy</div><div class="s">Google: Artificial Intelligence &amp; Productivity</div><div class="d">2026</div></div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- ══════════ MAIN ══════════ -->
+    <div class="main">
+
+      <!-- PERFIL -->
+      <section class="panel glass">
+        <div class="glass-bg" aria-hidden="true"></div>
+        <div class="sec"><span class="n">01</span><h2>Professional Profile</h2><span class="rule"></span></div>
+        <div class="perfil">
+          <p>Product Designer with <strong>over 8 years of experience</strong> creating and evolving digital products, web platforms, and human-centered experiences. I combine <b>UX · UI · Product Design · Service Design</b> to transform user and business needs into clear, useful, and viable digital experiences.</p>
+          <p>I have worked across <strong>end-to-end</strong> processes: from discovery, research, and flow definition to prototyping, interface design, <b>Design Systems</b>, validation, and implementation support.</p>
+          <p>I work closely with <strong>product, technology, and business</strong> teams to turn complex problems into simple, scalable solutions.</p>
+          <p>My experience in <b>Design Systems, digital analytics, Front-End, and Artificial Intelligence applied to design</b> allows me to connect design intent with its implementation and product evolution.</p>
+        </div>
+      </section>
+
+      <!-- EXPERIENCIA -->
+      <section class="panel glass">
+        <div class="glass-bg" aria-hidden="true"></div>
+        <div class="sec"><span class="n">02</span><h2>Experience</h2><span class="rule"></span></div>
+        <div class="jobs">
+
+          <article class="job">
+            <div class="hd">
+              <div class="logo"><img src="logos/companies/compensar.png" alt="Compensar" /></div>
+              <div class="hinfo"><div class="role">Senior Product Designer</div><div class="co">Compensar</div></div>
+              <div class="when"><div class="d">Sep 2023 - May 2026</div><div class="loc">Bogotá · Col.</div></div>
+            </div>
+              <ul>
+                <li>Led <b>design and evolution</b> initiatives for digital products, connecting user needs, business objectives, and technical feasibility.</li>
+                <li>Design <b>end-to-end</b> experiences: from research and information architecture to user flows, prototypes, high-fidelity interfaces, validation, and product evolution.</li>
+                <li>Work with cross-functional teams and stakeholders to transform business problems and user needs into <b>clear, actionable digital solutions</b>.</li>
+                <li>Design and evolve <b>Design Systems</b>, creating reusable patterns and components that support consistency, scalability, and product efficiency.</li>
+                <li>Use research, <b>digital analytics</b>, and user behavior to identify opportunities and guide design decisions.</li>
+                <li>Facilitate <b>workshops</b> and collaborative sessions to align teams, explore alternatives, and define solutions.</li>
+                <li>Manage and optimize digital platforms used by <b>more than 300 users</b>, identifying opportunities to improve experience, adoption, and operational efficiency.</li>
+                <li>Explore and apply <b>Artificial Intelligence</b> tools — including Copilot, Gemini, and Claude — to accelerate research, ideation, documentation, and design processes.</li>
+                <li>Design automations with <b>Power Automate and n8n</b> to streamline internal processes and reduce operational workload.</li>
+              </ul>
+          </article>
+
+          <article class="job">
+            <div class="hd">
+              <div class="logo"><img src="logos/companies/adlldigitallab.png" alt="ADL Digital Lab" /></div>
+              <div class="hinfo"><div class="role">Senior UX/UI Designer</div><div class="co">ADL Digital Lab</div></div>
+              <div class="when"><div class="d">Jun 2022 - Jul 2023</div><div class="loc">Bogotá · Col.</div></div>
+            </div>
+              <ul>
+                <li>Led <b>web and mobile UX/UI</b> projects, contributing across the entire process, from discovery to implementation.</li>
+                <li>Transformed user needs and business goals into <b>user flows, information architecture, wireframes, prototypes, and high-fidelity UI</b>.</li>
+                <li>Conducted <b>user research</b> and usability testing to validate hypotheses, identify friction points, and guide design decisions.</li>
+                <li>Designed experiences focused on <b>usability, conversion, and interaction clarity</b>, balancing user needs with business goals.</li>
+                <li>Collaborated directly with <b>product, business, and development</b> teams to ensure technical feasibility and proper implementation of the solutions.</li>
+                <li>Analyzed <b>user behavior</b> and performance metrics to identify opportunities for product optimization and evolution.</li>
+                <li>Integrated <b>Artificial Intelligence</b> tools into ideation, exploration, and documentation processes to accelerate the design cycle.</li>
+              </ul>
+          </article>
+
+          <article class="job">
+            <div class="hd">
+              <div class="logo"><img src="logos/companies/scotiabankcolpatria.png" alt="Scotiabank Colpatria" /></div>
+              <div class="hinfo"><div class="role">Senior UX/UI Designer</div><div class="co">Scotiabank Colpatria</div></div>
+              <div class="when"><div class="d">Aug 2021 - May 2022</div><div class="loc">Bogotá · Col.</div></div>
+            </div>
+              <ul>
+                <li>Designed and optimized digital experiences for <b>web and mobile financial products</b>, working on highly sensitive flows and user needs.</li>
+                <li>Led <b>research, usability testing, and functional validation</b> to identify friction points and improve the digital experience.</li>
+                <li>Defined <b>user flows, information architecture, and high-fidelity prototypes</b>, translating user and business needs into digital solutions.</li>
+                <li>Collaborated with <b>product, technology, and business</b> teams to continuously evolve digital channels.</li>
+                <li>Analyzed <b>metrics and user behavior</b> to identify improvement opportunities and prioritize design decisions.</li>
+                <li>Supported <b>implementation alongside development teams</b>, ensuring the correct interpretation and quality of the designed solutions.</li>
+              </ul>
+          </article>
+
+          <article class="job">
+            <div class="hd">
+              <div class="logo dk"><img src="logos/companies/fitpal.png" alt="Fitpal SAS" /></div>
+              <div class="hinfo"><div class="role">Front-End Designer</div><div class="co">Fitpal SAS</div></div>
+              <div class="when"><div class="d">Mar 2018 - Aug 2021</div><div class="loc">Bogotá · Col.</div></div>
+            </div>
+              <ul>
+                <li>Designed and developed digital experiences for <b>web platforms and mobile applications</b>, bridging UX/UI and Front-End implementation.</li>
+                <li>Defined <b>user flows and product experiences</b> in collaboration with business and technology teams.</li>
+                <li>Built <b>reusable interfaces and components</b> focused on visual consistency and development efficiency.</li>
+                <li>Developed solutions using <b>React, Angular, Ionic, HTML, CSS, and JavaScript</b>.</li>
+                <li>Built <b>conversion-focused landing pages and digital experiences</b>.</li>
+              </ul>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("themeBtn");
+    var saved = null;
+    try { saved = localStorage.getItem("cv-theme"); } catch (e) {}
+    var qs = new URLSearchParams(window.location.search);
+    var theme = qs.get("theme") || saved || "dark";
+    if (theme !== "light") theme = "dark";
+    if (qs.get("embed") === "1") document.body.classList.add("cv-embed");
+    function apply(t) {
+      root.setAttribute("data-theme", t);
+      if (btn) btn.textContent = t === "dark" ? "Light mode" : "Dark mode";
+      try { localStorage.setItem("cv-theme", t); } catch (e) {}
+    }
+    apply(theme);
+    if (btn) btn.addEventListener("click", function () {
+      apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    });
+  })();
+</script>
+
+</body>
+</html>

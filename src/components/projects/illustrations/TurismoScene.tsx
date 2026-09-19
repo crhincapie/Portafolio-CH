@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { Elem, enterVariants, Scene } from "./motion";
 import { Card, DrawLine, Grid, Ping, Pill, SceneBg, Txt } from "./primitives";
+import { usePalette } from "./theme";
 
-const C = {
+const C_DARK = {
   top: "#0c1d1d",
   bottom: "#071313",
   card: "#10241f",
@@ -17,6 +18,27 @@ const C = {
   text: "#e6f2ee",
   dim: "#6f8f87",
   leaf: "#4ade80",
+  mountSkyTop: "#1c3a47",
+  mountSkyBottom: "#0b1d1a",
+  mountain: "#0b1d1a",
+};
+
+const C_LIGHT = {
+  top: "#eaf8f3",
+  bottom: "#d8efe8",
+  card: "#ffffff",
+  cardHi: "#e2f1ec",
+  sun: "#fbbf24",
+  amber: "#d97706",
+  teal: "#0d9488",
+  mint: "#059669",
+  sky: "#0ea5e9",
+  text: "#1f2937",
+  dim: "#6b7280",
+  leaf: "#16a34a",
+  mountSkyTop: "#bfe3f5",
+  mountSkyBottom: "#d6efe0",
+  mountain: "#0d9488",
 };
 
 const SUN_RAYS: Array<[number, number, number, number]> = [
@@ -31,6 +53,7 @@ const SUN_RAYS: Array<[number, number, number, number]> = [
 ];
 
 export function TurismoScene() {
+  const C = usePalette(C_DARK, C_LIGHT);
   return (
     <Scene>
       <Elem enter={enterVariants("fade", 0.05)}>
@@ -46,14 +69,14 @@ export function TurismoScene() {
           {/* Paisaje: cielo → atardecer */}
           <defs>
             <linearGradient id="mountSky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1c3a47" />
-              <stop offset="100%" stopColor="#0b1d1a" />
+              <stop offset="0%" stopColor={C.mountSkyTop} />
+              <stop offset="100%" stopColor={C.mountSkyBottom} />
             </linearGradient>
           </defs>
           <rect x={418} y={86} width={304} height={176} rx={16} fill="url(#mountSky)" />
 
           {/* Sol con rayos que giran lentamente */}
-          <circle cx={576} cy={148} r={120} fill={C.sun} opacity={0.14} />
+          <circle cx={576} cy={148} r={120} fill={C.sun} opacity={0.12} />
           <circle cx={576} cy={148} r={30} fill={C.sun} />
           <Elem enter={enterVariants("fade", 0.4)} loop={{ rotate: 360 }} loopT={{ duration: 32, repeat: Infinity, ease: "linear" }}>
             <g transform="translate(576 148)">
@@ -66,7 +89,7 @@ export function TurismoScene() {
           {/* Montañas */}
           <path
             d="M418 262 L474 200 L512 240 L560 170 L612 232 L660 194 L700 232 L722 232 L722 262 Z"
-            fill="#0b1d1a"
+            fill={C.mountain}
           />
           <motion.path
             d="M474 200 L512 240 L560 170 L612 232 L660 194"

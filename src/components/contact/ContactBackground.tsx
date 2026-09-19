@@ -35,7 +35,7 @@ export function ContactBackground() {
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,#0a0e1a,#0d0f1a)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-mesh-base to-canvas" />
 
       {hasContext ? (
         <ParallaxBlobs />
@@ -53,7 +53,7 @@ export function ContactBackground() {
         </>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-zinc-950/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-canvas/80 via-transparent to-canvas/40" />
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -69,7 +69,7 @@ export function ContactBackground() {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-        className="absolute -right-6 top-10 hidden w-40 rounded-2xl border border-white/10 bg-zinc-950/80 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm md:block"
+        className="absolute -right-6 top-10 hidden w-40 rounded-2xl border border-line bg-surface-1 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.25)] backdrop-blur-sm md:block"
       >
         <div className="flex items-center justify-center rounded-xl border border-[#00feff]/20 bg-[#00feff]/5 p-3">
           <svg className="h-7 w-7 text-[#00feff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
@@ -78,31 +78,31 @@ export function ContactBackground() {
           </svg>
         </div>
         <div className="mt-3 space-y-1.5">
-          <div className="h-1.5 w-24 rounded-full bg-white/15" />
-          <div className="h-1 w-16 rounded-full bg-white/10" />
+          <div className="h-1.5 w-24 rounded-full bg-ink/20" />
+          <div className="h-1 w-16 rounded-full bg-ink/10" />
         </div>
       </motion.div>
 
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-        className="absolute -left-6 bottom-10 hidden w-44 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm sm:block"
+        className="absolute -left-6 bottom-10 hidden w-44 rounded-2xl border border-line bg-surface-1 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.25)] backdrop-blur-sm sm:block"
       >
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00feff]/15 text-[10px] font-semibold text-[#00feff]">
             CH
           </span>
           <div className="space-y-1">
-            <div className="h-1.5 w-16 rounded-full bg-white/15" />
-            <div className="h-1 w-10 rounded-full bg-white/10" />
+            <div className="h-1.5 w-16 rounded-full bg-ink/20" />
+            <div className="h-1 w-10 rounded-full bg-ink/10" />
           </div>
         </div>
         <div className="mt-3 space-y-2">
           <div className="ml-auto w-fit rounded-xl rounded-br-sm border border-[#00feff]/25 bg-[#00feff]/10 px-2.5 py-1.5">
             <div className="h-1.5 w-20 rounded-full bg-[#00feff]/50" />
           </div>
-          <div className="w-fit rounded-xl rounded-bl-sm border border-white/10 bg-white/5 px-2.5 py-1.5">
-            <div className="h-1.5 w-16 rounded-full bg-white/25" />
+          <div className="w-fit rounded-xl rounded-bl-sm border border-line bg-surface-2 px-2.5 py-1.5">
+            <div className="h-1.5 w-16 rounded-full bg-ink/25" />
           </div>
         </div>
         <div className="mt-2.5 flex items-center gap-1 pl-1">

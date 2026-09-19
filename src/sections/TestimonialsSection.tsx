@@ -10,7 +10,7 @@ export async function TestimonialsSection() {
   const locale = await getLocale();
 
   return (
-    <section id="testimonios" className="scroll-mt-28 border-b border-white/5 py-20 md:py-28">
+    <section id="testimonios" className="glass-ambient scroll-mt-28 border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-6xl space-y-12 px-4 md:px-6">
         <Reveal>
           <SectionHeading kicker={t("kicker")} title={t("title")} description={t("subtitle")} />
@@ -21,22 +21,24 @@ export async function TestimonialsSection() {
             <AnimatedItem
               key={item.name}
               as="figure"
-              className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-zinc-950/60 p-6"
+              className="group h-full transition duration-300 hover:scale-[1.02] motion-reduce:transition-none"
             >
-              {item.sectionTitle && (
-                <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#00feff]/80">
-                  {pickLocale(locale, item.sectionTitle)}
-                </p>
-              )}
-              <blockquote className="text-pretty text-base leading-relaxed text-zinc-200">
-                {pickLocale(locale, item.quote)}
-              </blockquote>
-              <figcaption className="mt-6 space-y-1 text-sm text-zinc-400">
-                <p className="font-semibold text-white">{item.name}</p>
-                <p>
-                  {pickLocale(locale, item.role)} · {item.company}
-                </p>
-              </figcaption>
+              <div className="glass-surface glass-blur flex h-full flex-col justify-between rounded-3xl border border-line-strong p-6 transition-colors duration-300 group-hover:border-[#00feff]/70">
+                {item.sectionTitle && (
+                  <p className="accent-chip mb-4 text-xs font-semibold uppercase tracking-widest">
+                    {pickLocale(locale, item.sectionTitle)}
+                  </p>
+                )}
+                <blockquote className="text-pretty text-base leading-relaxed text-soft">
+                  {pickLocale(locale, item.quote)}
+                </blockquote>
+                <figcaption className="mt-6 space-y-1 text-sm text-muted">
+                  <p className="font-semibold text-ink">{item.name}</p>
+                  <p>
+                    {pickLocale(locale, item.role)} · {item.company}
+                  </p>
+                </figcaption>
+              </div>
             </AnimatedItem>
           ))}
         </StaggerReveal>

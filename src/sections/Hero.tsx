@@ -119,7 +119,7 @@ function BgCanvas({ accent, gradient }: { accent: string; gradient: string[] }) 
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${gradient[0]}, ${gradient[1]})` }} />
+      <div className="absolute inset-0 light:opacity-0" style={{ background: `linear-gradient(135deg, ${gradient[0]}, ${gradient[1]})` }} />
       <ParallaxLayer depth={0.6} className="absolute inset-0">
         <div className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]" style={{ background: `radial-gradient(ellipse at 20% 0%, ${accent}, transparent 70%)` }} />
         <div className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]" style={{ background: `radial-gradient(ellipse at 100% 100%, ${accent}, transparent 70%)` }} />
@@ -165,9 +165,9 @@ function BrandLogo({ brand, color }: { brand: string; color: string }) {
     case "notion":
       return (
         <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="1" y="1" width="22" height="22" rx="5" fill="white" fillOpacity="0.08" />
-          <path d="M5 7h14M5 12h14M5 17h10" stroke="white" strokeWidth="1.3" strokeLinecap="round" opacity="0.7" />
-          <circle cx="17" cy="17" r="2" fill="white" opacity="0.25" />
+          <rect x="1" y="1" width="22" height="22" rx="5" fill="currentColor" fillOpacity="0.12" />
+          <path d="M5 7h14M5 12h14M5 17h10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.7" />
+          <circle cx="17" cy="17" r="2" fill="currentColor" opacity="0.3" />
         </svg>
       );
     case "jira":
@@ -265,11 +265,17 @@ const LOGOS: Record<string, LogoDef[]> = {
 
 function FloatingLogo({ logo }: { logo: LogoDef }) {
   const depth = logo.x > 50 ? -0.5 : 0.5;
+  const isNotion = logo.brand === "notion";
+  const inlineStyle = isNotion
+    ? undefined
+    : { color: logo.color, backgroundColor: logo.bg };
   return (
     <ParallaxLayer depth={depth} className="pointer-events-none absolute z-10 hidden md:block" style={{ left: `${logo.x}%`, top: `${logo.y}%` }}>
       <motion.div
-        className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl"
-        style={{ color: logo.color, backgroundColor: logo.bg }}
+        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl ${isNotion
+          ? "border-white/15 bg-white/10 text-white light:border-zinc-500/50 light:bg-zinc-600/10 light:text-zinc-700"
+          : "border-white/10 light:border-zinc-900/15 light:shadow-zinc-900/10"}`}
+        style={inlineStyle}
         initial={{ opacity: 0, scale: 0.3 }}
         animate={{ opacity: [0, 1, 1, 1], scale: [0.3, 1, 1.05, 1], x: [0, 8, -6, 0], y: [0, -6, 4, 0] }}
         transition={{ duration: 5 + logo.delay, repeat: Infinity, delay: logo.delay, ease: "easeInOut", times: [0, 0.2, 0.5, 1] }}
@@ -299,32 +305,32 @@ function UXUIVisual() {
         {/* Grid backdrop */}
         <svg className="absolute inset-0 h-full w-full" viewBox="-240 -240 480 480">
           <pattern id="uxuiGridLg" x="-240" y="-240" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.06" />
+            <path d="M 20 0 L 0 0 0 20" fill="none" className="stroke-[#00feff]/6 light:stroke-zinc-500/45" strokeWidth="0.5" />
           </pattern>
           <rect x="-240" y="-240" width="480" height="480" fill="url(#uxuiGridLg)" />
         </svg>
 
         {/* Central screen — bigger */}
         <motion.div
-          className="absolute z-10 flex flex-col overflow-hidden rounded-xl border backdrop-blur-sm"
-          style={{ width: 270, height: 185, borderColor: `${accent}25`, backgroundColor: `${accent}06`, boxShadow: `0 16px 56px ${accent}08`, transform: "translate(0px, -5px)" }}
+          className="absolute z-10 flex flex-col overflow-hidden rounded-xl border border-[#00feff]/25 light:border-zinc-500/45 backdrop-blur-sm"
+          style={{ width: 270, height: 185, backgroundColor: `${accent}06`, boxShadow: `0 16px 56px ${accent}08`, transform: "translate(0px, -5px)" }}
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="flex items-center gap-1.5 border-b border-white/[0.06] px-3 py-2">
+          <div className="flex items-center gap-1.5 border-b border-white/[0.06] light:border-zinc-900/10 px-3 py-2">
             <div className="h-2 w-2 rounded-full bg-red-400/60" />
             <div className="h-2 w-2 rounded-full bg-yellow-400/60" />
             <div className="h-2 w-2 rounded-full bg-green-400/60" />
           </div>
           <div className="flex flex-1 gap-3 p-3">
             <div className="flex w-1/3 flex-col gap-2">
-              <div className="h-4 w-full rounded bg-white/[0.08]" />
-              <div className="h-4 w-3/4 rounded bg-white/[0.05]" />
-              <div className="h-4 w-1/2 rounded bg-white/[0.03]" />
+              <div className="h-4 w-full rounded bg-white/[0.08] light:bg-zinc-900/[0.12]" />
+              <div className="h-4 w-3/4 rounded bg-white/[0.05] light:bg-zinc-900/[0.08]" />
+              <div className="h-4 w-1/2 rounded bg-white/[0.03] light:bg-zinc-900/[0.05]" />
             </div>
-            <div className="flex flex-1 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03]">
-              <motion.div className="h-8 w-8 rounded-full" style={{ border: `2px solid ${accent}40` }}
+            <div className="flex flex-1 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] light:border-zinc-900/10 light:bg-zinc-900/[0.04]">
+              <motion.div className="h-8 w-8 rounded-full border-2 border-[#00feff]/40 light:border-zinc-600/60"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
@@ -342,8 +348,8 @@ function UXUIVisual() {
           { w: 100, h: 64, x: 0, y: 150, label: "Dropdown", el: 5, delay: 0.55 },
         ].map((c) => (
           <motion.div key={c.label}
-            className="absolute z-10 flex flex-col items-center justify-center gap-1.5 rounded-xl border backdrop-blur-sm"
-            style={{ width: c.w, height: c.h, borderColor: `${accent}20`, backgroundColor: `${accent}05`, transform: `translate(${c.x}px, ${c.y}px)`, boxShadow: `0 4px 20px ${accent}06` }}
+            className="absolute z-10 flex flex-col items-center justify-center gap-1.5 rounded-xl border border-[#00feff]/20 light:border-zinc-500/40 backdrop-blur-sm"
+            style={{ width: c.w, height: c.h, backgroundColor: `${accent}05`, transform: `translate(${c.x}px, ${c.y}px)`, boxShadow: `0 4px 20px ${accent}06` }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 + c.delay, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -351,28 +357,28 @@ function UXUIVisual() {
             {c.el === 0 && <div className="h-6 w-16 rounded-full" style={{ backgroundColor: accent + "25" }} />}
             {c.el === 1 && (
               <div className="flex flex-col gap-1">
-                <div className="h-2 w-8 rounded bg-white/10" />
-                <div className="h-2 w-12 rounded bg-white/[0.05]" />
+                <div className="h-2 w-8 rounded bg-white/10 light:bg-zinc-900/15" />
+                <div className="h-2 w-12 rounded bg-white/[0.05] light:bg-zinc-900/[0.08]" />
               </div>
             )}
-            {c.el === 2 && <div className="h-4 w-14 rounded border border-white/[0.08] bg-white/[0.03]" />}
+            {c.el === 2 && <div className="h-4 w-14 rounded border border-white/[0.08] bg-white/[0.03] light:border-zinc-900/15 light:bg-zinc-900/[0.05]" />}
             {c.el === 3 && <div className="flex items-center gap-1.5">
               <div className="h-3.5 w-6 rounded-full" style={{ backgroundColor: accent + "30" }} />
-              <div className="h-3.5 w-6 rounded-full border border-white/10" />
+              <div className="h-3.5 w-6 rounded-full border border-white/10 light:border-zinc-900/20" />
             </div>}
             {c.el === 4 && <motion.div className="h-1.5 w-12 rounded-full" style={{ backgroundColor: accent + "25" }}
               animate={{ width: ["60%", "100%", "60%"] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />}
             {c.el === 5 && (
-              <div className="flex items-center gap-1 rounded border border-white/[0.08] px-2 py-1">
-                <div className="h-1.5 w-6 rounded bg-white/10" />
-                <svg width="6" height="4" viewBox="0 0 6 4" className="text-zinc-500">
+              <div className="flex items-center gap-1 rounded border border-white/[0.08] light:border-zinc-900/15 px-2 py-1">
+                <div className="h-1.5 w-6 rounded bg-white/10 light:bg-zinc-900/15" />
+                <svg width="6" height="4" viewBox="0 0 6 4" className="text-zinc-500 light:text-zinc-600">
                   <path d="M0 0l3 4 3-4z" fill="currentColor" />
                 </svg>
               </div>
             )}
-            <span className="text-[8px] font-medium uppercase tracking-wider text-zinc-500">{c.label}</span>
+            <span className="text-[8px] font-medium uppercase tracking-wider text-zinc-500 light:text-zinc-600">{c.label}</span>
           </motion.div>
         ))}
 
@@ -380,7 +386,7 @@ function UXUIVisual() {
         <svg className="absolute inset-0 h-full w-full" viewBox="-240 -240 480 480">
           {[[-160, -85, 0, -5], [160, -95, 0, -5], [-170, 85, 0, -5], [155, 90, 0, -5], [0, -150, 0, -5], [0, 150, 0, -5]].map((c, i) => (
             <motion.line key={i} x1={c[0]} y1={c[1]} x2={c[2]} y2={c[3]}
-              stroke={accent} strokeWidth="0.5" opacity="0.1" strokeDasharray="2 3"
+              className="stroke-[#00feff]/10 light:stroke-zinc-500/45" strokeWidth="0.5" strokeDasharray="2 3"
               initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
               transition={{ delay: 0.5 + i * 0.08, duration: 0.5 }}
             />
@@ -414,7 +420,7 @@ function ProcessVisual({ t }: { t: (key: string) => string }) {
     { label: "Test", desc: t("processPhase4Desc"), color: "#c084fc", angle: 180 },
   ];
 
-  const cx = 200, cy = 200, circleR = 175, nodeR = 175;
+  const cx = 200, cy = 200, nodeR = 175;
 
   return (
     <>
@@ -432,12 +438,8 @@ function ProcessVisual({ t }: { t: (key: string) => string }) {
       >
         {/* SVG framework — viewBox 400 for ~20% visual gain */}
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400">
-          {/* Large bounding circle */}
-          <circle cx={cx} cy={cy} r={circleR} fill="none" stroke="#4b5563" strokeWidth="0.5" strokeDasharray="4 6" opacity={0.15} />
-
-          {/* Inner rings */}
-          <circle cx={cx} cy={cy} r={50} fill="none" stroke="#4b5563" strokeWidth="0.4" opacity={0.12} />
-          <circle cx={cx} cy={cy} r={100} fill="none" stroke="#4b5563" strokeWidth="0.3" strokeDasharray="2 4" opacity={0.08} />
+          {/* Inner ring */}
+          <circle className="stroke-[#4b5563]/15 light:stroke-[#3f3f46]/80" cx={cx} cy={cy} r={50} fill="none" strokeWidth="0.6" />
 
           {/* Curved arcs connecting nodes ON the circle */}
           {phases.map((p, i) => {
@@ -453,7 +455,8 @@ function ProcessVisual({ t }: { t: (key: string) => string }) {
             const cpy = cy + (nodeR + 20) * Math.sin(midA);
             return (
               <motion.path key={`arc-${i}`} d={`M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`}
-                fill="none" stroke={p.color} strokeWidth="0.7" opacity="0.18"
+                fill="none" stroke={p.color} strokeWidth="0.7"
+                className="opacity-[0.18] light:opacity-[0.6]"
                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                 transition={{ delay: 0.6 + i * 0.08, duration: 0.5 }}
               />
@@ -507,7 +510,7 @@ function ProcessVisual({ t }: { t: (key: string) => string }) {
                 {p.label}
               </motion.span>
               <motion.span
-                className="text-[10px] text-zinc-500 md:text-[10px]"
+                className="text-[10px] text-zinc-500 light:text-zinc-600 md:text-[10px]"
                 animate={{ opacity: [0.5, 0.9, 0.5] }}
                 transition={{ duration: 2.5 + i * 0.3, repeat: Infinity }}
               >
@@ -533,7 +536,7 @@ function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
     { label: "Measure", desc: t("servicePhase5Desc"), color: "#c084fc", angle: 198 },
   ];
 
-  const cx = 200, cy = 200, circleR = 175, nodeR = 175;
+  const cx = 200, cy = 200, nodeR = 175;
 
   return (
     <>
@@ -551,12 +554,8 @@ function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
         >
         {/* SVG layers — viewBox 400 for 20% visual gain */}
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400">
-          {/* Outer bounding circle */}
-          <circle cx={cx} cy={cy} r={circleR} fill="none" stroke={`${accent}10`} strokeWidth="0.5" strokeDasharray="4 8" />
-
-          {/* Concentric rings */}
-          <circle cx={cx} cy={cy} r={55} fill={`${accent}05`} stroke={`${accent}15`} strokeWidth="0.5" />
-          <circle cx={cx} cy={cy} r={100} fill="none" stroke={`${accent}08`} strokeWidth="0.3" strokeDasharray="2 4" />
+          {/* Concentric ring */}
+          <circle className="stroke-[#c084fc]/15 light:stroke-[#6d28d9]/60" cx={cx} cy={cy} r={55} fill={`${accent}05`} strokeWidth="0.6" />
 
           {/* Curved outer arcs between adjacent phases */}
           {phases.map((p, i) => {
@@ -572,7 +571,8 @@ function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
             const cpy = cy + (nodeR + 22) * Math.sin(midA);
             return (
               <motion.path key={`arc-${i}`} d={`M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`}
-                fill="none" stroke={p.color} strokeWidth="0.6" opacity="0.18"
+                fill="none" stroke={p.color} strokeWidth="0.6"
+                className="opacity-[0.18] light:opacity-[0.65]"
                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                 transition={{ delay: 0.6 + i * 0.08, duration: 0.5 }}
               />
@@ -629,7 +629,7 @@ function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
                 {p.label}
               </motion.span>
               <motion.span
-                className="text-[10px] text-zinc-500 md:text-xs"
+                className="text-[10px] text-zinc-500 light:text-zinc-600 md:text-xs"
                 animate={{ opacity: [0.5, 0.9, 0.5] }}
                 transition={{ duration: 2.5 + i * 0.2, repeat: Infinity }}
               >
@@ -659,7 +659,7 @@ function ArrowBtn({ dir, onClick }: { dir: "left" | "right"; onClick: () => void
   return (
     <button
       onClick={onClick}
-      className="absolute top-1/2 z-30 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/5 p-2.5 text-[#00feff] backdrop-blur-xl transition hover:border-[#00feff]/40 hover:bg-white/10 md:block"
+      className="absolute top-1/2 z-30 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/5 p-2.5 text-[#00feff] backdrop-blur-xl transition hover:border-[#00feff]/40 hover:bg-white/10 light:border-transparent light:bg-zinc-900/80 light:hover:border-[#00feff]/40 light:hover:bg-zinc-900 md:block"
       style={{ [dir]: "20px" }}
       aria-label={dir === "left" ? "Previous" : "Next"}
     >
@@ -688,7 +688,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
   return (
     <motion.div className="absolute inset-0" variants={slideVariants} custom={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
       <BgCanvas accent={slide.accent} gradient={slide.gradient} />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-zinc-950/20 via-transparent to-zinc-950" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-zinc-950/20 via-transparent to-zinc-950 light:from-transparent light:via-transparent light:to-transparent" />
 
       {logos.map((logo) => <FloatingLogo key={logo.label} logo={logo} />)}
 
@@ -698,11 +698,11 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           {/* Left: Title */}
           <motion.div className="w-full pt-10 text-left md:pt-0 md:text-right" variants={line1} initial="hidden" animate="visible">
             <ParallaxLayer depth={-0.35} className="inline-block">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 md:text-[11px]">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 light:rounded-full light:bg-zinc-900/85 light:px-2.5 light:py-1 light:text-[#00feff] md:text-[11px]">
               {t(slide.subtitleKey)}
             </p>
-            <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl xl:text-7xl">
-              <span className="text-zinc-200">{t(slide.titleKey1)}</span>
+            <h1 className="text-4xl font-semibold tracking-tight text-white light:text-ink md:text-5xl lg:text-6xl xl:text-7xl">
+              <span className="text-zinc-200 light:text-soft">{t(slide.titleKey1)}</span>
               <br />
               <span className="text-gradient-accent">{t(slide.titleKey2)}</span>
             </h1>
@@ -715,29 +715,34 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
               <Tilt max={5}>
               {slide.heroType === "profile" ? (
                 <div className="relative flex items-center justify-center">
-                  <div className="pointer-events-none absolute h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
-                  <div className="pointer-events-none absolute h-[min(520px,84vw)] w-[min(520px,84vw)] rounded-full border border-[#00feff]/10 md:h-[520px] md:w-[520px]" />
-                  <motion.div className="pointer-events-none absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 md:-right-4 md:top-12 md:h-4 md:w-4"
+                  {/* Dark glow */}
+                  <div className="pointer-events-none absolute h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl light:hidden md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
+                  {/* Light glow — soft teal halo that reads on the warm canvas */}
+                  <div className="pointer-events-none absolute hidden h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl light:block md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, rgba(13,148,136,0.22) 0%, rgba(13,148,136,0.10) 45%, transparent 72%)` }} />
+                  <div className="pointer-events-none absolute h-[min(520px,84vw)] w-[min(520px,84vw)] rounded-full border border-[#00feff]/10 light:border-[#00feff]/60 md:h-[520px] md:w-[520px]" />
+                  <motion.div className="pointer-events-none absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 light:bg-[#0e7490]/75 md:-right-4 md:top-12 md:h-4 md:w-4"
                     animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 3, repeat: Infinity }}
                   />
-                  <motion.div className="pointer-events-none absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 md:h-3 md:w-3"
+                  <motion.div className="pointer-events-none absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 light:bg-[#0e7490]/65 md:h-3 md:w-3"
                     animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
                     transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
                   />
-                  <motion.div className="pointer-events-none absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 md:h-2 md:w-2"
+                  <motion.div className="pointer-events-none absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 light:bg-[#0e7490]/85 md:h-2 md:w-2"
                     animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.7, 0.4] }}
                     transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
                   />
                   <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
                     <Image src="/images/hero/profile-cutout.png" alt="Cristian Hincapié" width={400} height={500} priority
-                      className="relative h-auto w-[min(300px,80vw)] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px]" />
+                      className="relative block h-auto w-[min(300px,80vw)] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px] light:hidden" />
+                    <Image src="/images/hero/profile-cristian-light.webp" alt="Cristian Hincapié" width={440} height={603} priority
+                      className="relative hidden h-auto w-[min(300px,80vw)] object-contain light:block sm:w-[350px] md:w-[420px] lg:w-[480px]" />
                   </motion.div>
                   {slide.id === "product-designer" && (
                     <div className="absolute left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 md:hidden" style={{ top: "calc(100% - 70px)" }}>
                       <Button animated onClick={onOpenCV}>{t("ctaCv")}</Button>
                       <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
-                      <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600">
+                      <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600 light:text-muted">
                         <span className="block whitespace-nowrap">{t("tagline1")}</span>
                         <span className="block whitespace-nowrap">{t("tagline2")}</span>
                       </p>
@@ -754,8 +759,8 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
           {/* Right: Description */}
           <motion.div className="relative z-10 mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
             <ParallaxLayer depth={-0.45} className="flex flex-col gap-5">
-            <p className="text-sm leading-relaxed text-zinc-400 md:text-base lg:text-lg">{t(slide.descKey)}</p>
-            {slide.id === "product-designer" && <p className="text-xs text-zinc-500">{t("roles")}</p>}
+            <p className="text-sm leading-relaxed text-zinc-400 light:text-muted md:text-base lg:text-lg">{t(slide.descKey)}</p>
+            {slide.id === "product-designer" && <p className="text-xs text-zinc-500 light:text-faint">{t("roles")}</p>}
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
               {slide.id === "product-designer" && (
                 <Button animated onClick={onOpenCV} className="hidden md:inline-flex">{t("ctaCv")}</Button>
@@ -768,7 +773,7 @@ function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => vo
             </div>
             </ParallaxLayer>
             {slide.id === "product-designer" && (
-              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 md:block">{t("tagline1")} · {t("tagline2")}</p>
+              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 light:text-faint md:block">{t("tagline1")} · {t("tagline2")}</p>
             )}
           </motion.div>
         </div>
@@ -793,7 +798,7 @@ export function Hero() {
   }, [next]);
 
   return (
-    <section className="relative min-h-screen overflow-x-hidden border-b border-white/5 bg-zinc-950 md:h-screen md:overflow-hidden">
+    <section className="relative min-h-screen overflow-x-hidden border-b border-white/5 bg-zinc-950 light:border-line light:bg-canvas md:h-screen md:overflow-hidden">
       <AnimatePresence mode="wait" custom={direction}>
         <SlideContent key={slide} slide={SLIDES[slide]} onOpenCV={() => setIsCVModalOpen(true)} />
       </AnimatePresence>
@@ -805,7 +810,7 @@ export function Hero() {
       <div className="absolute bottom-20 left-4 z-30 flex items-center gap-2.5 md:bottom-24 md:left-8">
         {SLIDES.map((s, i) => (
           <button key={s.id} onClick={() => goTo(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-[#00feff]" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-[#00feff]" : "w-1.5 bg-white/20 hover:bg-white/40 light:bg-zinc-900/25 light:hover:bg-zinc-900/50"}`}
             aria-label={`Slide ${i + 1}`}
           />
         ))}
@@ -819,9 +824,9 @@ export function Hero() {
           { val: t("statCraftValue"), label: t("statCraftLabel") },
         ].map((card, i) => (
           <div key={i}
-            className="flex w-[72px] flex-col items-center justify-center gap-0.5 rounded-xl border border-white/[0.08] bg-white/[0.06] px-1 py-2 text-center backdrop-blur-xl md:w-[84px] md:gap-1 md:rounded-2xl md:px-2 md:py-3">
-            <p className="text-[10px] font-semibold leading-tight text-white md:text-xs">{card.val}</p>
-            <p className="text-[7px] leading-tight text-zinc-500 md:text-[8px]">{card.label}</p>
+            className="flex w-[72px] flex-col items-center justify-center gap-0.5 rounded-xl border border-white/[0.08] bg-white/[0.06] px-1 py-2 text-center backdrop-blur-xl light:border-zinc-900/15 light:bg-zinc-900/[0.06] md:w-[84px] md:gap-1 md:rounded-2xl md:px-2 md:py-3">
+            <p className="text-[10px] font-semibold leading-tight text-white light:text-ink md:text-xs">{card.val}</p>
+            <p className="text-[7px] leading-tight text-zinc-500 light:text-faint md:text-[8px]">{card.label}</p>
           </div>
         ))}
       </ParallaxLayer>
@@ -834,7 +839,7 @@ export function Hero() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <motion.div
-            className="flex h-7 w-[14px] items-start justify-center rounded-full border border-zinc-500/60 py-1.5"
+            className="flex h-7 w-[14px] items-start justify-center rounded-full border border-zinc-500/60 light:border-zinc-700/70 py-1.5"
             animate={{ opacity: [0.4, 0.8, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity }}
           >
@@ -845,7 +850,7 @@ export function Hero() {
             />
           </motion.div>
           <motion.span
-            className="text-[9px] font-semibold uppercase tracking-[0.32em] text-zinc-500"
+            className="text-[9px] font-semibold uppercase tracking-[0.32em] text-zinc-500 light:text-faint"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2.5, repeat: Infinity }}
           >

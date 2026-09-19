@@ -1,9 +1,11 @@
 import type { CaseStudyContent, Project } from "./types";
 
 const cs = (
-  partial: Omit<CaseStudyContent, "tools" | "techStack"> & {
+  partial: Omit<CaseStudyContent, "tools" | "techStack" | "interfaces" | "components"> & {
     tools?: string[];
     techStack?: string[];
+    interfaces: number;
+    components: number;
   },
 ): CaseStudyContent => ({
   tools: partial.tools ?? ["Figma", "Maze", "Notion", "Jira"],
@@ -64,6 +66,8 @@ const featuredBalanc: CaseStudyContent = cs({
   ],
   figmaUrl: null,
   prototypeUrl: "https://embed.figma.com/proto/0DrKFvC908Swabcxxdmnvz/BalanC-Funcional?node-id=12931-16913&scaling=scale-down-width&content-scaling=fixed&page-id=1%3A13&starting-point-node-id=12931%3A16913&embed-host=share",
+  interfaces: 4,
+  components: 20,
 });
 
 const featuredTurismo: CaseStudyContent = cs({
@@ -113,6 +117,8 @@ const featuredTurismo: CaseStudyContent = cs({
   },
   figmaUrl: null,
   prototypeUrl: null,
+  interfaces: 4,
+  components: 15,
 });
 
 const featuredAgro: CaseStudyContent = cs({
@@ -170,6 +176,8 @@ const featuredAgro: CaseStudyContent = cs({
   techStack: ["Design system", "React", "API-driven flows"],
   figmaUrl: null,
   prototypeUrl: null,
+  interfaces: 30,
+  components: 24,
 });
 
 const brief = (
@@ -177,10 +185,14 @@ const brief = (
   titleEn: string,
   bodyEs: string,
   bodyEn: string,
+  interfaces: number,
+  components: number,
 ): CaseStudyContent =>
   cs({
     context: { es: `Resumen del proyecto: ${titleEs}.`, en: `Project summary: ${titleEn}.` },
     problem: { es: bodyEs, en: bodyEn },
+    interfaces,
+    components,
     goals: {
       es: "Alinear negocio y usuarios con entregables incrementales y métricas claras de adopción.",
       en: "Align business and users with incremental deliverables and clear adoption metrics.",
@@ -350,6 +362,8 @@ export const PROJECTS: Project[] = [
       "Bienestar a la Carta",
       "Personalización sin complejidad: control sin abrumar con opciones.",
       "Personalization without complexity—control without option overload.",
+      4,
+      14,
     ),
   },
   {
@@ -380,6 +394,8 @@ export const PROJECTS: Project[] = [
       "Hola Vivienda",
       "Reducir incertidumbre en etapas tempranas del funnel inmobiliario.",
       "Reduce uncertainty in early stages of the real-estate funnel.",
+      5,
+      16,
     ),
   },
   {
@@ -410,6 +426,8 @@ export const PROJECTS: Project[] = [
       "Un asunto de dos",
       "Equilibrar tono emocional con claridad de tareas para retención saludable.",
       "Balance emotional tone with task clarity for healthy retention.",
+      5,
+      12,
     ),
   },
   {
@@ -443,6 +461,8 @@ export const PROJECTS: Project[] = [
       "Avaluador de Inmuebles",
       "Traducir modelos complejos a interacciones comprensibles para usuarios no técnicos.",
       "Translate complex models into understandable interactions for non-technical users.",
+      8,
+      18,
     ),
   },
   {
@@ -476,6 +496,8 @@ export const PROJECTS: Project[] = [
       "Corporate e-learning",
       "Reducir abandono con micro-lecciones y patrones consistentes.",
       "Reduce churn with micro-lessons and consistent patterns.",
+      8,
+      20,
     ),
   },
   {
@@ -508,6 +530,8 @@ export const PROJECTS: Project[] = [
       "Property publishing",
       "Formularios largos en pasos comprensibles con recuperación de contexto.",
       "Long forms split into understandable steps with context recovery.",
+      7,
+      18,
     ),
   },
 ];

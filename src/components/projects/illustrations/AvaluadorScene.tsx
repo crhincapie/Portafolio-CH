@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { Elem, enterVariants, EASE, Scene } from "./motion";
 import { Card, DrawLine, Grid, GrowBars, Ping, Pill, SceneBg, Txt } from "./primitives";
+import { track, usePalette, useSceneTheme } from "./theme";
 
-const C = {
+const C_DARK = {
   top: "#0e1526",
   bottom: "#0a101c",
   card: "#14203a",
@@ -17,6 +18,19 @@ const C = {
   dim: "#5c6f94",
 };
 
+const C_LIGHT = {
+  top: "#ebf1fa",
+  bottom: "#dbe5f5",
+  card: "#ffffff",
+  cardHi: "#e7edf8",
+  blue: "#0284c7",
+  indigo: "#6366f1",
+  orange: "#ea580c",
+  mint: "#059669",
+  text: "#1f2937",
+  dim: "#64748b",
+};
+
 const BLUEPRINTS = [
   "M20 56 V20 H56",
   "M780 20 H744 V56",
@@ -25,6 +39,8 @@ const BLUEPRINTS = [
 ];
 
 export function AvaluadorScene() {
+  const light = useSceneTheme();
+  const C = usePalette(C_DARK, C_LIGHT);
   return (
     <Scene>
       <Elem enter={enterVariants("fade", 0.05)}>
@@ -103,7 +119,7 @@ export function AvaluadorScene() {
               { x: 268, y: 470, h: 186, w: 28, fill: C.orange },
             ]}
           />
-          <line x1={88} y1={474} x2={296} y2={474} stroke="rgba(255,255,255,0.1)" strokeWidth={2} />
+          <line x1={88} y1={474} x2={296} y2={474} stroke={track(0.1, light)} strokeWidth={2} />
           <Txt x={282} y={462} size={11} fill={C.orange} weight={700} anchor="end">
             320k
           </Txt>
@@ -126,7 +142,7 @@ export function AvaluadorScene() {
           <Txt x={424} y={416} size={11} fill={C.dim}>
             Arrastra para explorar el modelo
           </Txt>
-          <rect x={424} y={444} width={280} height={8} rx={4} fill="rgba(255,255,255,0.1)" />
+          <rect x={424} y={444} width={280} height={8} rx={4} fill={track(0.12, light)} />
           <motion.rect
             x={424}
             y={444}
