@@ -1,5 +1,7 @@
 {
-  "a11y": { "skip": "Saltar al contenido" },
+  "a11y": {
+    "skip": "Saltar al contenido"
+  },
   "nav": {
     "about": "Sobre mí",
     "experience": "Experiencia",
@@ -173,7 +175,8 @@
     "title": "Índice de proyectos.",
     "subtitle": "Cada caso incluye narrativa, decisiones y entregables.",
     "featured": "Destacados",
-    "all": "Todos"
+    "all": "Todos",
+    "viewCase": "Ver caso"
   },
   "notFound": {
     "title": "Página no encontrada",

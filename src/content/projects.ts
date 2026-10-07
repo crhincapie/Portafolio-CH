@@ -13,6 +13,69 @@ const cs = (
   ...partial,
 });
 
+const featuredLogiOps: CaseStudyContent = cs({
+  context: {
+    es: "La operación logística exige visibilidad de extremo a extremo: equipos de despacho, rutas y mesa de control necesitan saber dónde está cada entrega y qué hacer cuando algo cambia.",
+    en: "Logistics operations demand end-to-end visibility: dispatch teams, routes, and the control tower need to know where every shipment is and what to do when something changes.",
+  },
+  problem: {
+    es: "La trazabilidad estaba fragmentada en tablas dispersas y canales informales: las novedades se perdían, las decisiones llegaban tarde y el equipo no tenía una sola fuente de verdad.",
+    en: "Traceability was fragmented across scattered tables and informal channels: incidents got lost, decisions came late, and the team lacked a single source of truth.",
+  },
+  goals: {
+    es: "Centralizar el control operativo en tiempo real, reducir errores de registro y dar a cada rol la información correcta en el momento de decidir.",
+    en: "Centralize real-time operational control, reduce data-entry errors, and give every role the right information at the moment of decision.",
+  },
+  research: {
+    es: "Entrevistas con despachadores, conductores y mesa de control; shadowing de jornadas operativas y revisión heurística de los dashboards existentes.",
+    en: "Interviews with dispatchers, drivers, and the control tower; shadowing of operational shifts, and heuristic review of existing dashboards.",
+  },
+  uxProcess: {
+    es: "Arquitectura por momentos de verdad operativa: recibir, despachar, monitorear y cerrar; cada estado con sus datos y acciones prioritarias.",
+    en: "Architecture built around operational moments of truth: receive, dispatch, monitor, and close—each state with its priority data and actions.",
+  },
+  wireframes: {
+    es: "Vistas compactas de alta densidad (lista/detalle), filtros por estado y ruta, y deep-links para que cada rol llegue directo a su tarea.",
+    en: "Compact, high-density views (list/detail), filters by status and route, and deep links so each role jumps straight to its task.",
+  },
+  uiExploration: {
+    es: "UI sobria para datos en tiempo real: estados de color inequívocos (en tránsito, entregado, novedad), jerarquía tipográfica y targets operables.",
+    en: "Sober UI for real-time data: unmistakable status colors (in transit, delivered, incident), type hierarchy, and operable touch targets.",
+  },
+  designSystem: {
+    es: "Tokens de estado, tablas densas, badges de SLA y componentes reutilizables para escalar el control a más ciudades y operadores.",
+    en: "Status tokens, dense tables, SLA badges, and reusable components to scale control across more cities and operators.",
+  },
+  decisions: {
+    es: "Densidad sobre decoro: el dato correcto antes que el panel vistoso. La claridad del estado crítico siempre manda.",
+    en: "Density over décor—the right number beats a pretty panel. Clarity of critical status always wins.",
+  },
+  results: {
+    es: "Un centro de control operativo único con decisiones más rápidas y una base UI lista para escalar a nuevas regiones.",
+    en: "A single operational control center with faster decisions and a UI foundation ready to scale to new regions.",
+  },
+  learnings: {
+    es: "La visibilidad no es un panel: es una decisión informada a tiempo.",
+    en: "Visibility is not a dashboard—it's an informed decision made in time.",
+  },
+  metrics: [
+    {
+      es: "Trazabilidad centralizada de despachos en tiempo real (fase de validación).",
+      en: "Centralized real-time dispatch tracking (validation phase).",
+    },
+    {
+      es: "Menor esfuerzo de conciliación de novedades entre canales.",
+      en: "Lower effort reconciling incidents across channels.",
+    },
+  ],
+  tools: ["Figma", "Maze", "Notion", "Jira"],
+  techStack: ["Design system", "React", "Real-time data", "Web app"],
+  figmaUrl: null,
+  prototypeUrl: "https://logi-ops.vercel.app/",
+  interfaces: 8,
+  components: 18,
+});
+
 const featuredBalanc: CaseStudyContent = cs({
   context: {
     es: "BalanC Funcional es una propuesta de salud digital orientada a hábitos y adherencia, con foco en confianza y claridad operativa.",
@@ -235,9 +298,28 @@ const brief = (
 
 export const PROJECTS: Project[] = [
   {
+    slug: "logi-ops",
+    featured: true,
+    year: "2026",
+    company: { es: "Logística & Operaciones", en: "Logistics & Operations" },
+    role: { es: "Product Designer", en: "Product Designer" },
+    title: { es: "Logi'Ops", en: "Logi'Ops" },
+    summary: {
+      es: "Plataforma digital para planear, rastrear y controlar operaciones logísticas en tiempo real, reduciendo fricción operativa y mejorando la visibilidad de cada despacho.",
+      en: "Digital platform to plan, track, and control logistics operations in real time—reducing operational friction and improving visibility across every dispatch.",
+    },
+    tags: ["Logística", "Real-time", "Data viz", "Web app"],
+    figmaUrl: null,
+    prototypeUrl: "https://logi-ops.vercel.app/",
+    heroImage: "/images/projects/logi-ops/home.jpg",
+    galleryVariant: "desktop",
+    gallery: ["/images/projects/logi-ops/home.jpg"],
+    caseStudy: featuredLogiOps,
+  },
+  {
     slug: "balanc-funcional",
     featured: true,
-    year: "2024",
+    year: "2025",
     company: { es: "Salud digital", en: "Digital health" },
     role: { es: "Lead Product & UX/UI", en: "Lead Product & UX/UI" },
     title: { es: "BalanC Funcional", en: "BalanC Funcional" },

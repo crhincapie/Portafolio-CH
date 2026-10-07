@@ -24,6 +24,14 @@ type Theme = {
 };
 
 const THEMES: Record<string, Theme> = {
+  "logi-ops": {
+    accent: "#4fd8ff",
+    accentLight: "#0284c7",
+    soft: "bg-sky-400/20",
+    glow: "rgba(79,216,255,0.18)",
+    grad: "from-cyan-400 via-sky-400 to-blue-500",
+    ring: "border-sky-400/30",
+  },
   "balanc-funcional": {
     accent: "#7dffd9",
     accentLight: "#0d9488",

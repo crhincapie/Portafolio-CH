@@ -659,7 +659,7 @@ function ArrowBtn({ dir, onClick }: { dir: "left" | "right"; onClick: () => void
   return (
     <button
       onClick={onClick}
-      className="absolute top-1/2 z-30 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/5 p-2.5 text-[#00feff] backdrop-blur-xl transition hover:border-[#00feff]/40 hover:bg-white/10 light:border-transparent light:bg-zinc-900/80 light:hover:border-[#00feff]/40 light:hover:bg-zinc-900 md:block"
+      className="absolute top-1/2 z-30 hidden -translate-y-1/2 rounded-[12px] border border-white/10 bg-white/5 p-2.5 text-[#00feff] backdrop-blur-xl transition hover:border-[#00feff]/40 hover:bg-white/10 light:border-transparent light:bg-zinc-900/80 light:hover:border-[#00feff]/40 light:hover:bg-zinc-900 md:block"
       style={{ [dir]: "20px" }}
       aria-label={dir === "left" ? "Previous" : "Next"}
     >

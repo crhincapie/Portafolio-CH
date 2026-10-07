@@ -1,5 +1,7 @@
 {
-  "a11y": { "skip": "Skip to content" },
+  "a11y": {
+    "skip": "Skip to content"
+  },
   "nav": {
     "about": "About",
     "experience": "Experience",
@@ -173,7 +175,8 @@
     "title": "Project index.",
     "subtitle": "Each case includes narrative, decisions, and deliverables.",
     "featured": "Featured",
-    "all": "All"
+    "all": "All",
+    "viewCase": "Ver caso"
   },
   "notFound": {
     "title": "Page not found",

@@ -17,6 +17,24 @@ interface ProjectCardClientProps {
 
 // Contenido detallado de proyectos
 const projectContent: Record<string, Record<string, Record<string, string>>> = {
+  "logi-ops": {
+    es: {
+      problematic:
+        "La trazabilidad estaba fragmentada en tablas dispersas y canales informales: las novedades se perdían y las decisiones llegaban tarde.",
+      solution:
+        "Diseño de un centro de control logístico en tiempo real que centraliza despachos, estados y novedades en una sola fuente de verdad.",
+      about:
+        "Plataforma para planear, rastrear y controlar operaciones logísticas: visibilidad de extremo a extremo para despacho, rutas y mesa de control.",
+    },
+    en: {
+      problematic:
+        "Traceability was fragmented across scattered tables and informal channels: incidents got lost and decisions came late.",
+      solution:
+        "Design of a real-time logistics control center that centralizes dispatches, statuses, and incidents in a single source of truth.",
+      about:
+        "Platform to plan, track, and control logistics operations: end-to-end visibility for dispatch, routes, and the control tower.",
+    },
+  },
   "balanc-funcional": {
     es: {
       problematic:
@@ -279,10 +297,10 @@ export function ProjectCardClient({ project, children, featured = false, classNa
                 <button
                   data-case
                   onClick={handleFlipBack}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-line-strong bg-transparent px-6 py-3 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-[12px] border border-line-strong bg-transparent px-6 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
                   title={t("back")}
                 >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
