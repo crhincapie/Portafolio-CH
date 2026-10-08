@@ -24,6 +24,14 @@ type Theme = {
 };
 
 const THEMES: Record<string, Theme> = {
+  "logi-ops": {
+    accent: "#4fd8ff",
+    accentLight: "#0284c7",
+    soft: "bg-sky-400/20",
+    glow: "rgba(79,216,255,0.18)",
+    grad: "from-cyan-400 via-sky-400 to-blue-500",
+    ring: "border-sky-400/30",
+  },
   "balanc-funcional": {
     accent: "#7dffd9",
     accentLight: "#0d9488",
@@ -188,20 +196,20 @@ export async function CaseStudyView({ slug }: Props) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 md:items-end">
-              <div className="grid w-full grid-cols-3 gap-3 md:w-auto md:min-w-[240px]">
+            <div className="flex flex-col gap-4">
+              <div className="grid w-full grid-cols-3 gap-3">
                 <HeroStat value={project.year} label={label("heroYear")} accent={theme.accent} accentLight={theme.accentLight} />
                 <HeroStat value={cs.components.toString()} label={label("heroComponents")} short={label("shortComponents")} accent={theme.accent} accentLight={theme.accentLight} />
                 <HeroStat value={cs.interfaces.toString()} label={label("heroScreens")} short={label("shortScreens")} accent={theme.accent} accentLight={theme.accentLight} />
               </div>
 
-              <div className="flex w-full flex-col gap-2 md:items-end">
+              <div className="flex w-full flex-col gap-2">
                 {prototype ? (
                   <PrototypeLinkButton label={t("openPrototype")} url={prototype} aspectRatio={project.prototypeAspect} zoom={project.prototypeZoom} />
                 ) : null}
                 <Link
                   href="/"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-line-strong px-5 py-2.5 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text md:w-auto"
+                  className="inline-flex w-1/2 items-center justify-center self-end rounded-[12px] border border-line-strong px-5 py-2.5 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
                 >
                   ← {t("back")}
                 </Link>

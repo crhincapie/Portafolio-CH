@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentType } from "react";
+import { LogiOpsScene } from "./LogiOpsScene";
 import { BalancScene } from "./BalancScene";
 import { TurismoScene } from "./TurismoScene";
 import { AgroCashScene } from "./AgroCashScene";
@@ -9,6 +10,7 @@ import { AvaluadorScene } from "./AvaluadorScene";
 import { InmuebleScene } from "./InmuebleScene";
 
 const SCENES: Record<string, ComponentType> = {
+  "logi-ops": LogiOpsScene,
   "balanc-funcional": BalancScene,
   "turismo-sostenible": TurismoScene,
   agrocash: AgroCashScene,

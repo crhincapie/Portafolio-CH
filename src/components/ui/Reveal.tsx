@@ -28,10 +28,11 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
 }
 
 export const staggerItem = {
-  hidden: { opacity: 0, scale: 0.9 },
+  hidden: { opacity: 1, scale: 0.96, y: 14 },
   visible: {
     opacity: 1,
     scale: 1,
+    y: 0,
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   },
 };

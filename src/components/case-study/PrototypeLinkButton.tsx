@@ -18,9 +18,11 @@ export function PrototypeLinkButton({ label, url, aspectRatio, zoom }: Prototype
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="block w-full rounded-2xl border border-transparent bg-zinc-900/85 px-4 py-3 text-[#00feff] transition hover:border-accent-strong light:bg-surface-2 light:text-[#0e7490]"
+        className="btn-border-animate-teal group w-full rounded-[12px]"
       >
-        {label}
+        <span className="relative z-10 inline-flex w-full items-center justify-center rounded-[10px] bg-zinc-900/85 px-4 py-3 text-sm font-medium text-[#00feff] transition group-hover:text-white light:bg-surface-2 light:text-[#0e7490]">
+          {label}
+        </span>
       </button>
       <PrototypeModal
         isOpen={isOpen}

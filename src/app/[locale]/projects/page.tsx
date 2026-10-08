@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { PROJECTS, getFeaturedProjects } from "@/content/projects";
+import { ProjectsIndexGrid, type IndexProjectData } from "@/components/projects/ProjectIndexCards";
+import { PROJECTS } from "@/content/projects";
 import { pickLocale } from "@/content/i18n";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -10,46 +10,31 @@ export default async function ProjectsIndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("projectsPage");
-  const featured = getFeaturedProjects();
-  const rest = PROJECTS.filter((p) => !p.featured);
+
+  const toData = (
+    p: (typeof PROJECTS)[number],
+  ): IndexProjectData => ({
+    slug: p.slug,
+    title: pickLocale(locale, p.title),
+    company: pickLocale(locale, p.company),
+    summary: pickLocale(locale, p.summary),
+    role: pickLocale(locale, p.role),
+    year: p.year,
+    tags: p.tags,
+    featured: p.featured,
+  });
+
+  const projects = PROJECTS.map(toData);
 
   return (
     <div className="border-b border-line pb-20 pt-10 md:pb-28 md:pt-16">
       <div className="mx-auto max-w-6xl space-y-12 px-4 md:px-6">
         <SectionHeading kicker={t("kicker")} title={t("title")} description={t("subtitle")} />
 
-        <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-faint">{t("featured")}</p>
-          <div className="grid gap-4 md:grid-cols-3">
-            {featured.map((project) => (
-              <Link
-                key={project.slug}
-                href={`/projects/${project.slug}`}
-                className="rounded-3xl border border-line bg-surface-1 p-5 transition hover:border-[#00feff]/50"
-              >
-                <p className="text-xs text-muted">{pickLocale(locale, project.company)}</p>
-                <h2 className="mt-2 text-lg font-semibold text-ink">{pickLocale(locale, project.title)}</h2>
-                <p className="mt-2 line-clamp-3 text-sm text-muted">{pickLocale(locale, project.summary)}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-faint">{t("all")}</p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((project) => (
-              <Link
-                key={project.slug}
-                href={`/projects/${project.slug}`}
-                className="rounded-2xl border border-line bg-surface-1 p-4 transition hover:border-[#00feff]/40"
-              >
-                <p className="text-xs text-muted">{pickLocale(locale, project.company)}</p>
-                <p className="mt-2 text-sm font-semibold text-ink">{pickLocale(locale, project.title)}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <ProjectsIndexGrid
+          projects={projects}
+          labels={{ featured: t("featured"), viewCase: t("viewCase") }}
+        />
       </div>
     </div>
   );

@@ -61,6 +61,31 @@ const ZERO: TargetAndTransition = { x: "0%", y: "0%", rotate: 0, scale: 1 };
 // balancear, orbitar). Todo es traslación + rotación (sin zoom continuo) y la
 // imagen conserva su tamaño original.
 const PRESETS: Record<string, AnimPreset> = {
+  // Logi'Ops → recorrido operativo (la mesa de control "avanza" sobre la ruta)
+  "logi-ops": {
+    idle: {
+      x: ["0%", "-6%", "-2%", "5%", "0%"],
+      y: ["0%", "1.2%", "-0.8%", "0.9%", "0%"],
+      rotate: [0, 0.5, -0.3, 0],
+    },
+    idleTransition: {
+      x: { duration: 16, repeat: Infinity, ease: "easeInOut" as const },
+      y: { duration: 13, repeat: Infinity, ease: "easeInOut" as const },
+      rotate: { duration: 20, repeat: Infinity, ease: "easeInOut" as const },
+    },
+    hover: {
+      x: ["0%", "-9%", "0%", "9%", "0%"],
+      y: ["0%", "2%", "-1.4%", "1.6%", "0%"],
+    },
+    hoverTransition: {
+      x: { duration: 8, repeat: Infinity, ease: "easeInOut" as const },
+      y: { duration: 9, repeat: Infinity, ease: "easeInOut" as const },
+    },
+    parallaxX: 36,
+    parallaxY: 16,
+    entrance: "construct",
+  },
+
   // BalanC Funcional → flotación orgánica (UI flotando en la app)
   "balanc-funcional": {
     idle: {

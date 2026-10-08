@@ -30,7 +30,7 @@ export function Button({
   ...rest
 }: Props) {
   const animatedContent = animated ? (
-    <span className="relative z-10 inline-flex items-center justify-center gap-2 rounded-full bg-zinc-950 px-6 py-3 text-sm font-medium text-white transition group-hover:text-[#00feff]">
+    <span className="relative z-10 inline-flex items-center justify-center gap-2 rounded-[10px] bg-zinc-950 px-6 py-3 text-sm font-medium text-white transition group-hover:text-[#00feff]">
       {children}
     </span>
   ) : (
@@ -38,8 +38,8 @@ export function Button({
   );
 
   const styles = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00feff]",
-    animated ? "btn-border-animate group" : cn("px-6 py-3", variants[variant]),
+    "inline-flex items-center justify-center gap-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00feff]",
+    animated ? "btn-border-animate group rounded-[12px]" : cn("rounded-full px-6 py-3", variants[variant]),
     className,
   );
 

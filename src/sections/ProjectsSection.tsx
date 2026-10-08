@@ -8,12 +8,16 @@ import { AnimatedItem } from "@/components/ui/AnimatedItem";
 import { cn } from "@/lib/utils";
 
 const BENTO_LAYOUT: Record<string, { span: string; variant: BentoVariant }> = {
-  "balanc-funcional": { span: "sm:col-span-2 lg:col-span-7 lg:row-span-2", variant: "flagship" },
-  "turismo-sostenible": { span: "lg:col-span-5", variant: "featured" },
-  agrocash: { span: "lg:col-span-5", variant: "featured" },
-  "bienestar-a-la-carta": { span: "lg:col-span-8", variant: "secondary" },
-  "avaluador-playground": { span: "lg:col-span-8", variant: "secondary" },
-  "publicacion-inmueble": { span: "lg:col-span-8", variant: "secondary" },
+  "logi-ops": { span: "sm:col-span-2 lg:[grid-column:1/8] lg:[grid-row:1/3]", variant: "flagship" },
+  "turismo-sostenible": { span: "lg:[grid-column:8/13] lg:[grid-row:1/2]", variant: "featured" },
+  agrocash: { span: "lg:[grid-column:8/13] lg:[grid-row:2/3]", variant: "featured" },
+  "balanc-funcional": { span: "sm:col-span-2 lg:[grid-column:1/8] lg:[grid-row:3/5]", variant: "flagship" },
+  "bienestar-a-la-carta": { span: "lg:[grid-column:8/13] lg:[grid-row:3/4]", variant: "featured" },
+  "hola-vivienda": { span: "lg:[grid-column:8/13] lg:[grid-row:4/5]", variant: "featured" },
+  "un-asunto-de-dos": { span: "lg:[grid-column:1/5] lg:[grid-row:5/6]", variant: "secondary" },
+  "avaluador-playground": { span: "lg:[grid-column:5/13] lg:[grid-row:5/6]", variant: "secondary" },
+  "davivienda-e-learning": { span: "lg:[grid-column:1/5] lg:[grid-row:6/7]", variant: "secondary" },
+  "publicacion-inmueble": { span: "lg:[grid-column:5/13] lg:[grid-row:6/7]", variant: "secondary" },
 };
 
 const DEFAULT_LAYOUT = { span: "lg:col-span-4", variant: "secondary" as BentoVariant };

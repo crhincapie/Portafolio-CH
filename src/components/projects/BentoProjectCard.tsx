@@ -47,29 +47,43 @@ interface CardActionsProps {
 }
 
 function CardActions({ featured, t }: CardActionsProps) {
-  const outlineBtn =
-    "inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-6 py-3 text-sm font-medium text-white transition hover:border-[#00feff]/60 hover:text-[#00feff] light:border-zinc-900/20 light:text-ink light:hover:border-[#0e7490]/70 light:hover:text-[#0e7490]";
-  const solidBtn =
-    "inline-flex items-center justify-center gap-2 rounded-full bg-[#00feff] px-6 py-3 text-sm font-medium text-zinc-950 shadow-[0_0_40px_rgba(0,254,255,0.25)] transition hover:bg-[#7afcff] light:shadow-[0_6px_24px_rgba(13,148,136,0.25)]";
+  const btn =
+    "inline-flex h-11 items-center justify-center gap-2 rounded-[12px] px-5 text-sm font-medium transition";
+  const primary = cn(
+    btn,
+    "bg-[#00feff] text-zinc-950 shadow-[0_0_32px_rgba(0,254,255,0.22)] hover:bg-[#7afcff] light:shadow-[0_6px_20px_rgba(13,148,136,0.22)]",
+  );
+  const outline = cn(
+    btn,
+    "border border-white/15 bg-transparent text-white hover:border-[#00feff]/60 hover:text-[#00feff] light:border-zinc-900/20 light:text-ink light:hover:border-[#0e7490]/70 light:hover:text-[#0e7490]",
+  );
+  const animated = "btn-border-animate-teal group inline-flex flex-1 rounded-[12px]";
+  const animatedInner =
+    "relative z-10 inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-zinc-950 px-5 text-sm font-medium text-white transition group-hover:text-[#00feff]";
+
+  const eye = (
+    <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    </svg>
+  );
 
   if (featured) {
     return (
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:flex-col xl:flex-row">
-        <button data-case className={cn(outlineBtn, "flex-1")} title={t("viewCase")}>
-          <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
-          <span>{t("case")}</span>
-        </button>
-        <button data-prototype className={cn(solidBtn, "flex-1")} title={t("prototypeTitle")}>
-          <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
-          <span>{t("prototype")}</span>
-        </button>
-        <button data-details className={cn(solidBtn, "flex-1 lg:basis-full")} title={t("viewDetailsTitle")}>
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2">
+          <button data-case className={cn(primary, "flex-1")} title={t("viewCase")}>
+            {eye}
+            <span>{t("case")}</span>
+          </button>
+          <button data-prototype className={animated} title={t("prototypeTitle")}>
+            <span className={animatedInner}>
+              {eye}
+              <span>{t("prototype")}</span>
+            </span>
+          </button>
+        </div>
+        <button data-details className={cn(outline, "w-full")} title={t("viewDetailsTitle")}>
           {t("viewDetails")}
         </button>
       </div>
@@ -78,14 +92,13 @@ function CardActions({ featured, t }: CardActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <button data-prototype className={cn(solidBtn, "flex-1")} title={t("prototypeTitle")}>
-        <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-        <span>{t("prototype")}</span>
+      <button data-prototype className={animated} title={t("prototypeTitle")}>
+        <span className={animatedInner}>
+          {eye}
+          <span>{t("prototype")}</span>
+        </span>
       </button>
-      <button data-details className={cn(solidBtn, "flex-1")} title={t("viewDetailsTitle")}>
+      <button data-details className={cn(outline, "flex-1")} title={t("viewDetailsTitle")}>
         {t("viewDetails")}
       </button>
     </div>
