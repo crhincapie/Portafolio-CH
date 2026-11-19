@@ -410,7 +410,7 @@ function PortraitVisual() {
       <div aria-hidden className="absolute left-1/2 top-[48%] h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,254,255,0.22),transparent)] blur-2xl light:bg-[radial-gradient(closest-side,rgba(14,116,144,0.18),transparent)]" />
       {/* Marco de selección como en una herramienta de diseño */}
       <div className="absolute left-1/2 top-[6%] h-[88%] w-[60%] -translate-x-1/2">
-        <span className="absolute -top-6 left-0 flex items-center gap-1.5 text-[11px] font-medium text-accent-text light:text-[#0e7490]">
+        <span className="absolute -top-6 left-0 flex items-center gap-1.5 whitespace-nowrap text-[10px] font-medium sm:text-[11px] text-accent-text light:text-[#0e7490]">
           <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 1v14M11 1v14M1 5h14M1 11h14" /></svg>
           Cristian Hincapié — Product Designer
         </span>
@@ -613,6 +613,80 @@ function BlueprintVisual() {
   );
 }
 
+/* ── Selector de roles para móvil: píldoras que se expanden ──
+   Solo la activa muestra su nombre y se llena con el avance
+   del carrusel; las demás quedan como iconos (con nombre accesible). */
+function RoleRail({
+  slide,
+  paused,
+  reduced,
+  onSelect,
+  label,
+  names,
+}: {
+  slide: number;
+  paused: boolean;
+  reduced: boolean;
+  onSelect: (i: number) => void;
+  label: string;
+  names: string[];
+}) {
+  return (
+    <div role="tablist" aria-label={label} className="mx-auto mt-3 flex max-w-[520px] items-center justify-center gap-1.5 min-[380px]:gap-2 lg:hidden">
+      {names.map((name, i) => {
+        const on = i === slide;
+        return (
+          <motion.button
+            key={name}
+            layout
+            type="button"
+            role="tab"
+            aria-selected={on}
+            aria-controls="hero-visual"
+            aria-label={name}
+            onClick={() => onSelect(i)}
+            transition={{ layout: { type: "spring", stiffness: 420, damping: 36 } }}
+            className={cn(
+              "relative isolate flex h-11 items-center min-[380px]:h-12 overflow-hidden rounded-full border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00feff]/70",
+              on
+                ? "min-w-0 flex-1 gap-2 border-[#00feff]/60 bg-[#00feff]/[0.08] pl-1 pr-3 min-[380px]:gap-2.5 min-[380px]:pl-1.5 min-[380px]:pr-4 light:border-[#0e7490]/50 light:bg-[#0e7490]/[0.06]"
+                : "w-10 shrink-0 justify-center min-[380px]:w-12 border-line-strong bg-white/[0.03] text-soft light:bg-white/70",
+            )}
+          >
+            {on && (
+              <motion.span
+                key={`rail-${slide}-${paused}`}
+                aria-hidden
+                className="absolute inset-0 -z-10 origin-left bg-[#00feff]/[0.14] light:bg-[#0e7490]/[0.12]"
+                initial={{ scaleX: reduced ? 1 : 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: reduced || paused ? 0 : SLIDE_MS / 1000, ease: "linear" }}
+              />
+            )}
+            <span
+              className={cn(
+                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors",
+                on ? "bg-[#00feff] text-zinc-950" : "",
+              )}
+            >
+              {ROLE_ICONS[i]}
+            </span>
+            {on && (
+              <motion.span
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0, transition: { duration: 0.35, delay: 0.1 } }}
+                className="min-w-0 truncate whitespace-nowrap text-[13px] font-semibold text-ink min-[380px]:text-sm"
+              >
+                {name}
+              </motion.span>
+            )}
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+}
+
 function RoleVisual({ slide }: { slide: number }) {
   const reduced = !!useReducedMotion();
   return (
@@ -687,6 +761,7 @@ export function Hero() {
   const reduced = !!useReducedMotion();
   const [slide, setSlide] = useState(0);
   const [paused, setPaused] = useState(false);
+  const swipeX = useRef<number | null>(null);
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
 
   useEffect(() => {
@@ -713,7 +788,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_45%,#000,transparent)] light:bg-[radial-gradient(rgba(24,24,27,0.12)_1px,transparent_1px)]" />
       </div>
 
-      <div className="mx-auto grid min-h-[calc(100svh-72px)] max-w-6xl items-center gap-10 px-4 pb-10 pt-8 md:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6 lg:pb-16">
+      <div className="mx-auto grid min-h-[calc(100svh-72px)] max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-8 px-4 pb-10 pt-4 md:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:pt-8 lg:gap-6 lg:pb-16">
         <div
           className="relative z-10 flex flex-col gap-6"
           onPointerEnter={() => setPaused(true)}
@@ -742,11 +817,11 @@ export function Hero() {
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span key={slide} className="block" initial="out" animate="in" exit="exit">
                   {[title1, title2].map((line, li) => (
-                    <span key={li} className="block overflow-hidden pb-[0.06em]">
+                    <span key={li} className="-mb-[0.1em] block overflow-hidden pb-[0.16em]">
                       {line.split(" ").map((word, wi) => (
                         <motion.span
                           key={wi}
-                          className={cn("mr-[0.22em] inline-block", li === 1 && "text-gradient-accent")}
+                          className={cn("mr-[0.22em] inline-block", li === 1 && "text-gradient-accent -mb-[0.14em] pb-[0.14em]")}
                           variants={{
                             out: { y: "100%", opacity: 0, filter: "blur(8px)" },
                             in: { y: "0%", opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, delay: li * 0.08 + wi * 0.05, ease } },
@@ -801,8 +876,8 @@ export function Hero() {
             </button>
           </div>
 
-          {/* Roles: tarjetas accionables que cambian la ilustración */}
-          <div className="mt-1 space-y-3">
+          {/* Roles: tarjetas accionables que cambian la ilustración (escritorio) */}
+          <div className="mt-1 hidden space-y-3 lg:block">
             <p className="flex items-center gap-2 text-xs font-medium text-faint">
               <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4 text-accent-text light:text-[#0e7490]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.5a6 6 0 0 1-4.6-2.2L4.5 15a1.5 1.5 0 0 1 2.3-1.9L9 15" />
@@ -871,8 +946,30 @@ export function Hero() {
           </dl>
         </div>
 
-        <div id="hero-visual" role="tabpanel" aria-label={`${t(`slide${n}Title1`)} ${t(`slide${n}Title2`)}`}>
-          <RoleVisual slide={slide} />
+        <div className="order-first min-w-0 lg:order-none">
+          {/* Móvil y tablet: escenario con la ilustración como protagonista; se puede deslizar */}
+          <div
+            id="hero-visual"
+            role="tabpanel"
+            aria-label={`${t(`slide${n}Title1`)} ${t(`slide${n}Title2`)}`}
+            className="relative mx-auto max-w-[520px] touch-pan-y max-lg:flex max-lg:h-[min(112vw,540px)] max-lg:items-center max-lg:justify-center lg:max-w-none"
+            onTouchStart={(e) => {
+              swipeX.current = e.touches[0].clientX;
+            }}
+            onTouchEnd={(e) => {
+              if (swipeX.current === null) return;
+              const dx = e.changedTouches[0].clientX - swipeX.current;
+              swipeX.current = null;
+              if (Math.abs(dx) < 45) return;
+              setSlide((s) => (s + (dx < 0 ? 1 : SLIDES.length - 1)) % SLIDES.length);
+            }}
+          >
+            <div className={cn("w-full transition-[width,margin] duration-500", slide === 1 ? "max-lg:mt-24 max-lg:w-[min(72%,290px)]" : "max-lg:w-[min(94%,calc(100%-8px))] max-[380px]:w-[86%]")}>
+              <RoleVisual slide={slide} />
+            </div>
+          </div>
+
+          <RoleRail slide={slide} paused={paused} reduced={reduced} onSelect={setSlide} label={t("rolesLabel")} names={SLIDES.map((sn) => `${t(`slide${sn}Title1`)} ${t(`slide${sn}Title2`)}`)} />
         </div>
       </div>
 
