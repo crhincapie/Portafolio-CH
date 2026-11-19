@@ -54,7 +54,25 @@
     "servicePhase2Desc": "Sintetizar",
     "servicePhase3Desc": "Prototipar",
     "servicePhase4Desc": "Implementar",
-    "servicePhase5Desc": "Evaluar"
+    "servicePhase5Desc": "Evaluar",
+    "marquee": "Product Strategy · Product Discovery · UX Research · Arquitectura de información · User Flows · Wireframing · Prototipado · Interaction Design · Design Systems · UI de alta fidelidad · Usability Testing",
+    "marquee2": "Service Design · Journey Mapping · Diseño basado en evidencia · Accesibilidad · IA aplicada al diseño · Front-End · Liderazgo de diseño · Workshops · Analítica digital · Diseño centrado en el usuario",
+    "stackLabel": "Anatomía de un producto",
+    "stackCaption": "De la investigación a la interfaz: así se construye un producto.",
+    "layerResearch": "Research",
+    "layerArchitecture": "Arquitectura",
+    "layerWireframe": "Wireframe",
+    "layerSystem": "Design System",
+    "layerUi": "UI final",
+    "rolesLabel": "Roles",
+    "rolesHint": "Explora mis roles: toca uno para ver cómo trabajo",
+    "uiLayers": "Capas",
+    "uiInspector": "Propiedades",
+    "bpUser": "Usuario",
+    "bpFront": "Frontstage",
+    "bpBack": "Backstage",
+    "bpSupport": "Soporte",
+    "bpEmotion": "Experiencia del usuario"
   },
   "about": {
     "kicker": "Sobre mí",
@@ -62,12 +80,26 @@
     "body": "Llevo más de 10 años diseñando productos digitales, y lo que más me interesa no es la interfaz, sino entender el problema, tomar mejores decisiones y convertir necesidades reales en soluciones de producto.\n\nHe liderado iniciativas de producto en Compensar, Scotiabank Colpatria y ADL Digital Lab, en sectores como fintech, salud, inmobiliario y servicios.\n\nMi enfoque integra estrategia de producto, liderazgo multidisciplinario y ejecución técnica, incluyendo Design Systems, IA aplicada y desarrollo front-end.\n\nConecto negocio, tecnología y experiencia para tomar decisiones basadas en evidencia, optimizar procesos y construir productos digitales escalables.",
     "location": "Bogotá, Colombia",
     "languages": "Español nativo · Inglés B1 (en mejora activa)",
-    "locationLabel": "Base"
+    "locationLabel": "Base",
+    "vennBusiness": "Negocio",
+    "vennUsers": "Usuarios",
+    "vennTech": "Tecnología",
+    "vennCore": "Producto",
+    "languagesLabel": "Idiomas"
   },
   "experience": {
     "kicker": "Experiencia",
     "title": "Diseño y liderazgo en productos digitales.",
-    "subtitle": "Experiencia conectando estrategia, diseño y tecnología para convertir problemas complejos en productos claros y escalables."
+    "subtitle": "Experiencia conectando estrategia, diseño y tecnología para convertir problemas complejos en productos claros y escalables.",
+    "chapter": "Capítulo",
+    "highlights": "Funciones y logros",
+    "originTitle": "El origen",
+    "originRole": "De la tecnología al diseño",
+    "originSummary": "Empecé por la tecnología y llegué a la forma. Soporte técnico, administración web, producción multimedia, diseño gráfico y desarrollo frontend me dieron una mezcla poco común: entiendo cómo funciona un sistema por dentro y cómo debe verse y sentirse por fuera. Esa doble mirada es la base de cada decisión de producto que tomo hoy.",
+    "nowTitle": "Hoy",
+    "nowDates": "2026 →",
+    "nowSummary": "Hoy reúno todo ese recorrido en una sola práctica: lidero decisiones de producto de la estrategia al pixel, combinando Product Design, UX/UI, Service Design e IA aplicada. Trabajo con equipos de negocio, diseño e ingeniería para convertir problemas complejos en productos claros, medibles y escalables.",
+    "scrollHint": "Desliza para recorrer la historia"
   },
   "projects": {
     "kicker": "Proyectos destacados",
@@ -95,12 +127,18 @@
     "pill1": "Estrategia & priorización",
     "pill2": "UX basada en evidencia",
     "pill3": "Design Systems & escalabilidad",
-    "pill4": "IA aplicada al producto"
+    "pill4": "IA aplicada al producto",
+    "core": "Decisión"
   },
   "testimonials": {
     "kicker": "Testimonios",
     "title": "Diseño que genera confianza.",
-    "subtitle": "Perspectivas de quienes han trabajado conmigo en producto, tecnología y diseño."
+    "subtitle": "Perspectivas de quienes han trabajado conmigo en producto, tecnología y diseño.",
+    "prev": "Testimonio anterior",
+    "next": "Siguiente testimonio",
+    "channel": "feedback-producto",
+    "members": "{count} personas en el canal",
+    "typing": "{name} está escribiendo…"
   },
   "contact": {
     "kicker": "Contacto",
@@ -112,7 +150,25 @@
     "behanceCta": "Behance",
     "availability": "Disponible para nuevos proyectos",
     "footnote": "Respuesta habitual en 24–48h hábiles.",
-    "downloadCV": "Descargar CV"
+    "downloadCV": "Descargar CV",
+    "composeTitle": "Nuevo mensaje",
+    "composeTo": "Para",
+    "composeSubject": "Asunto",
+    "composeMessage": "Mensaje",
+    "composeOptional": "Opcional",
+    "composePlaceholder": "Cuéntame brevemente sobre el producto, el equipo o la oportunidad…",
+    "topic1": "Oportunidad en Product Design",
+    "topic2": "Liderazgo de diseño",
+    "topic3": "Proyecto digital",
+    "topic4": "Solo quiero saludar",
+    "copy": "Copiar email",
+    "copied": "¡Copiado!",
+    "localTime": "Hora en Bogotá",
+    "channels": "O escríbeme por",
+    "whatsappHint": "Respuesta rápida",
+    "linkedinHint": "Perfil profesional",
+    "behanceHint": "Portafolio visual",
+    "cvHint": "Español o inglés, claro u oscuro"
   },
   "footer": {
     "title": "Cristian Hincapié",
@@ -168,7 +224,24 @@
     "label_metricTools": "Herramientas",
     "label_metricSteps": "Pasos",
     "label_learnings": "Aprendizajes",
-    "label_galleryCount": "capturas"
+    "label_galleryCount": "capturas",
+    "viewCase": "Ver caso",
+    "label_navSummary": "Resumen",
+    "label_navChallenge": "Reto",
+    "label_navProcess": "Proceso",
+    "label_navDesign": "Diseño",
+    "label_navResults": "Resultados",
+    "label_navLearning": "Aprendizaje",
+    "label_onThisCase": "En este caso",
+    "label_case": "Caso",
+    "label_allCases": "Todos los casos",
+    "label_next": "Siguiente caso",
+    "label_viewProcess": "Ver el proceso",
+    "label_screensNote": "pantallas diseñadas",
+    "label_componentsNote": "componentes de UI",
+    "label_processIntro": "Cuatro movimientos que llevaron el problema de una intuición a una solución lista para construir.",
+    "label_stepDecide": "Decidir",
+    "label_designTitle": "Cómo se ve, y por qué se ve así."
   },
   "projectsPage": {
     "kicker": "Casos",
@@ -176,7 +249,11 @@
     "subtitle": "Cada caso incluye narrativa, decisiones y entregables.",
     "featured": "Destacados",
     "all": "Todos",
-    "viewCase": "Ver caso"
+    "viewCase": "Ver caso",
+    "list": "Lista",
+    "gallery": "Galería",
+    "filterLabel": "Filtrar casos",
+    "viewLabel": "Cambiar vista"
   },
   "notFound": {
     "title": "Página no encontrada",

@@ -54,7 +54,25 @@
     "servicePhase2Desc": "Synthesize",
     "servicePhase3Desc": "Prototype",
     "servicePhase4Desc": "Implement",
-    "servicePhase5Desc": "Evaluate"
+    "servicePhase5Desc": "Evaluate",
+    "marquee": "Product Strategy · Product Discovery · UX Research · Information Architecture · User Flows · Wireframing · Prototyping · Interaction Design · Design Systems · High-fidelity UI · Usability Testing",
+    "marquee2": "Service Design · Journey Mapping · Evidence-based Design · Accessibility · AI-assisted Design · Front-End · Design Leadership · Workshops · Digital Analytics · Human-centered Design",
+    "stackLabel": "Anatomy of a product",
+    "stackCaption": "From research to interface: this is how a product is built.",
+    "layerResearch": "Research",
+    "layerArchitecture": "Architecture",
+    "layerWireframe": "Wireframe",
+    "layerSystem": "Design System",
+    "layerUi": "Final UI",
+    "rolesLabel": "Roles",
+    "rolesHint": "Explore my roles: tap one to see how I work",
+    "uiLayers": "Layers",
+    "uiInspector": "Properties",
+    "bpUser": "User",
+    "bpFront": "Frontstage",
+    "bpBack": "Backstage",
+    "bpSupport": "Support",
+    "bpEmotion": "User experience"
   },
   "about": {
     "kicker": "About",
@@ -62,12 +80,26 @@
     "body": "I've spent 10+ years designing digital products, and what interests me most isn't the interface—it's understanding the problem, making better decisions, and turning real needs into product solutions.\n\nI've led product initiatives at Compensar, Scotiabank Colpatria, and ADL Digital Lab, across fintech, health, real estate, and services.\n\nMy approach integrates product strategy, multidisciplinary leadership, and technical execution, including Design Systems, applied AI, and front-end development.\n\nI connect business, technology, and experience to make evidence-based decisions, optimize processes, and build scalable digital products.",
     "location": "Bogotá, Colombia",
     "languages": "Native Spanish · English B1 (actively improving)",
-    "locationLabel": "Location"
+    "locationLabel": "Location",
+    "vennBusiness": "Business",
+    "vennUsers": "Users",
+    "vennTech": "Technology",
+    "vennCore": "Product",
+    "languagesLabel": "Languages"
   },
   "experience": {
     "kicker": "Experience",
     "title": "Design and leadership in digital products.",
-    "subtitle": "Experience connecting strategy, design, and technology to turn complex problems into clear, scalable products."
+    "subtitle": "Experience connecting strategy, design, and technology to turn complex problems into clear, scalable products.",
+    "chapter": "Chapter",
+    "highlights": "Responsibilities & wins",
+    "originTitle": "The origin",
+    "originRole": "From technology to design",
+    "originSummary": "I started in technology and found my way to form. Tech support, web administration, multimedia production, graphic design, and frontend development gave me an uncommon mix: I understand how a system works on the inside and how it should look and feel on the outside. That dual perspective underpins every product decision I make today.",
+    "nowTitle": "Today",
+    "nowDates": "2026 →",
+    "nowSummary": "Today I bring that whole journey into a single practice: I lead product decisions from strategy to pixel, combining Product Design, UX/UI, Service Design, and applied AI. I work with business, design, and engineering teams to turn complex problems into clear, measurable, scalable products.",
+    "scrollHint": "Scroll to walk through the story"
   },
   "projects": {
     "kicker": "Featured work",
@@ -95,12 +127,18 @@
     "pill1": "Strategy & prioritization",
     "pill2": "Evidence-led UX",
     "pill3": "Design Systems & scale",
-    "pill4": "AI applied to product"
+    "pill4": "AI applied to product",
+    "core": "Decision"
   },
   "testimonials": {
     "kicker": "Testimonials",
     "title": "Design that builds trust.",
-    "subtitle": "Perspectives from those who have worked with me in product, technology, and design."
+    "subtitle": "Perspectives from those who have worked with me in product, technology, and design.",
+    "prev": "Previous testimonial",
+    "next": "Next testimonial",
+    "channel": "product-feedback",
+    "members": "{count} people in the channel",
+    "typing": "{name} is typing…"
   },
   "contact": {
     "kicker": "Contact",
@@ -112,7 +150,25 @@
     "behanceCta": "Behance",
     "availability": "Available for new projects",
     "footnote": "Typical reply within 24–48 business hours.",
-    "downloadCV": "Download CV"
+    "downloadCV": "Download CV",
+    "composeTitle": "New message",
+    "composeTo": "To",
+    "composeSubject": "Subject",
+    "composeMessage": "Message",
+    "composeOptional": "Optional",
+    "composePlaceholder": "Tell me briefly about the product, the team, or the opportunity…",
+    "topic1": "Product Design opportunity",
+    "topic2": "Design leadership",
+    "topic3": "Digital project",
+    "topic4": "Just saying hi",
+    "copy": "Copy email",
+    "copied": "Copied!",
+    "localTime": "Time in Bogotá",
+    "channels": "Or reach me via",
+    "whatsappHint": "Quick reply",
+    "linkedinHint": "Professional profile",
+    "behanceHint": "Visual portfolio",
+    "cvHint": "Spanish or English, light or dark"
   },
   "footer": {
     "title": "Cristian Hincapié",
@@ -168,7 +224,24 @@
     "label_metricTools": "Tools",
     "label_metricSteps": "Steps",
     "label_learnings": "Learnings",
-    "label_galleryCount": "screens"
+    "label_galleryCount": "screens",
+    "viewCase": "View case",
+    "label_navSummary": "Overview",
+    "label_navChallenge": "Challenge",
+    "label_navProcess": "Process",
+    "label_navDesign": "Design",
+    "label_navResults": "Results",
+    "label_navLearning": "Learning",
+    "label_onThisCase": "In this case",
+    "label_case": "Case",
+    "label_allCases": "All cases",
+    "label_next": "Next case",
+    "label_viewProcess": "See the process",
+    "label_screensNote": "screens designed",
+    "label_componentsNote": "UI components",
+    "label_processIntro": "Four moves that took the problem from a hunch to a solution ready to build.",
+    "label_stepDecide": "Decide",
+    "label_designTitle": "How it looks, and why it looks that way."
   },
   "projectsPage": {
     "kicker": "Case studies",
@@ -176,7 +249,11 @@
     "subtitle": "Each case includes narrative, decisions, and deliverables.",
     "featured": "Featured",
     "all": "All",
-    "viewCase": "Ver caso"
+    "viewCase": "Ver caso",
+    "list": "List",
+    "gallery": "Gallery",
+    "filterLabel": "Filter cases",
+    "viewLabel": "Change view"
   },
   "notFound": {
     "title": "Page not found",

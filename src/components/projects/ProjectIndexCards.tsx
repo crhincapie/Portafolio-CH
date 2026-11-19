@@ -1,11 +1,9 @@
 "use client";
 
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { Link } from "@/i18n/navigation";
-import { motion } from "framer-motion";
-import { AnimatedIllustration } from "@/components/projects/AnimatedIllustration";
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
-import { Tilt } from "@/components/motion/Parallax";
-import { StaggerReveal, staggerItem } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 export interface IndexProjectData {
@@ -17,18 +15,12 @@ export interface IndexProjectData {
   year: string;
   tags: string[];
   featured: boolean;
+  image?: string;
+  prototypeUrl?: string | null;
 }
 
-interface ProjectsIndexGridProps {
-  projects: IndexProjectData[];
-  labels: {
-    featured: string;
-    viewCase: string;
-  };
-}
-
-// Cada proyecto recibe su propio "tinte" de borde y resplandor.
-const ACCENTS: Record<string, string> = {
+// Cada proyecto conserva su propio "tinte" de acento.
+export const PROJECT_ACCENTS: Record<string, string> = {
   "logi-ops": "#00feff",
   "balanc-funcional": "#2dd4bf",
   "turismo-sostenible": "#34d399",
@@ -41,153 +33,222 @@ const ACCENTS: Record<string, string> = {
   "publicacion-inmueble": "#fb923c",
 };
 
-// Bento único con todos los casos: Logi'Ops como flagship a la
-// izquierda (2 filas), los otros destacados a su derecha y el
-// resto en filas de tres; cierra un projecto ancho.
-const SPANS: Record<string, string> = {
-  "logi-ops": "sm:col-span-2 lg:[grid-column:1/9] lg:[grid-row:1/3]",
-  "balanc-funcional": "lg:[grid-column:9/13] lg:[grid-row:1/2]",
-  "turismo-sostenible": "lg:[grid-column:9/13] lg:[grid-row:2/3]",
-  agrocash: "lg:[grid-column:1/5] lg:[grid-row:3/4]",
-  "bienestar-a-la-carta": "lg:[grid-column:5/9] lg:[grid-row:3/4]",
-  "hola-vivienda": "lg:[grid-column:9/13] lg:[grid-row:3/4]",
-  "un-asunto-de-dos": "lg:[grid-column:1/5] lg:[grid-row:4/5]",
-  "avaluador-playground": "lg:[grid-column:5/9] lg:[grid-row:4/5]",
-  "davivienda-e-learning": "lg:[grid-column:9/13] lg:[grid-row:4/5]",
-  "publicacion-inmueble": "lg:[grid-column:1/13] lg:[grid-row:5/6]",
-};
+export const accentOf = (slug: string) => PROJECT_ACCENTS[slug] ?? "#00feff";
 
-const DEFAULT_SPAN = "sm:col-span-2 lg:col-span-4";
+const ease = [0.22, 1, 0.36, 1] as const;
 
-function accent(slug: string): string {
-  return ACCENTS[slug] ?? "#00feff";
-}
-
-function ArrowIcon() {
+function Arrow({ className }: { className?: string }) {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 9h10M10 4l5 5-5 5" />
+    <svg aria-hidden viewBox="0 0 24 24" className={cn("h-5 w-5", className)} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 17 17 7M8 7h9v9" />
     </svg>
   );
 }
 
-function ProjectIndexCard({
-  data,
-  labels,
-  large = false,
-  className,
+/* ── Índice tipográfico con vista previa que sigue al cursor ─────── */
+
+export function ProjectRows({
+  projects,
+  startIndex = 0,
+  viewCaseLabel,
 }: {
-  data: IndexProjectData;
-  labels: ProjectsIndexGridProps["labels"];
-  large?: boolean;
-  className?: string;
+  projects: IndexProjectData[];
+  startIndex?: number;
+  viewCaseLabel: string;
 }) {
-  const color = accent(data.slug);
+  const reduced = !!useReducedMotion();
+  const listRef = useRef<HTMLUListElement>(null);
+  const [hover, setHover] = useState<number | null>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 200, damping: 26 });
+  const sy = useSpring(y, { stiffness: 200, damping: 26 });
+
+  const onMove = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
+    const r = listRef.current?.getBoundingClientRect();
+    if (!r) return;
+    x.set(e.clientX - r.left);
+    y.set(e.clientY - r.top);
+  };
+
+  const active = hover !== null ? projects[hover] : null;
 
   return (
-    <motion.div variants={staggerItem} className={cn("h-full", className)}>
-      <Tilt max={5} className="h-full">
-        <Link
-          href={`/projects/${data.slug}`}
-          className="group block h-full rounded-[26px] outline-none focus-visible:ring-2 focus-visible:ring-[#00feff]/60"
-        >
-          <SpotlightCard
-            spotlightColor={`${color}30`}
-            className="relative h-full rounded-[26px] transition-transform duration-500 ease-out group-hover:-translate-y-1.5"
-          >
-            {/* Borde de vidrio con tinte del proyecto */}
-            <div
-              className="relative h-full rounded-[26px] p-px"
-              style={{
-                background: `linear-gradient(160deg, ${color}78 0%, rgba(255,255,255,0.14) 42%, ${color}34 100%)`,
-              }}
+    <ul ref={listRef} className="relative border-t border-line" onPointerMove={onMove} onPointerLeave={() => setHover(null)}>
+      {projects.map((p, i) => {
+        const color = accentOf(p.slug);
+        return (
+          <li key={p.slug} className="border-b border-line">
+            <Link
+              href={`/projects/${p.slug}`}
+              onPointerEnter={() => setHover(i)}
+              onFocus={() => setHover(i)}
+              onBlur={() => setHover(null)}
+              className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-4 py-6 outline-none transition-[padding] duration-500 md:grid-cols-[3.5rem_minmax(0,1.4fr)_minmax(0,1fr)_4rem_auto] md:gap-6 md:py-8 md:hover:pl-4 focus-visible:pl-4"
+              aria-label={`${viewCaseLabel}: ${p.title}`}
             >
-              <div className="liquid-card relative h-full overflow-hidden rounded-[25px]">
-                <AnimatedIllustration slug={data.slug} title={`${data.title} — fondo animado`} />
+              {/* Miniatura (móvil) */}
+              <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-line md:hidden">
+                {p.image && <Image src={p.image} alt="" fill sizes="56px" className="object-cover object-top" />}
+              </span>
+              <span className="hidden text-sm tabular-nums text-faint md:block">{String(startIndex + i + 1).padStart(2, "0")}</span>
+              <span className="min-w-0">
+                <span className="block truncate text-[clamp(1.35rem,3vw,2.6rem)] font-semibold leading-tight tracking-[-0.035em] text-ink transition-colors duration-300 group-hover:text-[var(--row-accent)]" style={{ ["--row-accent" as string]: color }}>
+                  {p.title}
+                </span>
+                <span className="mt-1 block truncate text-sm text-muted md:hidden">
+                  {p.company} · {p.year}
+                </span>
+              </span>
+              <span className="hidden truncate text-sm text-muted md:block">
+                {p.company} — {p.role}
+              </span>
+              <span className="hidden text-sm tabular-nums text-muted md:block">{p.year}</span>
+              <span
+                className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong text-soft transition-all duration-300 group-hover:rotate-45 group-hover:border-transparent group-hover:text-zinc-950"
+                style={{ ["--row-accent" as string]: color }}
+              >
+                <span className="absolute inset-0 scale-0 rounded-full bg-[var(--row-accent)] transition-transform duration-300 group-hover:scale-100" />
+                <Arrow className="relative h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+        );
+      })}
 
-                {/* Velo de legibilidad */}
-                <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-zinc-950 via-zinc-950/55 to-zinc-950/10 light:from-white light:via-white/65 light:to-transparent" />
-
-                {/* Barrido especular tipo líquido al hover */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 z-30 -translate-x-[170%] skew-x-[-18deg] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[170%] light:via-white/45"
-                />
-
-                {data.featured && (
-                  <span className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-xl light:border-white/60 light:bg-white/60 light:text-zinc-700">
-                    {labels.featured}
-                  </span>
-                )}
-
-                <div
-                  className={cn(
-                    "absolute inset-0 z-10 flex flex-col justify-end gap-2.5 p-6",
-                    large && "lg:p-8",
-                  )}
-                >
-                  <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                    <span className="font-medium uppercase tracking-[0.25em]" style={{ color }}>
-                      {data.role}
-                    </span>
-                    <span className="h-1 w-1 rounded-full bg-zinc-500 light:bg-zinc-400" />
-                    <span className="text-zinc-400 light:text-muted">{data.company}</span>
-                    <span className="h-1 w-1 rounded-full bg-zinc-500 light:bg-zinc-400" />
-                    <span className="text-zinc-400 light:text-muted">{data.year}</span>
-                  </div>
-                  <h2 className={cn("font-semibold tracking-tight text-white light:text-ink", large ? "text-2xl lg:text-3xl" : "text-xl md:text-2xl")}>
-                    {data.title}
-                  </h2>
-                  <p className={cn("max-w-2xl text-sm leading-relaxed text-zinc-300 light:text-soft", large ? "line-clamp-3" : "line-clamp-2")}>
-                    {data.summary}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {data.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-[10px] border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-300 light:border-zinc-900/10 light:bg-zinc-900/[0.04] light:text-zinc-600"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="inline-flex items-center gap-2 pt-2 text-sm font-semibold transition group-hover:gap-3">
-                    <span className="text-white light:text-ink group-hover:text-[#00feff] light:group-hover:text-[#0e7490]">
-                      {labels.viewCase}
-                    </span>
-                    <span
-                      className="grid h-8 w-8 place-items-center rounded-[12px] border text-white transition group-hover:bg-[#00feff]/20 light:text-ink light:group-hover:bg-[#00feff]/25"
-                      style={{ borderColor: `${color}55` }}
-                    >
-                      <ArrowIcon />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </SpotlightCard>
-        </Link>
-      </Tilt>
-    </motion.div>
+      {/* Vista previa flotante (escritorio) */}
+      {!reduced && (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 z-20 hidden md:block"
+          style={{ x: sx, y: sy }}
+        >
+          <AnimatePresence>
+            {active?.image && (
+              <motion.div
+                key={active.slug}
+                className="relative -translate-y-1/2 translate-x-10 overflow-hidden rounded-2xl border border-white/15 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.7)]"
+                style={{ width: 340, height: 230, boxShadow: `0 30px 80px -30px ${accentOf(active.slug)}66` }}
+                initial={{ opacity: 0, scale: 0.85, rotate: -4 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.45, ease } }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+              >
+                <Image src={active.image} alt="" fill sizes="340px" className="object-cover object-top" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      )}
+    </ul>
   );
 }
 
-export function ProjectsIndexGrid({ projects, labels }: ProjectsIndexGridProps) {
+/* ── Galería (vista alternativa del índice) ─────────────────────── */
+
+function GalleryCard({ p, index, viewCaseLabel }: { p: IndexProjectData; index: number; viewCaseLabel: string }) {
+  const color = accentOf(p.slug);
   return (
-    <StaggerReveal className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
-      {projects.map((project) => {
-        const span = SPANS[project.slug] ?? DEFAULT_SPAN;
-        const isLogi = project.slug === "logi-ops";
-        return (
-          <ProjectIndexCard
-            key={project.slug}
-            data={project}
-            labels={labels}
-            large={isLogi}
-            className={cn(span, isLogi ? "min-h-[420px]" : "min-h-[300px]")}
-          />
-        );
-      })}
-    </StaggerReveal>
+    <Link
+      href={`/projects/${p.slug}`}
+      className="group block outline-none focus-visible:ring-2 focus-visible:ring-[#00feff]/60 rounded-[28px]"
+      aria-label={`${viewCaseLabel}: ${p.title}`}
+    >
+      <div className="glass-surface relative overflow-hidden rounded-[28px] p-2">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[22px] bg-zinc-900">
+          {p.image && (
+            <Image
+              src={p.image}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, 560px"
+              className="object-cover object-top transition-[transform,object-position] duration-[2500ms] ease-out group-hover:scale-[1.03] group-hover:object-bottom"
+            />
+          )}
+          <span className="absolute left-3 top-3 rounded-full bg-zinc-950/70 px-2.5 py-1 text-[11px] font-semibold tabular-nums text-white backdrop-blur">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+        <div className="flex items-end justify-between gap-4 px-3 pb-3 pt-4">
+          <div className="min-w-0 space-y-1">
+            <p className="text-xs font-medium" style={{ color }}>
+              {p.company} · {p.year}
+            </p>
+            <h3 className="truncate text-xl font-semibold tracking-tight text-ink">{p.title}</h3>
+            <p className="line-clamp-2 text-sm text-muted">{p.summary}</p>
+          </div>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong text-soft transition-all duration-300 group-hover:rotate-45 group-hover:bg-[#00feff] group-hover:text-zinc-950">
+            <Arrow className="h-4 w-4" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+interface ProjectsIndexGridProps {
+  projects: IndexProjectData[];
+  labels: {
+    featured: string;
+    all: string;
+    viewCase: string;
+    list: string;
+    gallery: string;
+    filterLabel: string;
+    viewLabel: string;
+  };
+}
+
+export function ProjectsIndexGrid({ projects, labels }: ProjectsIndexGridProps) {
+  const [filter, setFilter] = useState<"all" | "featured">("all");
+  const [view, setView] = useState<"list" | "gallery">("gallery");
+  const list = filter === "featured" ? projects.filter((p) => p.featured) : projects;
+
+  const seg = (on: boolean) =>
+    cn(
+      "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+      on ? "bg-[#00feff] text-zinc-950" : "text-muted hover:text-ink",
+    );
+
+  return (
+    <div className="space-y-10">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div role="group" aria-label={labels.filterLabel} className="glass-surface flex rounded-full p-1">
+          <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} className={seg(filter === "all")}>
+            {labels.all} <span className="tabular-nums opacity-60">{projects.length}</span>
+          </button>
+          <button type="button" aria-pressed={filter === "featured"} onClick={() => setFilter("featured")} className={seg(filter === "featured")}>
+            {labels.featured} <span className="tabular-nums opacity-60">{projects.filter((p) => p.featured).length}</span>
+          </button>
+        </div>
+        <div role="group" aria-label={labels.viewLabel} className="glass-surface flex rounded-full p-1">
+          <button type="button" aria-pressed={view === "gallery"} onClick={() => setView("gallery")} className={seg(view === "gallery")}>
+            {labels.gallery}
+          </button>
+          <button type="button" aria-pressed={view === "list"} onClick={() => setView("list")} className={seg(view === "list")}>
+            {labels.list}
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={`${view}-${filter}`}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease } }}
+          exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
+        >
+          {view === "list" ? (
+            <ProjectRows projects={list} viewCaseLabel={labels.viewCase} />
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              {list.map((p, i) => (
+                <GalleryCard key={p.slug} p={p} index={i} viewCaseLabel={labels.viewCase} />
+              ))}
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }

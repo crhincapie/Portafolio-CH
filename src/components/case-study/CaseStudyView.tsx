@@ -1,14 +1,15 @@
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { GalleryCarousel } from "@/components/case-study/GalleryCarousel";
 import { PrototypeLinkButton } from "@/components/case-study/PrototypeLinkButton";
-import { BigNumber, HeroStat } from "@/components/case-study/StatCards";
+import { CaseDock, CaseHeroScreen, CountUp, ProcessTrack, ScrollQuote } from "@/components/case-study/StatCards";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/config/site";
 import { pickLocale } from "@/content/i18n";
-import { getProjectBySlug } from "@/content/projects";
+import { PROJECTS, getProjectBySlug } from "@/content/projects";
 import { buildCreativeWorkJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 
@@ -106,13 +107,21 @@ const THEMES: Record<string, Theme> = {
   },
 };
 
-const STEPS: { key: string; source: "research" | "uxProcess" | "wireframes" | "results" }[] = [
+const STEPS: { key: string; source: "research" | "uxProcess" | "wireframes" | "decisions" }[] = [
   { key: "stepResearch", source: "research" },
   { key: "stepMap", source: "uxProcess" },
   { key: "stepPrototype", source: "wireframes" },
-  { key: "stepValidate", source: "results" },
+  { key: "stepDecide", source: "decisions" },
 ];
 
+/* ─────────────────────────────────────────────────────────────
+   CASO DE ESTUDIO
+   Hero con la pantalla que se endereza en 3D → ficha en bento →
+   el reto conectado al objetivo (el nodo y la barra del monograma)
+   → proceso en carril horizontal → diseño en bento → resultados
+   que cuentan → el aprendizaje que se enciende al leer → galería
+   → siguiente caso. Un dock flotante acompaña todo el recorrido.
+   ───────────────────────────────────────────────────────────── */
 export async function CaseStudyView({ slug }: Props) {
   const project = getProjectBySlug(slug);
   if (!project) notFound();
@@ -120,459 +129,433 @@ export async function CaseStudyView({ slug }: Props) {
   const t = await getTranslations("caseStudy");
   const locale = await getLocale();
   const cs = project.caseStudy;
-
   const theme = THEMES[slug] ?? THEMES["balanc-funcional"];
+  const L = (v: { es: string; en: string }) => pickLocale(locale, v);
+  const label = (key: string) => t(`label_${key}` as Parameters<typeof t>[0]);
 
   const prototype = project.prototypeUrl ?? cs.prototypeUrl;
   const gallery = project.gallery ?? [];
+  const heroImage = project.heroImage ?? gallery[0] ?? `/images/projects/${project.slug}/home.webp`;
+  const index = PROJECTS.findIndex((p) => p.slug === slug);
+  const next = PROJECTS[(index + 1) % PROJECTS.length];
+  const nextImage = next.heroImage ?? next.gallery?.[0];
 
   const path = locale === "es" ? `/projects/${project.slug}` : `/en/projects/${project.slug}`;
   const url = `${siteConfig.url.replace(/\/$/, "")}${path}`;
+  const host = prototype ? new URL(prototype).host : `${new URL(siteConfig.url).host}${path}`;
 
   const creativeLd = buildCreativeWorkJsonLd({
     locale,
-    name: pickLocale(locale, project.title),
-    description: pickLocale(locale, project.summary),
+    name: L(project.title),
+    description: L(project.summary),
     url,
     datePublished: `${project.year}-01-01`,
   });
 
-  const heroImage = project.heroImage ?? (gallery[0] ?? `/images/projects/${project.slug}/home.webp`);
-  const displayGallery = gallery.length > 1 ? gallery : gallery;
-  const processSteps = STEPS.length;
+  const sections = [
+    { id: "resumen", label: label("navSummary") },
+    { id: "reto", label: label("navChallenge") },
+    { id: "proceso", label: label("navProcess") },
+    { id: "diseno", label: label("navDesign") },
+    { id: "resultados", label: label("navResults") },
+    { id: "aprendizaje", label: label("navLearning") },
+  ];
 
-  const label = (key: string) => t(`label_${key}` as Parameters<typeof t>[0]);
+  const imgA = gallery[1] ?? heroImage;
+  const imgB = gallery[2] ?? gallery[0] ?? heroImage;
+  const mobileShots = project.galleryVariant === "mobile";
 
   return (
-    <article className="border-b border-line pb-20 pt-8 md:pb-28 md:pt-12">
+    <article
+      className="relative overflow-x-clip pb-24 [--a:var(--acc)] light:[--a:var(--acc-l)]"
+      style={{ "--acc": theme.accent, "--acc-l": theme.accentLight } as CSSProperties}
+    >
       <JsonLd data={[creativeLd]} />
+      <CaseDock items={sections} title={label("onThisCase")} />
 
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        {/* ————— HERO BANNER ————— */}
-        <section
-          className="liquid relative overflow-hidden rounded-[2rem] border border-line-strong bg-gradient-to-br from-surface-2 via-canvas to-canvas"
-          style={{ boxShadow: `0 0 120px ${theme.glow}` }}
-        >
-          <div
-            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl"
-            style={{ backgroundColor: theme.accent, opacity: 0.18 }}
-          />
-          <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-indigo-500/15 blur-3xl" />
+      {/* Ambiente del caso */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[120vh] overflow-hidden">
+        <div className="absolute -top-40 left-1/2 h-[700px] w-[1100px] -translate-x-1/2 rounded-full opacity-[0.16] blur-[120px]" style={{ backgroundColor: "var(--a)" }} />
+        <div className="absolute right-[-10%] top-[30%] h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[120px]" />
+      </div>
 
-          <div className="relative grid gap-8 p-8 md:grid-cols-[1.4fr_1fr] md:items-end md:p-12 lg:p-16">
-            <div className="space-y-6">
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em]"
-                  style={{ borderColor: theme.accent + "55", backgroundColor: theme.accent + "14", color: theme.accent }}
-                >
-                  {pickLocale(locale, project.company)}
-                </span>
-                <span className="rounded-full border border-line-strong bg-surface-1 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-soft">
-                  {project.year}
-                </span>
-                <span className="rounded-full border border-line-strong bg-surface-1 px-4 py-1.5 text-xs font-medium text-soft">
-                  {pickLocale(locale, project.role)}
-                </span>
-              </div>
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+        {/* ————— HERO ————— */}
+        <header className="pt-10 md:pt-16">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <Link href="/projects" className="group inline-flex items-center gap-2 text-muted transition hover:text-ink">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line-strong transition group-hover:-translate-x-0.5 group-hover:border-[color:var(--a)]">
+                <ArrowLeft />
+              </span>
+              {label("allCases")}
+            </Link>
+            <span className="text-faint">
+              {label("case")} <span className="font-semibold tabular-nums text-ink">{String(index + 1).padStart(2, "0")}</span> / {String(PROJECTS.length).padStart(2, "0")}
+            </span>
+          </div>
 
-              <h1 className="max-w-3xl text-balance text-5xl font-bold tracking-tight text-ink md:text-6xl lg:text-7xl">
-                {pickLocale(locale, project.title)}
-              </h1>
+          <div className="mt-12 flex flex-wrap items-center gap-2 md:mt-16">
+            <span className="rounded-full border px-3.5 py-1.5 text-sm font-medium text-[color:var(--a)]" style={{ borderColor: "color-mix(in srgb, var(--a) 40%, transparent)", backgroundColor: "color-mix(in srgb, var(--a) 8%, transparent)" }}>
+              {L(project.company)}
+            </span>
+            <span className="rounded-full border border-line-strong px-3.5 py-1.5 text-sm text-soft">{project.year}</span>
+          </div>
 
-              <p className="max-w-2xl text-pretty text-lg leading-relaxed text-soft md:text-xl">
-                {pickLocale(locale, project.summary)}
+          <h1 className="mt-6 max-w-[14ch] text-balance text-[clamp(3rem,9vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.055em] text-ink">
+            {L(project.title)}
+          </h1>
+
+          <div className="mt-10 grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-end">
+            <p className="max-w-2xl text-pretty text-lg leading-relaxed text-soft md:text-xl">{L(project.summary)}</p>
+            <div className="flex flex-col gap-4 md:items-end">
+              <p className="text-sm text-muted">
+                {label("role")} <span className="ml-1 font-semibold text-ink">{L(project.role)}</span>
               </p>
+              <div className="flex w-full flex-wrap gap-3 md:justify-end">
+                {prototype ? (
+                  <div className="min-w-[12rem] flex-1 md:flex-none">
+                    <PrototypeLinkButton label={t("openPrototype")} url={prototype} aspectRatio={project.prototypeAspect} zoom={project.prototypeZoom} />
+                  </div>
+                ) : null}
+                <a href="#proceso" className="inline-flex items-center justify-center gap-2 rounded-[12px] border border-line-strong px-5 py-3 text-sm font-medium text-ink transition hover:border-[color:var(--a)]">
+                  {label("viewProcess")}
+                  <ArrowDown />
+                </a>
+              </div>
+            </div>
+          </div>
 
-              <div className="flex flex-wrap gap-2 pt-2">
+          <div className="mt-12 md:mt-14">
+            <CaseHeroScreen
+              src={heroImage}
+              alt={L(project.title)}
+              host={host}
+              notes={[
+                { label: label("screensNote"), value: cs.interfaces },
+                { label: label("componentsNote"), value: cs.components },
+              ]}
+            />
+          </div>
+        </header>
+
+        {/* ————— RESUMEN · bento ————— */}
+        <section id="resumen" className="scroll-mt-24 pt-24 md:pt-32">
+          <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-12">
+            <Tile className="md:col-span-6 lg:col-span-7 lg:row-span-2" tint>
+              <Eyebrow>{t("context")}</Eyebrow>
+              <p className="mt-6 text-pretty text-2xl font-medium leading-snug tracking-[-0.02em] text-ink md:text-[2rem]">{L(cs.context)}</p>
+              <div className="mt-auto flex flex-wrap gap-2 pt-10">
                 {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-line bg-surface-1 px-3 py-1 text-xs text-soft"
-                  >
+                  <span key={tag} className="rounded-full border border-line-strong px-3 py-1 text-xs text-soft">
                     {tag}
                   </span>
                 ))}
               </div>
-            </div>
+            </Tile>
 
-            <div className="flex flex-col gap-4">
-              <div className="grid w-full grid-cols-3 gap-3">
-                <HeroStat value={project.year} label={label("heroYear")} accent={theme.accent} accentLight={theme.accentLight} />
-                <HeroStat value={cs.components.toString()} label={label("heroComponents")} short={label("shortComponents")} accent={theme.accent} accentLight={theme.accentLight} />
-                <HeroStat value={cs.interfaces.toString()} label={label("heroScreens")} short={label("shortScreens")} accent={theme.accent} accentLight={theme.accentLight} />
-              </div>
-
-              <div className="flex w-full flex-col gap-2">
-                {prototype ? (
-                  <PrototypeLinkButton label={t("openPrototype")} url={prototype} aspectRatio={project.prototypeAspect} zoom={project.prototypeZoom} />
-                ) : null}
-                <Link
-                  href="/"
-                  className="inline-flex w-1/2 items-center justify-center self-end rounded-[12px] border border-line-strong px-5 py-2.5 text-sm font-medium text-ink transition hover:border-accent-strong hover:text-accent-text"
-                >
-                  ← {t("back")}
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={cn("relative h-2 w-full bg-gradient-to-r", theme.grad)} />
-        </section>
-
-        {/* ————— HERO IMAGE ————— */}
-        <div className="liquid relative mt-6 overflow-hidden rounded-[2rem] border border-line-strong bg-surface-1">
-          <Image
-            src={heroImage}
-            alt={pickLocale(locale, project.title)}
-            width={1600}
-            height={900}
-            sizes="100vw"
-            quality={90}
-            className="aspect-[21/10] w-full object-cover object-top"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-6">
-            <div className="liquid liquid-overlay flex w-full flex-wrap items-end justify-between gap-3 rounded-2xl px-5 py-4">
-              <p className="max-w-xl text-sm leading-relaxed text-ink">
-                {pickLocale(locale, cs.context)}
+            <Tile className="md:col-span-3 lg:col-span-5">
+              <Eyebrow>{label("role")}</Eyebrow>
+              <p className="mt-4 text-3xl font-semibold tracking-tight text-ink">{L(project.role)}</p>
+              <p className="mt-2 text-sm text-muted">
+                {L(project.company)}, {project.year}
               </p>
-              <span
-                className="shrink-0 rounded-full border border-white/25 bg-zinc-950/45 px-4 py-1.5 text-xs uppercase tracking-widest backdrop-blur-md light:border-zinc-900/15 light:bg-white/60"
-                style={{ color: theme.accent }}
-              >
-                {label("heroHow")}
-              </span>
-            </div>
-          </div>
-        </div>
+            </Tile>
 
-        {/* ————— PROBLEM + ROLE BENTO ————— */}
-        <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Problem */}
-          <div
-            className="liquid relative overflow-hidden rounded-[2rem] border border-line bg-gradient-to-br from-rose-400/15 via-surface-1 to-surface-1 p-8 lg:col-span-7 lg:p-10"
-          >
-            <div className="pointer-events-none absolute right-0 top-0 h-40 w-40 translate-x-1/3 -translate-y-1/3 rounded-full bg-rose-400/20 blur-3xl" />
-            <Label accent>{label("problem")}</Label>
-            <p className="mt-5 text-pretty text-2xl font-semibold leading-snug text-ink md:text-3xl">
-              {pickLocale(locale, cs.problem)}
-            </p>
-            <div className="mt-8 grid grid-cols-3 gap-3 text-center">
-              <MiniFact num="01" text={pickLocale(locale, project.role)} />
-              <MiniFact num="02" text={project.year} />
-              <MiniFact num="03" text={pickLocale(locale, project.company)} />
-            </div>
-          </div>
+            <Tile className="md:col-span-3 lg:col-span-5">
+              <div className="grid h-full grid-cols-2 divide-x divide-line">
+                <div className="pr-4">
+                  <p className="text-[clamp(2.6rem,5vw,3.8rem)] font-semibold leading-none tracking-[-0.04em] text-[color:var(--a)]">
+                    <CountUp value={cs.interfaces} />
+                  </p>
+                  <p className="mt-3 text-sm text-muted">{label("screensNote")}</p>
+                </div>
+                <div className="pl-5">
+                  <p className="text-[clamp(2.6rem,5vw,3.8rem)] font-semibold leading-none tracking-[-0.04em] text-ink">
+                    <CountUp value={cs.components} />
+                  </p>
+                  <p className="mt-3 text-sm text-muted">{label("componentsNote")}</p>
+                </div>
+              </div>
+            </Tile>
 
-          {/* Role + tools */}
-          <div className="liquid flex flex-col gap-6 rounded-[2rem] border border-line bg-surface-1 p-8 lg:col-span-5">
-            <div className="space-y-4">
-              <Label accent>{label("role")}</Label>
-              <p className="text-3xl font-bold tracking-tight text-ink">{pickLocale(locale, project.role)}</p>
-              <p className="text-sm text-muted">
-                {pickLocale(locale, project.company)} · {project.year}
-              </p>
-            </div>
-            <div className="min-h-px flex-1 border-t border-line" />
-            <div>
-              <Label>{label("tools")}</Label>
-              <ul className="mt-4 flex flex-wrap gap-2">
+            <Tile className="md:col-span-3 lg:col-span-6">
+              <Eyebrow>{label("tools")}</Eyebrow>
+              <ul className="mt-5 flex flex-wrap gap-2">
                 {cs.tools.map((tool) => (
-                  <li
-                    key={tool}
-                    className="rounded-xl border border-line bg-surface-2 px-3 py-1.5 text-sm text-soft"
-                  >
+                  <li key={tool} className="inline-flex items-center gap-2 rounded-xl border border-line bg-white/[0.03] px-3 py-2 text-sm text-soft light:bg-zinc-900/[0.03]">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/[0.08] text-[10px] font-semibold text-ink light:bg-zinc-900/[0.08]">
+                      {tool.charAt(0)}
+                    </span>
                     {tool}
                   </li>
                 ))}
               </ul>
-            </div>
-            <div>
-              <Label>{label("tech")}</Label>
-              <ul className="mt-4 flex flex-wrap gap-2">
+            </Tile>
+
+            <Tile className="md:col-span-3 lg:col-span-6">
+              <Eyebrow>{label("tech")}</Eyebrow>
+              <ul className="mt-5 flex flex-wrap gap-2">
                 {cs.techStack.map((item) => (
                   <li
                     key={item}
-                    className="rounded-xl border px-3 py-1.5 text-sm"
-                    style={{ borderColor: theme.accent + "33", backgroundColor: theme.accent + "0d", color: theme.accent }}
+                    className="rounded-xl border px-3 py-2 text-sm text-[color:var(--a)]"
+                    style={{ borderColor: "color-mix(in srgb, var(--a) 30%, transparent)", backgroundColor: "color-mix(in srgb, var(--a) 6%, transparent)" }}
                   >
                     {item}
                   </li>
                 ))}
               </ul>
-            </div>
-          </div>
-
-          {/* Goals */}
-          <div className="liquid rounded-[2rem] border border-line bg-surface-1 p-8 lg:col-span-5">
-            <Label accent index="01">
-              {label("goals")}
-            </Label>
-            <p className="mt-4 text-pretty text-lg leading-relaxed text-soft">
-              {pickLocale(locale, cs.goals)}
-            </p>
-          </div>
-
-          {/* Research */}
-          <div
-            className="liquid relative overflow-hidden rounded-[2rem] border border-line bg-gradient-to-br from-indigo-500/15 via-surface-1 to-surface-1 p-8 lg:col-span-7 lg:p-10"
-          >
-            <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
-            <Label accent index="02" iconColor="text-indigo-500">
-              {label("research")}
-            </Label>
-            <p className="mt-4 max-w-2xl text-pretty text-xl leading-relaxed text-soft md:text-2xl">
-              {pickLocale(locale, cs.research)}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {project.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="rounded-full border border-line-strong bg-surface-2 px-4 py-1.5 text-sm text-soft"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            </Tile>
           </div>
         </section>
 
-        {/* ————— PROCESS ————— */}
-        <section className="liquid mt-6 rounded-[2rem] border border-line bg-surface-1 p-8 md:p-10">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <Label accent index="03">
-                {label("process")}
-              </Label>
-              <h3 className="mt-3 text-3xl font-bold tracking-tight text-ink md:text-4xl">{label("processTitle")}</h3>
-            </div>
-            <span className="hidden text-6xl font-black text-faint md:block">{project.year}</span>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-4">
-            {STEPS.map((s, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "liquid relative overflow-hidden rounded-3xl border border-line bg-gradient-to-b to-surface-1 p-6",
-                  i === 0 ? "from-emerald-400/25" : i === 1 ? "from-cyan-400/25" : i === 2 ? "from-fuchsia-400/25" : "from-violet-400/25",
-                )}
-              >
-                <span className="text-5xl font-black text-ink/10">0{i + 1}</span>
-                <p className="mt-4 text-lg font-semibold text-ink">{label(s.key)}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{pickLocale(locale, cs[s.source])}</p>
+        {/* ————— RETO → OBJETIVO ————— */}
+        <section id="reto" className="scroll-mt-24 pt-24 md:pt-32">
+          <div className="glass-surface relative overflow-hidden rounded-[32px]">
+            <div className="grid md:grid-cols-[1fr_auto_1fr]">
+              <div className="p-8 md:p-12">
+                <Eyebrow muted>{label("problem")}</Eyebrow>
+                <p className="mt-6 text-pretty text-2xl font-medium leading-snug tracking-[-0.02em] text-soft md:text-3xl">{L(cs.problem)}</p>
               </div>
-            ))}
+
+              {/* Conector: nodo → barra → asta (el monograma CH) */}
+              <div aria-hidden className="flex items-center justify-center px-8 md:px-2">
+                <svg viewBox="0 0 120 60" className="h-14 w-28 rotate-90 md:h-16 md:w-32 md:rotate-0">
+                  <circle cx="14" cy="30" r="8" className="fill-none stroke-current text-faint" strokeWidth="3" />
+                  <path d="M26 30 H100" stroke="var(--a)" strokeWidth="5" strokeLinecap="round" strokeDasharray="2 9" />
+                  <path d="M106 12 V48" stroke="var(--a)" strokeWidth="7" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              <div className="relative p-8 md:p-12" style={{ background: "linear-gradient(135deg, color-mix(in srgb, var(--a) 10%, transparent), transparent 70%)" }}>
+                <Eyebrow>{label("goals")}</Eyebrow>
+                <p className="mt-6 text-pretty text-2xl font-semibold leading-snug tracking-[-0.02em] text-ink md:text-3xl">{L(cs.goals)}</p>
+              </div>
+            </div>
+            <div className="grid gap-4 border-t border-line p-8 md:grid-cols-[12rem_1fr] md:p-12">
+              <Eyebrow>{label("research")}</Eyebrow>
+              <p className="max-w-3xl text-pretty text-lg leading-relaxed text-soft">{L(cs.research)}</p>
+            </div>
           </div>
         </section>
+      </div>
 
-        {/* ————— DESIGN CHUNK ————— */}
-        <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Wireframes + image */}
-          <div className="liquid overflow-hidden rounded-[2rem] border border-line bg-surface-1 lg:col-span-4">
-            <div className="p-7">
-              <Label accent index="04" iconColor="text-fuchsia-600">
-                {label("wireframes")}
-              </Label>
-              <p className="mt-3 text-pretty leading-relaxed text-soft">{pickLocale(locale, cs.wireframes)}</p>
-            </div>
-            {displayGallery[0] ? (
-              <Image
-                src={displayGallery[0]}
-                alt={label("wireframes")}
-                width={1200}
-                height={800}
-                className="h-56 w-full object-cover object-top"
-              />
-            ) : null}
-          </div>
+      {/* ————— PROCESO ————— */}
+      <section id="proceso" className="scroll-mt-0 pt-24 md:pt-32">
+        <div className="mx-auto max-w-6xl px-4 md:px-6">
+          <ProcessTrack
+            heading={label("processTitle")}
+            intro={label("processIntro")}
+            steps={STEPS.map((s) => ({ title: label(s.key), text: L(cs[s.source]) }))}
+          />
+        </div>
+      </section>
 
-          {/* UI exploration + image */}
-          <div
-            className="liquid overflow-hidden rounded-[2rem] border border-line bg-gradient-to-br via-surface-1 to-surface-1 lg:col-span-8"
-            style={{ backgroundImage: `linear-gradient(135deg, ${theme.accent}14, var(--canvas) 55%)` }}
-          >
-            <div className="grid gap-6 p-7 md:grid-cols-2 md:p-9">
-              <div>
-                <Label accent index="05" iconColor="text-accent-text">
-                  {label("uiExploration")}
-                </Label>
-                <p className="mt-3 text-pretty text-lg leading-relaxed text-soft md:text-xl">
-                  {pickLocale(locale, cs.uiExploration)}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {project.tags.slice(0, 4).map((p, i) => (
-                    <span key={i} className="rounded-full border px-3 py-1 text-xs" style={{ borderColor: theme.accent + "40", backgroundColor: theme.accent + "0d", color: theme.accent }}>
-                      {p}
-                    </span>
-                  ))}
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+        {/* ————— DISEÑO · bento ————— */}
+        <section id="diseno" className="scroll-mt-24 pt-24 md:pt-32">
+          <h2 className="mb-10 max-w-[16ch] text-balance text-[clamp(2.2rem,4.6vw,4rem)] font-semibold leading-[1] tracking-[-0.04em] text-ink">{label("designTitle")}</h2>
+          <div className="grid gap-4 md:grid-cols-12">
+            <Tile className="!p-0 md:col-span-7" tint>
+              <div className="p-7 md:p-9">
+                <Eyebrow>{label("uiExploration")}</Eyebrow>
+                <p className="mt-4 max-w-xl text-pretty text-lg leading-relaxed text-soft">{L(cs.uiExploration)}</p>
+              </div>
+              <div className="relative mx-7 mt-auto h-64 overflow-hidden rounded-t-2xl border border-b-0 border-line-strong md:mx-9 md:h-80">
+                <Image src={imgA} alt={label("uiExploration")} fill sizes="(min-width: 768px) 60vw, 100vw" className="object-cover object-top transition-transform duration-[2500ms] ease-out hover:scale-[1.03]" />
+              </div>
+            </Tile>
+
+            <Tile className="!p-0 md:col-span-5">
+              <div className="relative h-full min-h-[22rem] overflow-hidden">
+                <Image src={imgB} alt={label("wireframes")} fill sizes="(min-width: 768px) 40vw, 100vw" className={cn("object-cover", mobileShots ? "object-top" : "object-left-top")} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <span className="absolute bottom-5 left-5 rounded-full bg-black/50 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-md">
+                  {label("wireframes")}
+                </span>
+              </div>
+            </Tile>
+
+            <Tile className="md:col-span-12">
+              <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+                <div>
+                  <Eyebrow>{label("designSystem")}</Eyebrow>
+                  <p className="mt-4 text-pretty text-lg leading-relaxed text-soft md:text-xl">{L(cs.designSystem)}</p>
+                </div>
+                <div className="grid gap-6 rounded-3xl border border-line p-5 sm:grid-cols-[auto_1fr] sm:p-6">
+                  <div className="flex items-end justify-between gap-4 sm:flex-col sm:items-start">
+                    <span className="text-[5.5rem] font-semibold leading-none tracking-[-0.05em] text-ink">Aa</span>
+                    <span className="mt-2 text-xs text-muted">Figtree</span>
+                  </div>
+                  <div className="space-y-5">
+                    <div className="flex gap-2">
+                      {[
+                        { c: "var(--acc)", n: "Primary" },
+                        { c: "var(--acc-l)", n: "On light" },
+                        { c: "#6366f1", n: "Indigo" },
+                        { c: "#18181b", n: "Surface" },
+                        { c: "#fafaf9", n: "Canvas" },
+                      ].map((sw) => (
+                        <div key={sw.n} className="flex-1">
+                          <div className="aspect-square rounded-xl border border-line-strong" style={{ backgroundColor: sw.c }} />
+                          <p className="mt-1.5 truncate text-[11px] text-faint">{sw.n}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-[color:var(--a)] px-4 py-2 text-xs font-semibold text-zinc-950 light:text-white">Button</span>
+                      <span className="rounded-full border border-line-strong px-4 py-2 text-xs text-soft">Secondary</span>
+                      <span className="h-6 w-11 rounded-full bg-[color:var(--a)] p-0.5">
+                        <span className="ml-auto block h-5 w-5 rounded-full bg-white" />
+                      </span>
+                      <span className="ml-auto text-sm text-muted">
+                        <CountUp value={cs.components} className="font-semibold text-ink" /> {label("shortComponents")}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {displayGallery[1] ? (
-                <Image
-                  src={displayGallery[1]}
-                  alt={label("uiExploration")}
-                  width={1200}
-                  height={800}
-                  className="w-full rounded-2xl border border-line object-cover object-top"
-                />
-              ) : null}
-            </div>
-          </div>
-
-          {/* Design system */}
-          <div className="liquid rounded-[2rem] border border-line bg-surface-1 p-8 lg:col-span-7">
-            <Label accent index="06">
-              {label("designSystem")}
-            </Label>
-            <p className="mt-4 text-pretty text-lg leading-relaxed text-soft md:text-xl">
-              {pickLocale(locale, cs.designSystem)}
-            </p>
-            <div className="mt-6 grid grid-cols-4 gap-3">
-              <ColorSwatch c={theme.accent} label="Accent" />
-              <ColorSwatch c="var(--canvas)" label="Base" />
-              <ColorSwatch c="var(--surface-2)" label="Surface" />
-              <ColorSwatch c="#fbbf24" label="Alert" />
-            </div>
-          </div>
-
-          {/* Decisions */}
-          <div
-            className="liquid relative overflow-hidden rounded-[2rem] border border-line bg-gradient-to-br from-emerald-400/15 via-surface-1 to-surface-1 p-8 lg:col-span-5"
-          >
-            <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 -translate-y-1/3 translate-x-1/3 rounded-full bg-emerald-400/20 blur-3xl" />
-            <Label accent icon="◎" iconColor="text-emerald-600">
-              {label("decisions")}
-            </Label>
-            <p className="mt-4 text-pretty text-lg leading-relaxed text-soft">{pickLocale(locale, cs.decisions)}</p>
+            </Tile>
           </div>
         </section>
 
-        {/* ————— RESULTS ————— */}
-        <section
-          className="liquid relative mt-6 overflow-hidden rounded-[2rem] border border-line-strong bg-gradient-to-br from-surface-2 via-canvas to-canvas p-8 md:p-12"
-          style={{ boxShadow: `0 0 100px ${theme.glow}` }}
-        >
-          <div
-            className="pointer-events-none absolute -left-20 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full blur-3xl"
-            style={{ backgroundColor: theme.accent, opacity: 0.14 }}
-          />
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <Label accent icon="→" iconColor="text-accent-text">
-                {label("results")}
-              </Label>
-              <p className="mt-4 max-w-xl text-pretty text-2xl font-semibold leading-snug text-ink md:text-3xl">
-                {pickLocale(locale, cs.results)}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+        {/* ————— RESULTADOS ————— */}
+        <section id="resultados" className="scroll-mt-24 pt-24 md:pt-32">
+          <div className="relative overflow-hidden rounded-[32px] border border-line-strong bg-zinc-950 p-8 text-white md:p-14 light:bg-zinc-950">
+            <div aria-hidden className="absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-30 blur-[100px]" style={{ backgroundColor: "var(--acc)" }} />
+            <div aria-hidden className="absolute -bottom-32 left-10 h-80 w-80 rounded-full bg-indigo-500/25 blur-[100px]" />
+            <div className="relative grid gap-12 lg:grid-cols-[1.3fr_1fr]">
+              <div>
+                <p className="text-sm font-medium" style={{ color: "var(--acc)" }}>
+                  {label("results")}
+                </p>
+                <p className="mt-6 text-pretty text-[clamp(1.7rem,3.2vw,2.6rem)] font-semibold leading-[1.12] tracking-[-0.03em]">{L(cs.results)}</p>
                 {cs.metrics?.length ? (
-                  cs.metrics.map((m, i) => (
-                    <span key={i} className="rounded-2xl border px-5 py-3 text-sm" style={{ borderColor: theme.accent + "40", backgroundColor: theme.accent + "0d", color: theme.accent }}>
-                      {pickLocale(locale, m)}
-                    </span>
-                  ))
-                ) : (
-                  <span className="rounded-2xl border border-line bg-surface-1 px-5 py-3 text-sm text-soft">
-                    {cs.techStack.slice(0, 1).join(", ")}
-                  </span>
-                )}
+                  <ul className="mt-10 space-y-4">
+                    {cs.metrics.map((m, i) => (
+                      <li key={i} className="flex gap-4 text-base leading-relaxed text-zinc-300">
+                        <span className="mt-2 flex shrink-0 items-center">
+                          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "var(--acc)" }} />
+                          <span className="h-[2px] w-4" style={{ backgroundColor: "var(--acc)" }} />
+                        </span>
+                        {L(m)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+              <div className="grid grid-cols-3 gap-3 self-end lg:grid-cols-1">
+                {[
+                  { v: cs.interfaces, l: label("heroScreens") },
+                  { v: cs.components, l: label("heroComponents") },
+                  { v: STEPS.length, l: label("metricSteps") },
+                ].map((n) => (
+                  <div key={n.l} className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/[0.04] p-4 lg:flex-row lg:items-baseline lg:justify-between lg:p-5">
+                    <span className="text-xs text-zinc-400 lg:order-2 lg:text-sm">{n.l}</span>
+                    <CountUp value={n.v} className="text-4xl font-semibold tracking-[-0.04em] lg:text-6xl" />
+                  </div>
+                ))}
               </div>
             </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <BigNumber value={cs.interfaces.toString()} label={label("heroScreens")} short={label("shortScreens")} accent={theme.accent} accentLight={theme.accentLight} />
-              <BigNumber value={cs.components.toString()} label={label("heroComponents")} short={label("shortComponents")} accent={theme.accent} accentLight={theme.accentLight} />
-              <BigNumber value={processSteps.toString()} label={label("metricSteps")} accent={theme.accent} accentLight={theme.accentLight} />
-            </div>
           </div>
         </section>
 
-        {/* ————— LEARNINGS ————— */}
-        <section className="liquid mt-6 rounded-[2rem] border border-line bg-surface-1 p-8 md:p-10">
-          <div className="grid gap-8 md:grid-cols-[1fr_1.2fr] md:items-center">
-            <div>
-              <Label accent icon="§" iconColor="text-amber-600">
-                {label("learnings")}
-              </Label>
-            </div>
-            <div>
-              <p className="text-pretty text-xl font-medium leading-relaxed text-ink md:text-2xl">
-                “{pickLocale(locale, cs.learnings)}”
-              </p>
-            </div>
-          </div>
+        {/* ————— APRENDIZAJE ————— */}
+        <section id="aprendizaje" className="scroll-mt-24 py-28 md:py-40">
+          <p className="mb-8 text-sm font-medium text-[color:var(--a)]">{label("learnings")}</p>
+          <ScrollQuote text={L(cs.learnings)} />
         </section>
 
-        {/* ————— GALLERY CAROUSEL ————— */}
+        {/* ————— GALERÍA ————— */}
         {gallery.length > 1 ? (
-          <section className="mt-6 space-y-5">
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold tracking-tight text-ink md:text-3xl">{t("gallery")}</h3>
-              <span className="text-sm text-faint">{gallery.length} {label("galleryCount")}</span>
+          <section className="space-y-6">
+            <div className="flex items-end justify-between gap-4">
+              <h2 className="text-3xl font-semibold tracking-[-0.03em] text-ink md:text-4xl">{t("gallery")}</h2>
+              <span className="text-sm text-faint">
+                {gallery.length} {label("galleryCount")}
+              </span>
             </div>
-            <GalleryCarousel
-              images={gallery}
-              title={pickLocale(locale, project.title)}
-              variant={project.galleryVariant}
-            />
+            <GalleryCarousel images={gallery} title={L(project.title)} variant={project.galleryVariant} />
           </section>
         ) : null}
+
+        {/* ————— SIGUIENTE CASO ————— */}
+        <section className="pt-24 md:pt-32">
+          <Link
+            href={`/projects/${next.slug}`}
+            className="group glass-surface relative grid overflow-hidden rounded-[32px] md:grid-cols-[1fr_1fr]"
+          >
+            <div className="flex flex-col justify-between gap-10 p-8 md:p-12">
+              <p className="text-sm text-muted">{label("next")}</p>
+              <div>
+                <p className="text-sm text-faint">
+                  {L(next.company)}, {next.year}
+                </p>
+                <p className="mt-3 text-balance text-[clamp(2.2rem,5vw,4.2rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-ink">{L(next.title)}</p>
+              </div>
+              <span className="inline-flex w-fit items-center gap-3 rounded-full bg-[#00feff] px-5 py-3 text-sm font-semibold text-zinc-950 transition group-hover:gap-4">
+                {t("viewCase")}
+                <ArrowRight />
+              </span>
+            </div>
+            {nextImage ? (
+              <div className="relative min-h-[16rem] overflow-hidden md:min-h-[24rem]">
+                <Image
+                  src={nextImage}
+                  alt={L(next.title)}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+                />
+              </div>
+            ) : null}
+          </Link>
+        </section>
       </div>
     </article>
   );
 }
 
-/* ————— presentational helpers ————— */
+/* ————— piezas de presentación ————— */
 
-function MiniFact({ num, text }: { num: string; text: string }) {
+function Tile({ children, className, tint }: { children: ReactNode; className?: string; tint?: boolean }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface-2 p-3">
-      <div className="text-lg font-black text-rose-500">{num}</div>
-      <div className="mt-1 text-xs text-soft">{text}</div>
+    <div
+      className={cn("glass-surface relative flex flex-col overflow-hidden rounded-[28px] p-7 md:p-9", className)}
+      style={tint ? { backgroundImage: "linear-gradient(140deg, color-mix(in srgb, var(--a) 9%, transparent), transparent 55%)" } : undefined}
+    >
+      {children}
     </div>
   );
 }
 
-function ColorSwatch({ c, label }: { c: string; label: string }) {
+function Eyebrow({ children, muted }: { children: ReactNode; muted?: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div
-        className="h-14 w-14 rounded-2xl"
-        style={{ backgroundColor: c, border: "1px solid var(--line-strong)" }}
-      />
-      <span className="text-[11px] text-muted">{label}</span>
-    </div>
+    <p className={cn("flex items-center gap-2 text-sm font-medium", muted ? "text-muted" : "text-[color:var(--a)]")}>
+      <span aria-hidden className={cn("h-2 w-2 rounded-full", muted ? "border-2 border-current" : "bg-current")} />
+      {children}
+    </p>
   );
 }
 
-function Label({
-  children,
-  accent,
-  icon,
-  index,
-  iconColor = "text-accent-text",
-}: {
-  children: string;
-  accent?: boolean;
-  icon?: string;
-  index?: string;
-  iconColor?: string;
-}) {
+function ArrowLeft() {
   return (
-    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em]">
-      {accent ? (
-        <span
-          className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-white/15 bg-zinc-900/85 text-sm font-bold light:border-line-strong light:bg-surface-2"
-          style={{ color: iconColor }}
-        >
-          {icon ?? "●"}
-        </span>
-      ) : null}
-      <span className="text-muted">{children}</span>
-      {index ? <span className="ml-1 text-faint">{index}</span> : null}
-      <span className={cn("h-px flex-1", accent ? "bg-line-strong" : "bg-line")} />
-    </div>
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M19 12H5M11 6l-6 6 6 6" />
+    </svg>
+  );
+}
+function ArrowRight() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+function ArrowDown() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M12 5v14M6 13l6 6 6-6" />
+    </svg>
   );
 }

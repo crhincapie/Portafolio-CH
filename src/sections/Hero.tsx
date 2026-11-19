@@ -1,863 +1,882 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
-import { ParallaxLayer, Tilt, MouseGlow } from "@/components/motion/Parallax";
 import { CVModal } from "@/components/case-study/CVModal";
+import { cn } from "@/lib/utils";
 
-// ─── Config ──────────────────────────────────────────────────
-const W = 1920;
-const H = 1080;
+/* ─────────────────────────────────────────────────────────────
+   HERO · "Anatomía de un producto"
+   El elemento 3D es la profesión misma: un producto despiezado
+   en sus capas (Research → Arquitectura → Wireframe → Design
+   System → UI). Cada rol ilumina las capas que trabaja; al hacer
+   scroll las capas se ensamblan en un producto terminado.
+   ───────────────────────────────────────────────────────────── */
 
-interface SlideDef {
-  id: string;
-  titleKey1: string;
-  titleKey2: string;
-  subtitleKey: string;
-  descKey: string;
-  heroType: "profile" | "uxui" | "sd" | "process";
-  accent: string;
-  gradient: string[];
-  logos: string;
-}
+const SLIDES = [1, 2, 3, 4] as const;
+const SLIDE_MS = 10000;
 
-const SLIDES: SlideDef[] = [
-  {
-    id: "product-designer",
-    titleKey1: "slide1Title1",
-    titleKey2: "slide1Title2",
-    subtitleKey: "slide1Subtitle",
-    descKey: "slide1Desc",
-    heroType: "profile",
-    accent: "#00feff",
-    gradient: ["#0a0e1a", "#0d0f1a"],
-    logos: "product-designer",
-  },
-  {
-    id: "product-design",
-    titleKey1: "slide2Title1",
-    titleKey2: "slide2Title2",
-    subtitleKey: "slide2Subtitle",
-    descKey: "slide2Desc",
-    heroType: "process",
-    accent: "#60a5fa",
-    gradient: ["#0a0e1a", "#0d121a"],
-    logos: "product-design",
-  },
-  {
-    id: "ux-ui",
-    titleKey1: "slide3Title1",
-    titleKey2: "slide3Title2",
-    subtitleKey: "slide3Subtitle",
-    descKey: "slide3Desc",
-    heroType: "uxui",
-    accent: "#00feff",
-    gradient: ["#0a1418", "#0a1018"],
-    logos: "ux-ui",
-  },
-  {
-    id: "service-design",
-    titleKey1: "slide4Title1",
-    titleKey2: "slide4Title2",
-    subtitleKey: "slide4Subtitle",
-    descKey: "slide4Desc",
-    heroType: "sd",
-    accent: "#c084fc",
-    gradient: ["#0e0a14", "#120e0a"],
-    logos: "service-design",
-  },
+/** Capas que se iluminan en cada rol (índices de abajo hacia arriba). */
+const ACTIVE_LAYERS: Record<number, number[]> = {
+  0: [0, 1, 2, 3, 4], // Product Designer: todo el producto
+  1: [0, 1, 4], // Diseño de Producto: estrategia → resultado
+  2: [2, 3, 4], // UX/UI: wireframe, sistema, interfaz
+  3: [0, 1], // Service Design: investigación y blueprint
+};
+
+const ROLE_ICONS: ReactNode[] = [
+  <svg key="pd" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>,
+  <svg key="prd" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3 9 5-9 5-9-5z" /><path d="m3 13 9 5 9-5" /></svg>,
+  <svg key="ux" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M3 9h18M9 20V9" /></svg>,
+  <svg key="sd" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="6" r="2" /><circle cx="19" cy="18" r="2" /><path d="M7 6h6a3 3 0 0 1 0 6H11a3 3 0 0 0 0 6h6" /></svg>,
 ];
 
-// ─── Particles ────────────────────────────────────────────────
-function hashSeed(str: string) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
-  return h >>> 0;
-}
+const LAYER_KEYS = ["layerResearch", "layerArchitecture", "layerWireframe", "layerSystem", "layerUi"] as const;
 
-function mulberry32(seed: number) {
-  return () => {
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+const ease = [0.22, 1, 0.36, 1] as const;
 
-function useParticles(count: number, seed: string) {
-  return useMemo(
-    () => {
-      const rand = mulberry32(hashSeed(seed));
-      return Array.from({ length: count }, () => ({
-        x: rand() * W,
-        y: rand() * H,
-        r: 1 + rand() * 2.5,
-        delay: rand() * 4,
-        duration: 4 + rand() * 4,
-        drift: -15 + rand() * 30,
-      }));
-    },
-    [count, seed],
-  );
-}
+/* ── Arte de cada capa (todo vectorial / CSS, sin imágenes) ─── */
 
-// ─── Animated background ──────────────────────────────────────
-function BgCanvas({ accent, gradient }: { accent: string; gradient: string[] }) {
-  const particles = useParticles(25, accent);
-
-  const waves = useMemo(
-    () => [
-      { y: H * 0.75, amp: 40, freq: 0.004, speed: 12, opacity: 0.06, width: 2 },
-      { y: H * 0.82, amp: 25, freq: 0.006, speed: 9, opacity: 0.04, width: 1.5 },
-      { y: H * 0.65, amp: 30, freq: 0.005, speed: 15, opacity: 0.03, width: 1 },
-    ],
-    [],
-  );
-
+function ResearchArt() {
+  const notes = [
+    "left-[8%] top-[14%] rotate-[-4deg] bg-[#00feff]/25",
+    "left-[30%] top-[10%] rotate-[3deg] bg-white/15 light:bg-zinc-900/10",
+    "left-[52%] top-[16%] rotate-[-2deg] bg-[#6366f1]/30",
+    "left-[12%] top-[46%] rotate-[2deg] bg-white/15 light:bg-zinc-900/10",
+    "left-[34%] top-[44%] rotate-[-3deg] bg-[#00feff]/20",
+  ];
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 light:opacity-0" style={{ background: `linear-gradient(135deg, ${gradient[0]}, ${gradient[1]})` }} />
-      <ParallaxLayer depth={0.6} className="absolute inset-0">
-        <div className="absolute left-0 top-0 h-[60%] w-[50%] opacity-30 blur-[120px]" style={{ background: `radial-gradient(ellipse at 20% 0%, ${accent}, transparent 70%)` }} />
-        <div className="absolute bottom-0 right-0 h-[50%] w-[40%] opacity-15 blur-[100px]" style={{ background: `radial-gradient(ellipse at 100% 100%, ${accent}, transparent 70%)` }} />
-      </ParallaxLayer>
-      <MouseGlow color={`${accent}14`} size={620} className="opacity-70" />
-      <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
-        {particles.map((p, i) => (
-          <motion.circle key={i} cx={p.x} cy={p.y} r={p.r} fill={accent}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.25, 0], y: [p.y, p.y + p.drift, p.y] }}
-            transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
-          />
+    <>
+      {notes.map((c, i) => (
+        <span key={i} className={cn("absolute h-[22%] w-[17%] rounded-md", c)}>
+          <span className="absolute left-[14%] top-[22%] h-[6%] w-[60%] rounded bg-current opacity-40" />
+          <span className="absolute left-[14%] top-[42%] h-[6%] w-[44%] rounded bg-current opacity-30" />
+        </span>
+      ))}
+      <svg viewBox="0 0 420 300" className="absolute inset-0 h-full w-full" fill="none">
+        <path d="M250 230 C 290 170, 320 260, 360 190 S 400 120, 410 150" stroke="#00feff" strokeOpacity="0.7" strokeWidth="2.5" strokeLinecap="round" />
+        {[
+          [250, 230],
+          [305, 214],
+          [360, 190],
+        ].map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="5" fill="#00feff" />
         ))}
       </svg>
-      <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
-        {waves.map((w, i) => (
-          <motion.path key={i}
-            d={`M${(() => { let p = ""; for (let x = 0; x <= W; x += 20) p += `${x},${w.y + Math.sin(x * w.freq) * w.amp} `; return p; })()}`}
-            fill="none" stroke={accent} strokeWidth={w.width} opacity={w.opacity}
-            animate={{ x: [0, -W * 0.5] }}
-            transition={{ duration: w.speed, repeat: Infinity, ease: "linear" }}
+    </>
+  );
+}
+
+function ArchitectureArt() {
+  const nodes = [
+    { x: 175, y: 30, w: 70 },
+    { x: 60, y: 120, w: 70 },
+    { x: 175, y: 120, w: 70 },
+    { x: 290, y: 120, w: 70 },
+    { x: 30, y: 215, w: 60 },
+    { x: 110, y: 215, w: 60 },
+    { x: 290, y: 215, w: 70 },
+  ];
+  const links = [
+    [0, 1],
+    [0, 2],
+    [0, 3],
+    [1, 4],
+    [1, 5],
+    [3, 6],
+  ];
+  return (
+    <svg viewBox="0 0 420 300" className="absolute inset-0 h-full w-full" fill="none">
+      {links.map(([a, b], i) => {
+        const A = nodes[a];
+        const B = nodes[b];
+        const ax = A.x + A.w / 2;
+        const bx = B.x + B.w / 2;
+        return (
+          <path
+            key={i}
+            d={`M${ax} ${A.y + 34} V ${(A.y + 34 + B.y) / 2} H ${bx} V ${B.y}`}
+            stroke="currentColor"
+            strokeOpacity="0.35"
+            strokeWidth="1.5"
           />
+        );
+      })}
+      {nodes.map((n, i) => (
+        <g key={i}>
+          <rect x={n.x} y={n.y} width={n.w} height="34" rx="8" fill="currentColor" fillOpacity={i === 0 ? 0.18 : 0.08} stroke={i === 0 ? "#00feff" : "currentColor"} strokeOpacity={i === 0 ? 0.8 : 0.3} />
+          <rect x={n.x + 12} y={n.y + 14} width={n.w * 0.5} height="5" rx="2.5" fill="currentColor" fillOpacity="0.45" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function WireframeArt() {
+  return (
+    <div className="absolute inset-[7%] flex flex-col gap-[5%] text-current">
+      <div className="flex h-[10%] items-center justify-between rounded-md border border-current/25 px-[3%]">
+        <span className="h-[30%] w-[14%] rounded bg-current/30" />
+        <span className="flex w-[40%] justify-end gap-[8%]">
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="h-1.5 w-[22%] rounded bg-current/25" />
+          ))}
+        </span>
+      </div>
+      <div className="relative h-[38%] overflow-hidden rounded-md border border-dashed border-current/35">
+        <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <path d="M0 0 L100 100 M100 0 L0 100" stroke="currentColor" strokeOpacity="0.2" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+      <div className="grid flex-1 grid-cols-3 gap-[4%]">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="flex flex-col gap-[10%] rounded-md border border-current/25 p-[8%]">
+            <span className="h-[34%] rounded bg-current/15" />
+            <span className="h-1.5 w-[70%] rounded bg-current/30" />
+            <span className="h-1.5 w-[50%] rounded bg-current/20" />
+          </div>
         ))}
-      </svg>
+      </div>
     </div>
   );
 }
 
-// ─── Brand logos SVG ──────────────────────────────────────────
-function BrandLogo({ brand, color }: { brand: string; color: string }) {
-  const s = "h-3.5 w-3.5 md:h-4 md:w-4";
-  switch (brand) {
-    case "figma":
-      return (
-        <svg viewBox="0 0 16 24" className={s}>
-          <rect x="0" y="0" width="7" height="7" rx="1.8" fill="#F24E1E" />
-          <rect x="9" y="0" width="7" height="7" rx="1.8" fill="#FF7262" />
-          <rect x="0" y="8.5" width="7" height="7" rx="1.8" fill="#A259FF" />
-          <rect x="9" y="8.5" width="7" height="7" rx="1.8" fill="#1ABCFE" />
-          <rect x="0" y="17" width="7" height="7" rx="1.8" fill="#0ACF83" />
-        </svg>
-      );
-    case "notion":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="1" y="1" width="22" height="22" rx="5" fill="currentColor" fillOpacity="0.12" />
-          <path d="M5 7h14M5 12h14M5 17h10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.7" />
-          <circle cx="17" cy="17" r="2" fill="currentColor" opacity="0.3" />
-        </svg>
-      );
-    case "jira":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <circle cx="12" cy="12" r="11" fill="#2684FF" />
-          <path d="M12 6l-4.5 4.5a3.2 3.2 0 004.5 4.5 3.2 3.2 0 004.5-4.5L12 6z" fill="white" opacity="0.9" />
-        </svg>
-      );
-    case "miro":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="#FFD02F" opacity="0.9" />
-          <path d="M8 18l3-12 3 12-3-4z" fill="black" opacity="0.15" />
-          <path d="M6 14l3-8 3 8-3-3z" fill="black" opacity="0.2" />
-        </svg>
-      );
-    case "figjam":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="#F24E1E" opacity="0.8" />
-          <path d="M7 7l10 10M17 7l-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-        </svg>
-      );
-    case "maze":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="#5C6BC0" opacity="0.9" />
-          <path d="M6 6h3v3H6V6zm0 5h3v3H6v-3zm9-5h3v3h-3V6zm0 5h3v3h-3v-3z" fill="white" opacity="0.5" />
-          <path d="M6 16h3v3H6v-3zm9-5h3v3h-3v-3z" fill="white" opacity="0.25" />
-        </svg>
-      );
-    case "sketch":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <polygon points="12,3 21,10 12,21 3,10" fill="#F7B32B" opacity="0.85" />
-          <polygon points="12,6 17,10 12,17 7,10" fill="white" opacity="0.2" />
-        </svg>
-      );
-    case "illustrator":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="#FF9A00" opacity="0.85" />
-          <path d="M8 8l5 10M8 8l-2 6M8 8l-1 4" stroke="black" strokeWidth="1.3" strokeLinecap="round" opacity="0.15" />
-          <path d="M16 8v7M16 8l-2 3M16 8l2 3" stroke="white" strokeWidth="1.3" strokeLinecap="round" opacity="0.8" />
-        </svg>
-      );
-    case "lucid":
-      return (
-        <svg viewBox="0 0 24 24" className={s} fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="#FF6B6B" opacity="0.8" />
-          <path d="M8 12a4 4 0 118 0 4 4 0 01-8 0z" fill="white" opacity="0.4" />
-          <path d="M12 8v8" stroke="white" strokeWidth="1.5" opacity="0.6" />
-          <path d="M8 12h8" stroke="white" strokeWidth="1.5" opacity="0.6" />
-        </svg>
-      );
-    default:
-      return (
-        <div
-          className="h-3.5 w-3.5 rounded-full md:h-4 md:w-4"
-          style={{ backgroundColor: color }}
-        />
-      );
-  }
-}
-
-// ─── Floating logos ──────────────────────────────────────────
-interface LogoDef { label: string; color: string; bg: string; brand: string; x: number; y: number; delay: number; }
-const LOGOS: Record<string, LogoDef[]> = {
-  "product-designer": [
-    { label: "Figma", color: "#F24E1E", bg: "rgba(242,78,30,0.15)", brand: "figma", x: 6, y: 20, delay: 0 },
-    { label: "Notion", color: "#fff", bg: "rgba(255,255,255,0.1)", brand: "notion", x: 84, y: 16, delay: 0.4 },
-    { label: "Jira", color: "#2684FF", bg: "rgba(38,132,255,0.15)", brand: "jira", x: 82, y: 74, delay: 0.8 },
-    { label: "Miro", color: "#FFD02F", bg: "rgba(255,208,47,0.15)", brand: "miro", x: 8, y: 76, delay: 1.2 },
-  ],
-  "product-design": [
-    { label: "Notion", color: "#fff", bg: "rgba(255,255,255,0.1)", brand: "notion", x: 6, y: 22, delay: 0 },
-    { label: "Jira", color: "#2684FF", bg: "rgba(38,132,255,0.15)", brand: "jira", x: 85, y: 18, delay: 0.4 },
-    { label: "Miro", color: "#FFD02F", bg: "rgba(255,208,47,0.15)", brand: "miro", x: 82, y: 72, delay: 0.8 },
-    { label: "FigJam", color: "#F24E1E", bg: "rgba(242,78,30,0.15)", brand: "figjam", x: 8, y: 76, delay: 1.2 },
-  ],
-  "ux-ui": [
-    { label: "Figma", color: "#F24E1E", bg: "rgba(242,78,30,0.15)", brand: "figma", x: 5, y: 18, delay: 0 },
-    { label: "Maze", color: "#5C6BC0", bg: "rgba(92,107,192,0.15)", brand: "maze", x: 86, y: 14, delay: 0.5 },
-    { label: "Sketch", color: "#F7B32B", bg: "rgba(247,179,43,0.15)", brand: "sketch", x: 7, y: 78, delay: 1 },
-    { label: "Illustrator", color: "#FF9A00", bg: "rgba(255,154,0,0.15)", brand: "illustrator", x: 84, y: 80, delay: 1.5 },
-  ],
-  "service-design": [
-    { label: "Miro", color: "#FFD02F", bg: "rgba(255,208,47,0.15)", brand: "miro", x: 6, y: 20, delay: 0 },
-    { label: "Lucid", color: "#FF6B6B", bg: "rgba(255,107,107,0.15)", brand: "lucid", x: 86, y: 18, delay: 0.6 },
-    { label: "Notion", color: "#fff", bg: "rgba(255,255,255,0.1)", brand: "notion", x: 8, y: 76, delay: 1.2 },
-    { label: "Figma", color: "#F24E1E", bg: "rgba(242,78,30,0.15)", brand: "figma", x: 84, y: 78, delay: 1.8 },
-  ],
-};
-
-function FloatingLogo({ logo }: { logo: LogoDef }) {
-  const depth = logo.x > 50 ? -0.5 : 0.5;
-  const isNotion = logo.brand === "notion";
-  const inlineStyle = isNotion
-    ? undefined
-    : { color: logo.color, backgroundColor: logo.bg };
+function SystemArt() {
   return (
-    <ParallaxLayer depth={depth} className="pointer-events-none absolute z-10 hidden md:block" style={{ left: `${logo.x}%`, top: `${logo.y}%` }}>
-      <motion.div
-        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl ${isNotion
-          ? "border-white/15 bg-white/10 text-white light:border-zinc-500/50 light:bg-zinc-600/10 light:text-zinc-700"
-          : "border-white/10 light:border-zinc-900/15 light:shadow-zinc-900/10"}`}
-        style={inlineStyle}
-        initial={{ opacity: 0, scale: 0.3 }}
-        animate={{ opacity: [0, 1, 1, 1], scale: [0.3, 1, 1.05, 1], x: [0, 8, -6, 0], y: [0, -6, 4, 0] }}
-        transition={{ duration: 5 + logo.delay, repeat: Infinity, delay: logo.delay, ease: "easeInOut", times: [0, 0.2, 0.5, 1] }}
-      >
-        <BrandLogo brand={logo.brand} color={logo.color} />
-        <span>{logo.label}</span>
-      </motion.div>
-    </ParallaxLayer>
-  );
-}
-
-// ─── UX/UI — design system component grid ─────────────────────
-function UXUIVisual() {
-  const accent = "#00feff";
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-      className="flex w-full items-center justify-center"
-    >
-      <motion.div
-        className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {/* Grid backdrop */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="-240 -240 480 480">
-          <pattern id="uxuiGridLg" x="-240" y="-240" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" className="stroke-[#00feff]/6 light:stroke-zinc-500/45" strokeWidth="0.5" />
-          </pattern>
-          <rect x="-240" y="-240" width="480" height="480" fill="url(#uxuiGridLg)" />
-        </svg>
-
-        {/* Central screen — bigger */}
-        <motion.div
-          className="absolute z-10 flex flex-col overflow-hidden rounded-xl border border-[#00feff]/25 light:border-zinc-500/45 backdrop-blur-sm"
-          style={{ width: 270, height: 185, backgroundColor: `${accent}06`, boxShadow: `0 16px 56px ${accent}08`, transform: "translate(0px, -5px)" }}
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="flex items-center gap-1.5 border-b border-white/[0.06] light:border-zinc-900/10 px-3 py-2">
-            <div className="h-2 w-2 rounded-full bg-red-400/60" />
-            <div className="h-2 w-2 rounded-full bg-yellow-400/60" />
-            <div className="h-2 w-2 rounded-full bg-green-400/60" />
-          </div>
-          <div className="flex flex-1 gap-3 p-3">
-            <div className="flex w-1/3 flex-col gap-2">
-              <div className="h-4 w-full rounded bg-white/[0.08] light:bg-zinc-900/[0.12]" />
-              <div className="h-4 w-3/4 rounded bg-white/[0.05] light:bg-zinc-900/[0.08]" />
-              <div className="h-4 w-1/2 rounded bg-white/[0.03] light:bg-zinc-900/[0.05]" />
-            </div>
-            <div className="flex flex-1 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] light:border-zinc-900/10 light:bg-zinc-900/[0.04]">
-              <motion.div className="h-8 w-8 rounded-full border-2 border-[#00feff]/40 light:border-zinc-600/60"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Surrounding UI component cards — bigger + 2 extra */}
-        {[
-          { w: 105, h: 72, x: -160, y: -85, label: "Button", el: 0, delay: 0.25 },
-          { w: 130, h: 72, x: 160, y: -95, label: "Card", el: 1, delay: 0.3 },
-          { w: 105, h: 72, x: -170, y: 85, label: "Input", el: 2, delay: 0.4 },
-          { w: 130, h: 72, x: 155, y: 90, label: "Toggle", el: 3, delay: 0.45 },
-          { w: 100, h: 64, x: 0, y: -150, label: "Slider", el: 4, delay: 0.5 },
-          { w: 100, h: 64, x: 0, y: 150, label: "Dropdown", el: 5, delay: 0.55 },
-        ].map((c) => (
-          <motion.div key={c.label}
-            className="absolute z-10 flex flex-col items-center justify-center gap-1.5 rounded-xl border border-[#00feff]/20 light:border-zinc-500/40 backdrop-blur-sm"
-            style={{ width: c.w, height: c.h, backgroundColor: `${accent}05`, transform: `translate(${c.x}px, ${c.y}px)`, boxShadow: `0 4px 20px ${accent}06` }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 + c.delay, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {c.el === 0 && <div className="h-6 w-16 rounded-full" style={{ backgroundColor: accent + "25" }} />}
-            {c.el === 1 && (
-              <div className="flex flex-col gap-1">
-                <div className="h-2 w-8 rounded bg-white/10 light:bg-zinc-900/15" />
-                <div className="h-2 w-12 rounded bg-white/[0.05] light:bg-zinc-900/[0.08]" />
-              </div>
-            )}
-            {c.el === 2 && <div className="h-4 w-14 rounded border border-white/[0.08] bg-white/[0.03] light:border-zinc-900/15 light:bg-zinc-900/[0.05]" />}
-            {c.el === 3 && <div className="flex items-center gap-1.5">
-              <div className="h-3.5 w-6 rounded-full" style={{ backgroundColor: accent + "30" }} />
-              <div className="h-3.5 w-6 rounded-full border border-white/10 light:border-zinc-900/20" />
-            </div>}
-            {c.el === 4 && <motion.div className="h-1.5 w-12 rounded-full" style={{ backgroundColor: accent + "25" }}
-              animate={{ width: ["60%", "100%", "60%"] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />}
-            {c.el === 5 && (
-              <div className="flex items-center gap-1 rounded border border-white/[0.08] light:border-zinc-900/15 px-2 py-1">
-                <div className="h-1.5 w-6 rounded bg-white/10 light:bg-zinc-900/15" />
-                <svg width="6" height="4" viewBox="0 0 6 4" className="text-zinc-500 light:text-zinc-600">
-                  <path d="M0 0l3 4 3-4z" fill="currentColor" />
-                </svg>
-              </div>
-            )}
-            <span className="text-[8px] font-medium uppercase tracking-wider text-zinc-500 light:text-zinc-600">{c.label}</span>
-          </motion.div>
-        ))}
-
-        {/* Connection lines */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="-240 -240 480 480">
-          {[[-160, -85, 0, -5], [160, -95, 0, -5], [-170, 85, 0, -5], [155, 90, 0, -5], [0, -150, 0, -5], [0, 150, 0, -5]].map((c, i) => (
-            <motion.line key={i} x1={c[0]} y1={c[1]} x2={c[2]} y2={c[3]}
-              className="stroke-[#00feff]/10 light:stroke-zinc-500/45" strokeWidth="0.5" strokeDasharray="2 3"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-              transition={{ delay: 0.5 + i * 0.08, duration: 0.5 }}
-            />
+    <div className="absolute inset-[8%] grid grid-cols-[1.1fr_1fr] gap-[6%]">
+      <div className="flex flex-col justify-between">
+        <div className="flex gap-[6%]">
+          {["bg-[#00feff]", "bg-[#6366f1]", "bg-zinc-100 light:bg-zinc-900", "bg-zinc-500"].map((c) => (
+            <span key={c} className={cn("aspect-square w-[20%] rounded-full ring-1 ring-white/20", c)} />
           ))}
-        </svg>
-
-        {/* Decorative floating dots */}
-        {[0, 1, 2, 3].map((i) => (
-          <motion.div key={i}
-            className="absolute h-1.5 w-1.5 rounded-full md:h-2 md:w-2"
-            style={{ backgroundColor: accent, opacity: 0.12 + i * 0.08 }}
-            animate={{
-              x: [0, (i + 1) * 10, 0],
-              y: [0, (i % 2 === 0 ? -1 : 1) * (i + 1) * 6, 0],
-              opacity: [0.12, 0.35, 0.12],
-            }}
-            transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-          />
-        ))}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ─── Product design — nodes on circle perimeter ──────────────
-function ProcessVisual({ t }: { t: (key: string) => string }) {
-  const phases = [
-    { label: "Research", desc: t("processPhase1Desc"), color: "#60a5fa", angle: -90 },
-    { label: "Ideate", desc: t("processPhase2Desc"), color: "#818cf8", angle: 0 },
-    { label: "Design", desc: t("processPhase3Desc"), color: "#a78bfa", angle: 90 },
-    { label: "Test", desc: t("processPhase4Desc"), color: "#c084fc", angle: 180 },
-  ];
-
-  const cx = 200, cy = 200, nodeR = 175;
-
-  return (
-    <>
-      <style>{`@media(max-width:767px){.pv-node{left:calc(var(--pv-x)/480*100%)!important;top:calc(var(--pv-y)/480*100%)!important}}`}</style>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-        className="flex w-full items-center justify-center"
-      >
-        <motion.div
-        className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {/* SVG framework — viewBox 400 for ~20% visual gain */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400">
-          {/* Inner ring */}
-          <circle className="stroke-[#4b5563]/15 light:stroke-[#3f3f46]/80" cx={cx} cy={cy} r={50} fill="none" strokeWidth="0.6" />
-
-          {/* Curved arcs connecting nodes ON the circle */}
-          {phases.map((p, i) => {
-            const a1 = (p.angle * Math.PI) / 180;
-            const next = phases[(i + 1) % phases.length];
-            const a2 = (next.angle * Math.PI) / 180;
-            const midA = ((p.angle + next.angle) / 2 * Math.PI) / 180;
-            const x1 = cx + (nodeR - 12) * Math.cos(a1);
-            const y1 = cy + (nodeR - 12) * Math.sin(a1);
-            const x2 = cx + (nodeR - 12) * Math.cos(a2);
-            const y2 = cy + (nodeR - 12) * Math.sin(a2);
-            const cpx = cx + (nodeR + 20) * Math.cos(midA);
-            const cpy = cy + (nodeR + 20) * Math.sin(midA);
-            return (
-              <motion.path key={`arc-${i}`} d={`M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`}
-                fill="none" stroke={p.color} strokeWidth="0.7"
-                className="opacity-[0.18] light:opacity-[0.6]"
-                initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                transition={{ delay: 0.6 + i * 0.08, duration: 0.5 }}
-              />
-            );
-          })}
-        </svg>
-
-        {/* Central hub */}
-        <motion.div
-          className="absolute z-10 flex h-16 w-16 items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-widest md:h-20 md:w-20 md:text-xs"
-          style={{ backgroundColor: "#60a5fa12", border: "1px solid #60a5fa25", color: "#60a5fa" }}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          PD
-        </motion.div>
-
-        {/* Phase nodes — ON the circle perimeter */}
-        {phases.map((p, i) => {
-          const a = (p.angle * Math.PI) / 180;
-          const x = cx + nodeR * Math.cos(a);
-          const y = cy + nodeR * Math.sin(a);
-          return (
-            <motion.div key={p.label}
-              className="pv-node absolute z-10 flex flex-col items-center"
-              style={{ ...{ '--pv-x': x, '--pv-y': y } as React.CSSProperties, left: x, top: y, transform: "translate(-50%, -50%)" }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 + i * 0.08, duration: 0.35 }}
-            >
-              <motion.div
-                className="flex h-[60px] w-[60px] items-center justify-center rounded-[18px] border md:h-24 md:w-24"
-                style={{
-                  backgroundColor: `${p.color}14`,
-                  borderColor: `${p.color}30`,
-                  boxShadow: `0 0 50px ${p.color}10`,
-                }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <span className="text-lg font-bold md:text-2xl" style={{ color: p.color }}>
-                  {"0" + (i + 1)}
-                </span>
-              </motion.div>
-              <motion.span
-                className="mt-1.5 text-xs font-semibold uppercase tracking-wider md:mt-1.5 md:text-sm"
-                style={{ color: p.color }}
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 3 + i * 0.5, repeat: Infinity }}
-              >
-                {p.label}
-              </motion.span>
-              <motion.span
-                className="text-[10px] text-zinc-500 light:text-zinc-600 md:text-[10px]"
-                animate={{ opacity: [0.5, 0.9, 0.5] }}
-                transition={{ duration: 2.5 + i * 0.3, repeat: Infinity }}
-              >
-                {p.desc}
-              </motion.span>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    </motion.div>
-    </>
-  );
-}
-
-// ─── Service design — pentagon nodes on perimeter ────────────
-function ServiceDesignVisual({ t }: { t: (key: string) => string }) {
-  const accent = "#c084fc";
-  const phases = [
-    { label: "Discover", desc: t("servicePhase1Desc"), color: "#c084fc", angle: -90 },
-    { label: "Define", desc: t("servicePhase2Desc"), color: "#a78bfa", angle: -18 },
-    { label: "Develop", desc: t("servicePhase3Desc"), color: "#818cf8", angle: 54 },
-    { label: "Deliver", desc: t("servicePhase4Desc"), color: "#6366f1", angle: 126 },
-    { label: "Measure", desc: t("servicePhase5Desc"), color: "#c084fc", angle: 198 },
-  ];
-
-  const cx = 200, cy = 200, nodeR = 175;
-
-  return (
-    <>
-      <style>{`@media(max-width:767px){.sv-node{left:calc(var(--sv-x)/480*100%)!important;top:calc(var(--sv-y)/480*100%)!important}}`}</style>
-      <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-        className="flex w-full items-center justify-center"
-      >
-        <motion.div
-          className="relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 md:h-96 md:w-96 lg:h-[480px] lg:w-[480px]"
-          animate={{ y: [0, -4, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        >
-        {/* SVG layers — viewBox 400 for 20% visual gain */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400">
-          {/* Concentric ring */}
-          <circle className="stroke-[#c084fc]/15 light:stroke-[#6d28d9]/60" cx={cx} cy={cy} r={55} fill={`${accent}05`} strokeWidth="0.6" />
-
-          {/* Curved outer arcs between adjacent phases */}
-          {phases.map((p, i) => {
-            const next = phases[(i + 1) % phases.length];
-            const a1 = (p.angle * Math.PI) / 180;
-            const a2 = (next.angle * Math.PI) / 180;
-            const midA = ((p.angle + next.angle) / 2 * Math.PI) / 180;
-            const x1 = cx + (nodeR - 12) * Math.cos(a1);
-            const y1 = cy + (nodeR - 12) * Math.sin(a1);
-            const x2 = cx + (nodeR - 12) * Math.cos(a2);
-            const y2 = cy + (nodeR - 12) * Math.sin(a2);
-            const cpx = cx + (nodeR + 22) * Math.cos(midA);
-            const cpy = cy + (nodeR + 22) * Math.sin(midA);
-            return (
-              <motion.path key={`arc-${i}`} d={`M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`}
-                fill="none" stroke={p.color} strokeWidth="0.6"
-                className="opacity-[0.18] light:opacity-[0.65]"
-                initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                transition={{ delay: 0.6 + i * 0.08, duration: 0.5 }}
-              />
-            );
-          })}
-        </svg>
-
-        {/* Central hub */}
-        <motion.div
-          className="absolute z-10 flex h-16 w-16 items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-widest md:h-20 md:w-20 md:text-xs"
-          style={{ backgroundColor: `${accent}12`, border: `1px solid ${accent}25`, color: accent }}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          SD
-        </motion.div>
-
-        {/* Phase nodes — on perimeter, bigger */}
-        {phases.map((p, i) => {
-          const a = (p.angle * Math.PI) / 180;
-          const x = cx + nodeR * Math.cos(a);
-          const y = cy + nodeR * Math.sin(a);
-          return (
-            <motion.div key={p.label}
-              className="sv-node absolute z-10 flex flex-col items-center"
-              style={{ ...{ '--sv-x': x, '--sv-y': y } as React.CSSProperties, left: x, top: y, transform: "translate(-50%, -50%)" }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.15 + i * 0.07, duration: 0.35 }}
-            >
-              <motion.div
-                className="flex h-20 w-20 items-center justify-center rounded-full border md:h-24 md:w-24"
-                style={{
-                  backgroundColor: `${p.color}14`,
-                  borderColor: `${p.color}30`,
-                  boxShadow: `0 0 50px ${p.color}10`,
-                }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  className="h-5 w-5 rounded-full md:h-6 md:w-6"
-                  style={{ backgroundColor: p.color }}
-                  animate={{ scale: [1, 1.4, 1] }}
-                  transition={{ duration: 2.5 + i * 0.3, repeat: Infinity }}
-                />
-              </motion.div>
-              <motion.span
-                className="mt-2 text-xs font-semibold uppercase tracking-wider md:text-sm"
-                style={{ color: p.color }}
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 3 + i * 0.3, repeat: Infinity }}
-              >
-                {p.label}
-              </motion.span>
-              <motion.span
-                className="text-[10px] text-zinc-500 light:text-zinc-600 md:text-xs"
-                animate={{ opacity: [0.5, 0.9, 0.5] }}
-                transition={{ duration: 2.5 + i * 0.2, repeat: Infinity }}
-              >
-                {p.desc}
-              </motion.span>
-            </motion.div>
-          );
-        })}
-
-        {/* Bottom label */}
-        <motion.div
-          className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 text-[8px] font-semibold uppercase tracking-[0.3em]"
-          style={{ color: `${accent}40` }}
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          SERVICE DESIGN PROCESS
-        </motion.div>
-      </motion.div>
-    </motion.div>
-    </>
-  );
-}
-
-// ─── Arrow ────────────────────────────────────────────────────
-function ArrowBtn({ dir, onClick }: { dir: "left" | "right"; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="absolute top-1/2 z-30 hidden -translate-y-1/2 rounded-[12px] border border-white/10 bg-white/5 p-2.5 text-[#00feff] backdrop-blur-xl transition hover:border-[#00feff]/40 hover:bg-white/10 light:border-transparent light:bg-zinc-900/80 light:hover:border-[#00feff]/40 light:hover:bg-zinc-900 md:block"
-      style={{ [dir]: "20px" }}
-      aria-label={dir === "left" ? "Previous" : "Next"}
-    >
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {dir === "left" ? <path d="M11 4L6 9L11 14" /> : <path d="M7 4L12 9L7 14" />}
-      </svg>
-    </button>
-  );
-}
-
-// ─── Slide transition variants ────────────────────────────────
-const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? "100%" : "-100%", opacity: 0 }),
-  center: { x: "0%", opacity: 1 },
-  exit: (dir: number) => ({ x: dir < 0 ? "100%" : "-100%", opacity: 0 }),
-};
-
-// ─── Slide content ──────────────────────────────────────────
-function SlideContent({ slide, onOpenCV }: { slide: SlideDef; onOpenCV: () => void }) {
-  const t = useTranslations("hero");
-  const logos = LOGOS[slide.logos] ?? [];
-
-  const line1 = { hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const, delay: 0.15 } } };
-  const line2 = { hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const, delay: 0.25 } } };
-
-  return (
-    <motion.div className="absolute inset-0" variants={slideVariants} custom={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
-      <BgCanvas accent={slide.accent} gradient={slide.gradient} />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-zinc-950/20 via-transparent to-zinc-950 light:from-transparent light:via-transparent light:to-transparent" />
-
-      {logos.map((logo) => <FloatingLogo key={logo.label} logo={logo} />)}
-
-      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col px-4 pb-20 md:px-6 md:pb-0">
-        {/* Mobile layout uses flex-col with visual flex-1 for consistent centering; desktop uses 3-col grid */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 md:grid md:grid-cols-[1fr_1.3fr_1fr] md:gap-6 lg:gap-10">
-          {/* Left: Title */}
-          <motion.div className="w-full pt-10 text-left md:pt-0 md:text-right" variants={line1} initial="hidden" animate="visible">
-            <ParallaxLayer depth={-0.35} className="inline-block">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#00feff]/80 light:rounded-full light:bg-zinc-900/85 light:px-2.5 light:py-1 light:text-[#00feff] md:text-[11px]">
-              {t(slide.subtitleKey)}
-            </p>
-            <h1 className="text-4xl font-semibold tracking-tight text-white light:text-ink md:text-5xl lg:text-6xl xl:text-7xl">
-              <span className="text-zinc-200 light:text-soft">{t(slide.titleKey1)}</span>
-              <br />
-              <span className="text-gradient-accent">{t(slide.titleKey2)}</span>
-            </h1>
-            </ParallaxLayer>
-          </motion.div>
-
-          {/* Center: Hero visual */}
-          <div className="flex w-full flex-1 items-center justify-center md:flex-none">
-            <motion.div variants={line2} initial="hidden" animate="visible" className="pb-20 md:pb-0">
-              <Tilt max={5}>
-              {slide.heroType === "profile" ? (
-                <div className="relative flex items-center justify-center">
-                  {/* Dark glow */}
-                  <div className="pointer-events-none absolute h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl light:hidden md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, ${slide.accent}10 0%, ${slide.accent}05 40%, transparent 70%)` }} />
-                  {/* Light glow — soft teal halo that reads on the warm canvas */}
-                  <div className="pointer-events-none absolute hidden h-[min(700px,90vw)] w-[min(700px,90vw)] rounded-full blur-3xl light:block md:h-[700px] md:w-[700px]" style={{ background: `radial-gradient(circle at center, rgba(13,148,136,0.22) 0%, rgba(13,148,136,0.10) 45%, transparent 72%)` }} />
-                  <div className="pointer-events-none absolute h-[min(520px,84vw)] w-[min(520px,84vw)] rounded-full border border-[#00feff]/10 light:border-[#00feff]/60 md:h-[520px] md:w-[520px]" />
-                  <motion.div className="pointer-events-none absolute -right-2 top-8 h-3 w-3 rounded-full bg-[#00feff]/30 light:bg-[#0e7490]/75 md:-right-4 md:top-12 md:h-4 md:w-4"
-                    animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  />
-                  <motion.div className="pointer-events-none absolute -bottom-4 left-4 h-2 w-2 rounded-full bg-[#00feff]/20 light:bg-[#0e7490]/65 md:h-3 md:w-3"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
-                    transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
-                  />
-                  <motion.div className="pointer-events-none absolute -top-2 left-[20%] h-1.5 w-1.5 rounded-full bg-[#00feff]/40 light:bg-[#0e7490]/85 md:h-2 md:w-2"
-                    animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.7, 0.4] }}
-                    transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
-                  />
-                  <motion.div animate={{ y: [0, -7, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-                    <Image src="/images/hero/profile-cutout.png" alt="Cristian Hincapié" width={400} height={500} priority
-                      className="relative block h-auto w-[min(300px,80vw)] object-contain sm:w-[350px] md:w-[420px] lg:w-[480px] light:hidden" />
-                    <Image src="/images/hero/profile-cristian-light.webp" alt="Cristian Hincapié" width={440} height={603} priority
-                      className="relative hidden h-auto w-[min(300px,80vw)] object-contain light:block sm:w-[350px] md:w-[420px] lg:w-[480px]" />
-                  </motion.div>
-                  {slide.id === "product-designer" && (
-                    <div className="absolute left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4 md:hidden" style={{ top: "calc(100% - 70px)" }}>
-                      <Button animated onClick={onOpenCV}>{t("ctaCv")}</Button>
-                      <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
-                      <p className="text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-zinc-600 light:text-muted">
-                        <span className="block whitespace-nowrap">{t("tagline1")}</span>
-                        <span className="block whitespace-nowrap">{t("tagline2")}</span>
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ) : slide.heroType === "uxui" ? <UXUIVisual />
-              : slide.heroType === "process" ? <ProcessVisual t={t} />
-              : <ServiceDesignVisual t={t} />}
-              </Tilt>
-            </motion.div>
-          </div>
-
-          {/* Right: Description */}
-          <motion.div className="relative z-10 mb-13 flex w-full flex-col gap-5 md:mb-0" variants={line2} initial="hidden" animate="visible">
-            <ParallaxLayer depth={-0.45} className="flex flex-col gap-5">
-            <p className="text-sm leading-relaxed text-zinc-400 light:text-muted md:text-base lg:text-lg">{t(slide.descKey)}</p>
-            {slide.id === "product-designer" && <p className="text-xs text-zinc-500 light:text-faint">{t("roles")}</p>}
-            <div className="flex flex-wrap justify-center gap-3 md:justify-start">
-              {slide.id === "product-designer" && (
-                <Button animated onClick={onOpenCV} className="hidden md:inline-flex">{t("ctaCv")}</Button>
-              )}
-              {slide.id === "product-designer" ? (
-                <Button href="#proyectos" variant="outline" animated className="hidden md:inline-flex">{t("ctaProjects")}</Button>
-              ) : (
-                <Button href="#proyectos" variant="outline" animated>{t("ctaProjects")}</Button>
-              )}
-            </div>
-            </ParallaxLayer>
-            {slide.id === "product-designer" && (
-              <p className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-zinc-600 light:text-faint md:block">{t("tagline1")} · {t("tagline2")}</p>
-            )}
-          </motion.div>
+        </div>
+        <p className="text-[clamp(28px,4vw,52px)] font-semibold leading-none tracking-tight text-current">Aa</p>
+        <div className="flex flex-col gap-1.5">
+          <span className="h-1.5 w-[80%] rounded bg-current/40" />
+          <span className="h-1.5 w-[60%] rounded bg-current/25" />
         </div>
       </div>
+      <div className="flex flex-col justify-between gap-2">
+        <span className="flex h-[18%] items-center justify-center rounded-full bg-[#00feff] text-[9px] font-bold text-zinc-950">Button</span>
+        <span className="flex h-[18%] items-center justify-center rounded-full border border-current/40 text-[9px] font-semibold">Button</span>
+        <span className="relative h-[14%] w-[46%] rounded-full bg-[#00feff]/80">
+          <span className="absolute right-[6%] top-1/2 aspect-square h-[70%] -translate-y-1/2 rounded-full bg-white" />
+        </span>
+        <span className="flex gap-1.5">
+          <span className="rounded-full bg-current/15 px-2 py-0.5 text-[8px] font-semibold">Chip</span>
+          <span className="rounded-full bg-[#6366f1]/40 px-2 py-0.5 text-[8px] font-semibold">Tag</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function UiArt({ animate }: { animate: boolean }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
+      <div className="absolute inset-x-0 top-0 flex h-[13%] items-center gap-2 border-b border-white/10 px-[5%] light:border-zinc-900/10">
+        <span className="h-2 w-2 rounded-full bg-[#00feff]" />
+        <span className="h-1.5 w-[18%] rounded bg-current/50" />
+        <span className="ml-auto h-[46%] w-[16%] rounded-full bg-[#00feff]" />
+      </div>
+      <div className="absolute inset-x-[5%] top-[20%] grid h-[30%] grid-cols-3 gap-[3%]">
+        {[0.9, 0.6, 0.75].map((w, i) => (
+          <div key={i} className="flex flex-col justify-between rounded-lg bg-white/[0.06] p-[8%] light:bg-zinc-900/[0.05]">
+            <span className="h-1.5 rounded bg-current/30" style={{ width: `${w * 60}%` }} />
+            <span className="h-3 rounded bg-current/70" style={{ width: `${w * 70}%` }} />
+          </div>
+        ))}
+      </div>
+      <div className="absolute inset-x-[5%] bottom-[8%] top-[56%] rounded-lg bg-white/[0.05] light:bg-zinc-900/[0.04]">
+        <svg viewBox="0 0 300 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+          <defs>
+            <linearGradient id="ch-ui-fill" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stopColor="#00feff" stopOpacity="0.35" />
+              <stop offset="1" stopColor="#00feff" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 80 C 40 70, 60 40, 100 52 S 160 30, 200 36 S 260 12, 300 18 V100 H0Z" fill="url(#ch-ui-fill)" />
+          <motion.path
+            d="M0 80 C 40 70, 60 40, 100 52 S 160 30, 200 36 S 260 12, 300 18"
+            fill="none"
+            stroke="#00feff"
+            strokeWidth="2.5"
+            vectorEffect="non-scaling-stroke"
+            initial={{ pathLength: animate ? 0 : 1 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.6, delay: 1.1, ease }}
+          />
+        </svg>
+      </div>
+      {/* Selección estilo herramienta de diseño */}
+      <div className="absolute left-[3.5%] top-[18.5%] h-[33%] w-[31%] rounded-lg border border-[#00feff]">
+        {["-left-1 -top-1", "-right-1 -top-1", "-bottom-1 -left-1", "-bottom-1 -right-1"].map((p) => (
+          <span key={p} className={cn("absolute h-2 w-2 rounded-[2px] border border-[#00feff] bg-white", p)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const LAYER_ART = [ResearchArt, ArchitectureArt, WireframeArt, SystemArt] as const;
+
+function StackLayer({
+  index,
+  gap,
+  active,
+  children,
+  reduced,
+}: {
+  index: number;
+  gap: MotionValue<number>;
+  active: boolean;
+  children: ReactNode;
+  reduced: boolean;
+}) {
+  const z = useTransform(gap, (g) => g * index);
+  return (
+    <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ z }}>
+      <motion.div
+        className={cn(
+          "absolute inset-0 rounded-2xl border text-zinc-100 transition-[border-color,box-shadow,opacity,background-color] duration-700 light:text-zinc-800",
+          index === 4
+            ? "bg-zinc-950/85 light:bg-white/90"
+            : "bg-white/[0.035] light:bg-white/55",
+          active
+            ? "border-[#00feff]/55 opacity-100 shadow-[0_0_0_1px_rgba(0,254,255,0.08),0_30px_60px_-30px_rgba(0,254,255,0.55)] light:border-[#0e7490]/45"
+            : "border-white/10 opacity-[0.32] light:border-zinc-900/10",
+        )}
+        initial={reduced ? false : { opacity: 0, z: 260 }}
+        animate={{ opacity: active ? 1 : 0.32, z: 0 }}
+        transition={{ duration: 1.1, delay: reduced ? 0 : 0.35 + index * 0.14, ease }}
+      >
+        {children}
+      </motion.div>
     </motion.div>
   );
 }
 
-// ─── Main Hero ──────────────────────────────────────────────
-export function Hero() {
+function ProductStack({ slide }: { slide: number }) {
   const t = useTranslations("hero");
-  const [[slide, direction], setSlide] = useState([0, 1]);
-  const [isCVModalOpen, setIsCVModalOpen] = useState(false);
+  const reduced = !!useReducedMotion();
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState(false);
 
-  const goTo = useCallback((i: number) => setSlide(([c]) => [((i % SLIDES.length) + SLIDES.length) % SLIDES.length, i > c ? 1 : -1]), []);
-  const next = useCallback(() => setSlide(([c]) => [(c + 1) % SLIDES.length, 1]), []);
-  const prev = useCallback(() => setSlide(([c]) => [(c - 1 + SLIDES.length) % SLIDES.length, -1]), []);
-
+  // Scroll: al salir del hero las capas se ensamblan en un producto terminado.
+  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ["center center", "end start"] });
+  const assemble = useTransform(scrollYProgress, [0, 1], [1, 0.12]);
+  const hoverGap = useSpring(hover ? 1.35 : 1, { stiffness: 120, damping: 20 });
   useEffect(() => {
-    const timer = setInterval(next, 24000);
-    return () => clearInterval(timer);
-  }, [next]);
+    hoverGap.set(hover ? 1.35 : 1);
+  }, [hover, hoverGap]);
+  const gap = useTransform([assemble, hoverGap] as MotionValue<number>[], ([a, h]: number[]) => 54 * a * h);
+
+  // Puntero: inclinación sutil del producto.
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(my, [-1, 1], [62, 52]), { stiffness: 60, damping: 18 });
+  const rz = useSpring(useTransform(mx, [-1, 1], [-44, -32]), { stiffness: 60, damping: 18 });
+
+  const onMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (reduced || e.pointerType !== "mouse") return;
+      const r = wrapRef.current?.getBoundingClientRect();
+      if (!r) return;
+      mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+      my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+    },
+    [mx, my, reduced],
+  );
+
+  const active = ACTIVE_LAYERS[slide] ?? ACTIVE_LAYERS[0];
 
   return (
-    <section className="relative min-h-screen overflow-x-hidden border-b border-white/5 bg-zinc-950 light:border-line light:bg-canvas md:h-screen md:overflow-hidden">
-      <AnimatePresence mode="wait" custom={direction}>
-        <SlideContent key={slide} slide={SLIDES[slide]} onOpenCV={() => setIsCVModalOpen(true)} />
-      </AnimatePresence>
-
-      <ArrowBtn dir="left" onClick={prev} />
-      <ArrowBtn dir="right" onClick={next} />
-
-      {/* ── Floating dots ── */}
-      <div className="absolute bottom-20 left-4 z-30 flex items-center gap-2.5 md:bottom-24 md:left-8">
-        {SLIDES.map((s, i) => (
-          <button key={s.id} onClick={() => goTo(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-[#00feff]" : "w-1.5 bg-white/20 hover:bg-white/40 light:bg-zinc-900/25 light:hover:bg-zinc-900/50"}`}
-            aria-label={`Slide ${i + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* ── Floating stat cards ── */}
-      <ParallaxLayer depth={-0.6} className={`absolute bottom-[88px] right-4 z-30 gap-1.5 md:bottom-20 md:right-8 ${slide === 0 ? "flex" : "hidden md:flex"}`}>
-        {[
-          { val: t("statYearsValue"), label: t("statYearsLabel") },
-          { val: t("statSectorsValue"), label: t("statSectorsLabel") },
-          { val: t("statCraftValue"), label: t("statCraftLabel") },
-        ].map((card, i) => (
-          <div key={i}
-            className="flex w-[72px] flex-col items-center justify-center gap-0.5 rounded-xl border border-white/[0.08] bg-white/[0.06] px-1 py-2 text-center backdrop-blur-xl light:border-zinc-900/15 light:bg-zinc-900/[0.06] md:w-[84px] md:gap-1 md:rounded-2xl md:px-2 md:py-3">
-            <p className="text-[10px] font-semibold leading-tight text-white light:text-ink md:text-xs">{card.val}</p>
-            <p className="text-[7px] leading-tight text-zinc-500 light:text-faint md:text-[8px]">{card.label}</p>
-          </div>
-        ))}
-      </ParallaxLayer>
-
-      {/* Scroll */}
-      <div className="pointer-events-none absolute bottom-5 left-1/2 z-20 hidden -translate-x-1/2 md:block">
+    <figure
+      ref={wrapRef}
+      className="relative mx-auto w-full max-w-[620px] select-none"
+      onPointerMove={onMove}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => {
+        setHover(false);
+        mx.set(0);
+        my.set(0);
+      }}
+      aria-label={`${t("stackLabel")}: ${LAYER_KEYS.map((k) => t(k)).join(", ")}`}
+    >
+      <div className="relative mx-auto aspect-[1.12] w-full [perspective:1800px]">
         <motion.div
-          className="flex flex-col items-center gap-2"
-          animate={{ y: [0, -4, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-1/2 top-[50%] h-[56%] w-[80%] -translate-x-1/2 -translate-y-1/2 [transform-style:preserve-3d]"
+          style={{ rotateX: rx, rotateZ: rz }}
         >
-          <motion.div
-            className="flex h-7 w-[14px] items-start justify-center rounded-full border border-zinc-500/60 light:border-zinc-700/70 py-1.5"
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          >
-            <motion.div
-              className="h-[7px] w-[2px] rounded-full bg-[#00feff]"
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-          <motion.span
-            className="text-[9px] font-semibold uppercase tracking-[0.32em] text-zinc-500 light:text-faint"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          >
-            {t("scroll")}
-          </motion.span>
+          {/* sombra de contacto */}
+          <div className="absolute inset-[-6%] rounded-[40px] bg-[radial-gradient(closest-side,rgba(0,254,255,0.18),transparent)] blur-2xl light:bg-[radial-gradient(closest-side,rgba(14,116,144,0.22),transparent)]" />
+          {LAYER_ART.map((Art, i) => (
+            <StackLayer key={i} index={i} gap={gap} active={active.includes(i)} reduced={reduced}>
+              <Art />
+            </StackLayer>
+          ))}
+          <StackLayer index={4} gap={gap} active={active.includes(4)} reduced={reduced}>
+            <UiArt animate={!reduced} />
+          </StackLayer>
+        </motion.div>
+
+        {/* Cursor multijugador (como en una herramienta de diseño) */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute left-[46%] top-[30%] z-10"
+          animate={
+            reduced
+              ? undefined
+              : { x: [0, 70, 40, -30, 0], y: [0, 24, 80, 50, 0] }
+          }
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]">
+            <path d="M4 3l15 7-6.5 2L9 19z" fill="#00feff" stroke="#041416" strokeWidth="1.2" strokeLinejoin="round" />
+          </svg>
+          <span className="ml-4 mt-0.5 inline-block rounded-full rounded-tl-none bg-[#00feff] px-2.5 py-1 text-[11px] font-semibold text-zinc-950">
+            Cristian
+          </span>
         </motion.div>
       </div>
+
+      {/* Leyenda de capas (de arriba hacia abajo, como se ven) */}
+      <figcaption className="-mt-4 flex flex-col items-center gap-3">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-faint">{t("stackLabel")}</span>
+        <ol className="flex flex-wrap justify-center gap-x-5 gap-y-1.5">
+          {[...LAYER_KEYS].reverse().map((k, ri) => {
+            const i = LAYER_KEYS.length - 1 - ri;
+            const on = active.includes(i);
+            return (
+              <li
+                key={k}
+                className={cn(
+                  "flex items-center gap-2 text-xs font-medium transition-colors duration-500",
+                  on ? "text-ink" : "text-faint",
+                )}
+              >
+                <span className={cn("tabular-nums", on ? "text-accent-text light:text-[#0e7490]" : "")}>0{i + 1}</span>
+                {t(k)}
+              </li>
+            );
+          })}
+        </ol>
+      </figcaption>
+    </figure>
+  );
+}
+
+/* ── Visual 1 · Product Designer: retrato como "frame" de diseño ── */
+
+function FloatChip({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+  const reduced = !!useReducedMotion();
+  return (
+    <motion.span
+      className={cn(
+        "glass-surface glass-blur absolute z-20 flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-semibold text-ink shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]",
+        className,
+      )}
+      initial={reduced ? false : { opacity: 0, scale: 0.8, y: 10 }}
+      animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1, y: [0, -8, 0] }}
+      transition={{
+        opacity: { duration: 0.6, delay: 0.3 + delay },
+        scale: { duration: 0.6, delay: 0.3 + delay, ease },
+        y: { duration: 5 + delay * 2, repeat: Infinity, ease: "easeInOut", delay: delay },
+      }}
+    >
+      <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#00feff] shadow-[0_0_8px_#00feff]" />
+      {children}
+    </motion.span>
+  );
+}
+
+function PortraitVisual() {
+  const t = useTranslations("hero");
+  const chips = t("roles").split("·").map((x) => x.trim());
+  const pos = ["left-[2%] top-[26%]", "right-[0%] top-[16%]", "left-[6%] bottom-[24%]", "right-[4%] bottom-[30%]"];
+  return (
+    <div className="relative mx-auto aspect-[1.05] w-full max-w-[580px]">
+      <div aria-hidden className="absolute left-1/2 top-[48%] h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,254,255,0.22),transparent)] blur-2xl light:bg-[radial-gradient(closest-side,rgba(14,116,144,0.18),transparent)]" />
+      {/* Marco de selección como en una herramienta de diseño */}
+      <div className="absolute left-1/2 top-[6%] h-[88%] w-[60%] -translate-x-1/2">
+        <span className="absolute -top-6 left-0 flex items-center gap-1.5 text-[11px] font-medium text-accent-text light:text-[#0e7490]">
+          <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 1v14M11 1v14M1 5h14M1 11h14" /></svg>
+          Cristian Hincapié — Product Designer
+        </span>
+        <div className="absolute inset-0 rounded-[2px] border border-[#00feff]/80 light:border-[#0e7490]/70">
+          {["-left-[5px] -top-[5px]", "-right-[5px] -top-[5px]", "-bottom-[5px] -left-[5px]", "-bottom-[5px] -right-[5px]"].map((c) => (
+            <span key={c} className={cn("absolute h-2.5 w-2.5 border border-[#00feff] bg-white light:border-[#0e7490]", c)} />
+          ))}
+        </div>
+        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 rounded bg-[#00feff] px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-zinc-950">
+          480 × 600
+        </span>
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
+            src="/images/hero/profile-cutout.png"
+            alt="Cristian Hincapié"
+            fill
+            priority
+            sizes="(max-width: 1024px) 60vw, 340px"
+            className="object-cover object-top light:hidden"
+          />
+          <Image
+            src="/images/hero/profile-cristian-light.webp"
+            alt="Cristian Hincapié"
+            fill
+            priority
+            sizes="(max-width: 1024px) 60vw, 340px"
+            className="hidden object-cover object-top light:block"
+          />
+        </div>
+      </div>
+      {chips.map((c, i) => (
+        <FloatChip key={c} className={pos[i % pos.length]} delay={i * 0.25}>
+          {c}
+        </FloatChip>
+      ))}
+    </div>
+  );
+}
+
+/* ── Visual 3 · Diseño UX/UI: del wireframe a la interfaz ─────── */
+
+function UxUiVisual() {
+  const t = useTranslations("hero");
+  const reduced = !!useReducedMotion();
+  const layers = ["Frame", "Header", "Hero card", "List", "Button"];
+  return (
+    <div className="relative mx-auto aspect-[1.05] w-full max-w-[580px] text-zinc-100 light:text-zinc-800">
+      <div className="glass-surface absolute inset-[6%_0%_8%_0%] overflow-hidden rounded-[26px]">
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:20px_20px] light:bg-[radial-gradient(rgba(24,24,27,0.09)_1px,transparent_1px)]" />
+        {/* Capas */}
+        <div className="absolute bottom-[6%] left-[4%] top-[6%] hidden w-[24%] space-y-1.5 rounded-2xl border border-white/10 bg-zinc-950/70 p-3 sm:block light:border-zinc-900/10 light:bg-white/85">
+          <p className="mb-2 text-[10px] font-semibold text-faint">{t("uiLayers")}</p>
+          {layers.map((l, i) => (
+            <p key={l} className={cn("flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[10px]", i === 2 ? "bg-[#00feff]/15 text-ink" : "text-muted")} style={{ paddingLeft: i ? 14 : 6 }}>
+              <span className={cn("h-2 w-2 rounded-[3px] border", i === 2 ? "border-[#00feff]" : "border-current/40")} />
+              {l}
+            </p>
+          ))}
+        </div>
+        {/* Pantalla: wireframe abajo, UI arriba revelándose */}
+        <div className="absolute left-1/2 top-1/2 aspect-[9/17] h-[84%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950 light:border-zinc-900/15 light:bg-white">
+          <div className="absolute inset-0 space-y-[6%] p-[9%]">
+            <span className="block h-[4%] w-1/2 rounded border border-dashed border-current/40" />
+            <span className="relative block h-[30%] rounded-lg border border-dashed border-current/40">
+              <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 100"><path d="M0 0L100 100M100 0L0 100" stroke="currentColor" strokeOpacity="0.25" vectorEffect="non-scaling-stroke" /></svg>
+            </span>
+            {[0, 1, 2].map((i) => (
+              <span key={i} className="flex items-center gap-2">
+                <span className="aspect-square w-[16%] rounded-md border border-dashed border-current/40" />
+                <span className="h-1.5 flex-1 rounded border border-dashed border-current/30" />
+              </span>
+            ))}
+            <span className="block h-[7%] rounded-full border border-dashed border-current/40" />
+          </div>
+          <motion.div
+            className="absolute inset-0 space-y-[6%] bg-zinc-950 p-[9%] light:bg-white"
+            initial={{ clipPath: "inset(0 100% 0 0)" }}
+            animate={reduced ? { clipPath: "inset(0 0% 0 0)" } : { clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)", "inset(0 100% 0 0)"] }}
+            transition={{ duration: 7, times: [0, 0.4, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="block h-[4%] w-1/2 rounded bg-current/70" />
+            <span className="block h-[30%] rounded-lg bg-gradient-to-br from-[#00feff] to-[#6366f1]" />
+            {[0, 1, 2].map((i) => (
+              <span key={i} className="flex items-center gap-2">
+                <span className={cn("aspect-square w-[16%] rounded-md", i === 1 ? "bg-[#6366f1]/60" : "bg-[#00feff]/40")} />
+                <span className="flex-1 space-y-1">
+                  <span className="block h-1.5 w-[80%] rounded bg-current/60" />
+                  <span className="block h-1.5 w-[50%] rounded bg-current/25" />
+                </span>
+              </span>
+            ))}
+            <span className="flex h-[7%] items-center justify-center rounded-full bg-[#00feff] text-[8px] font-bold text-zinc-950">CTA</span>
+          </motion.div>
+          <span className="absolute left-2 top-2 rounded-full bg-zinc-900/80 px-2 py-0.5 text-[9px] font-semibold text-zinc-300">Wireframe → UI</span>
+        </div>
+        {/* Propiedades */}
+        <div className="absolute bottom-[6%] right-[4%] top-[6%] hidden w-[24%] space-y-3 rounded-2xl border border-white/10 bg-zinc-950/70 p-3 text-[10px] sm:block light:border-zinc-900/10 light:bg-white/85">
+          <p className="font-semibold text-faint">{t("uiInspector")}</p>
+          <div className="grid grid-cols-2 gap-1.5 tabular-nums text-muted">
+            {["W 375", "H 812", "X 0", "Y 0"].map((v) => (
+              <span key={v} className="rounded bg-current/[0.06] px-1.5 py-1">{v}</span>
+            ))}
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-faint">Fill</p>
+            <div className="flex gap-1.5">
+              {["bg-[#00feff]", "bg-[#6366f1]", "bg-zinc-200", "bg-zinc-700"].map((c) => (
+                <span key={c} className={cn("h-4 w-4 rounded-full ring-1 ring-white/20", c)} />
+              ))}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <p className="text-faint">Type</p>
+            <p className="font-semibold text-ink">Figtree · 16/24</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-faint">Radius</p>
+            <span className="block h-1 overflow-hidden rounded bg-current/15"><span className="block h-full w-[60%] rounded bg-[#00feff]" /></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Visual 4 · Service Design: blueprint de servicio ───────── */
+
+function BlueprintVisual() {
+  const t = useTranslations("hero");
+  const reduced = !!useReducedMotion();
+  const lanes = [t("bpUser"), t("bpFront"), t("bpBack"), t("bpSupport")];
+  const cols = 5;
+  // nodos activos por carril (columna)
+  const nodes: [number, number][] = [
+    [0, 0], [1, 0], [2, 0], [3, 0], [4, 0],
+    [0, 1], [2, 1], [3, 1],
+    [1, 2], [2, 2], [4, 2],
+    [2, 3], [4, 3],
+  ];
+  return (
+    <div className="relative mx-auto aspect-[1.05] w-full max-w-[580px] text-zinc-100 light:text-zinc-800">
+      <div className="glass-surface absolute inset-[6%_0%_8%_0%] overflow-hidden rounded-[26px] p-[5%]">
+        {/* Curva de emoción */}
+        <div className="relative h-[22%]">
+          <p className="absolute left-0 top-0 text-[10px] font-semibold text-faint">{t("bpEmotion")}</p>
+          <svg viewBox="0 0 400 80" preserveAspectRatio="none" className="absolute inset-x-[18%] bottom-0 top-[18%] h-[82%] w-[82%] overflow-visible" fill="none">
+            <motion.path
+              d="M0 50 C 40 20, 80 70, 100 60 S 180 10, 200 30 S 280 75, 300 55 S 370 10, 400 15"
+              stroke="#00feff"
+              strokeWidth="2.5"
+              vectorEffect="non-scaling-stroke"
+              initial={{ pathLength: reduced ? 1 : 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.8, ease }}
+            />
+            {[[0, 50], [100, 60], [200, 30], [300, 55], [400, 15]].map(([x, y], i) => (
+              <circle key={i} cx={x} cy={y} r="4.5" fill="#00feff" />
+            ))}
+          </svg>
+        </div>
+        {/* Carriles */}
+        <div className="relative mt-[4%] grid h-[70%] grid-rows-4">
+          {lanes.map((lane, r) => (
+            <div key={lane} className={cn("relative grid grid-cols-[18%_1fr] items-center border-t", r === 2 ? "border-dashed border-[#00feff]/40" : "border-white/10 light:border-zinc-900/10")}>
+              <span className="pr-2 text-[10px] font-semibold leading-tight text-muted">{lane}</span>
+              <div className="relative grid h-full items-center" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+                {Array.from({ length: cols }).map((_, c) => {
+                  const on = nodes.some(([nc, nr]) => nc === c && nr === r);
+                  return (
+                    <span key={c} className="flex justify-center">
+                      {on && (
+                        <motion.span
+                          className={cn(
+                            "h-[clamp(14px,2.4vw,22px)] w-[70%] rounded-md border",
+                            r === 0 ? "border-[#00feff]/70 bg-[#00feff]/20" : r === 1 ? "border-[#6366f1]/60 bg-[#6366f1]/25" : "border-white/20 bg-white/[0.06] light:border-zinc-900/15 light:bg-zinc-900/[0.04]",
+                          )}
+                          initial={reduced ? false : { opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.3 + c * 0.12 + r * 0.06, ease }}
+                        />
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          {/* conectores verticales (columna 2: un momento de verdad atraviesa todos los carriles) */}
+          <motion.span
+            aria-hidden
+            className="absolute bottom-[12%] top-[12%] w-px origin-top bg-[#00feff]/70"
+            style={{ left: `calc(18% + (82% / ${cols}) * 2.5)` }}
+            initial={{ scaleY: reduced ? 1 : 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 1, delay: 1, ease }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RoleVisual({ slide }: { slide: number }) {
+  const reduced = !!useReducedMotion();
+  return (
+    <div className="relative [perspective:1600px]">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={slide}
+          initial={reduced ? false : { opacity: 0, rotateY: -10, scale: 0.96, filter: "blur(10px)" }}
+          animate={{ opacity: 1, rotateY: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.8, ease } }}
+          exit={reduced ? undefined : { opacity: 0, rotateY: 8, scale: 0.97, filter: "blur(8px)", transition: { duration: 0.3 } }}
+        >
+          {slide === 0 && <PortraitVisual />}
+          {slide === 1 && <ProductStack slide={0} />}
+          {slide === 2 && <UxUiVisual />}
+          {slide === 3 && <BlueprintVisual />}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ── Marquee de la profesión (sin nombres de empresas) ─────── */
+
+function MarqueeRow({ items, reverse, muted }: { items: string[]; reverse?: boolean; muted?: boolean }) {
+  const row = (
+    <span className="flex shrink-0 items-center gap-8 pr-8">
+      {items.map((w) => (
+        <span key={w} className="flex items-center gap-8 whitespace-nowrap">
+          {w}
+          <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-[#00feff]/80 light:bg-[#0e7490]" />
+        </span>
+      ))}
+    </span>
+  );
+  return (
+    <div
+      className={cn(
+        "flex w-max",
+        reverse ? "animate-[ch-marquee_70s_linear_infinite_reverse]" : "animate-[ch-marquee_60s_linear_infinite]",
+        "group-hover:[animation-play-state:paused] motion-reduce:animate-none",
+        muted ? "text-faint" : "text-soft",
+      )}
+    >
+      {row}
+      <span aria-hidden className="flex">
+        {row}
+      </span>
+    </div>
+  );
+}
+
+export function ProfessionMarquee() {
+  const t = useTranslations("hero");
+  const split = (s: string) => s.split("·").map((x) => x.trim()).filter(Boolean);
+  const a = split(t("marquee"));
+  const b = [...split(t("roles")), t("tagline1"), ...split(t("tagline2")), ...split(t("marquee2"))];
+  return (
+    <div
+      className="group relative space-y-3 overflow-hidden border-y border-line py-6 text-sm font-medium tracking-tight md:text-base [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]"
+      aria-label={a.join(", ")}
+    >
+      <MarqueeRow items={a} />
+      <MarqueeRow items={b} reverse muted />
+    </div>
+  );
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+
+export function Hero() {
+  const t = useTranslations("hero");
+  const reduced = !!useReducedMotion();
+  const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [isCVModalOpen, setIsCVModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (reduced || paused) return;
+    const id = window.setTimeout(() => setSlide((s) => (s + 1) % SLIDES.length), SLIDE_MS);
+    return () => window.clearTimeout(id);
+  }, [slide, paused, reduced]);
+
+  const n = SLIDES[slide];
+  const title1 = t(`slide${n}Title1`);
+  const title2 = t(`slide${n}Title2`);
+
+  const stats = [
+    { v: t("statYearsValue"), l: t("statYearsLabel") },
+    { v: t("statSectorsValue"), l: t("statSectorsLabel") },
+    { v: t("statCraftValue"), l: t("statCraftLabel") },
+  ];
+
+  return (
+    <section id="inicio" className="relative isolate overflow-hidden">
+      {/* Fondo: aurora de marca + lienzo de puntos (como el canvas de una herramienta de diseño) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(900px_520px_at_12%_8%,rgba(0,254,255,0.16),transparent_62%),radial-gradient(820px_560px_at_88%_30%,rgba(99,102,241,0.16),transparent_60%)] light:bg-[radial-gradient(900px_520px_at_12%_8%,rgba(13,148,136,0.16),transparent_62%),radial-gradient(820px_560px_at_88%_30%,rgba(99,102,241,0.14),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_45%,#000,transparent)] light:bg-[radial-gradient(rgba(24,24,27,0.12)_1px,transparent_1px)]" />
+      </div>
+
+      <div className="mx-auto grid min-h-[calc(100svh-72px)] max-w-6xl items-center gap-10 px-4 pb-10 pt-8 md:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6 lg:pb-16">
+        <div
+          className="relative z-10 flex flex-col gap-6"
+          onPointerEnter={() => setPaused(true)}
+          onPointerLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+        >
+          <motion.p
+            className="flex items-center gap-2.5 text-sm text-muted"
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00feff] opacity-50 motion-reduce:animate-none" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00feff]" />
+            </span>
+            {t("kicker")}
+          </motion.p>
+
+          <h1 className="relative">
+            <span className="sr-only">
+              {t("line1")} {t("line2")}
+            </span>
+            <span aria-hidden className="block min-h-[2.1em] text-[clamp(3rem,8.4vw,6.6rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span key={slide} className="block" initial="out" animate="in" exit="exit">
+                  {[title1, title2].map((line, li) => (
+                    <span key={li} className="block overflow-hidden pb-[0.06em]">
+                      {line.split(" ").map((word, wi) => (
+                        <motion.span
+                          key={wi}
+                          className={cn("mr-[0.22em] inline-block", li === 1 && "text-gradient-accent")}
+                          variants={{
+                            out: { y: "100%", opacity: 0, filter: "blur(8px)" },
+                            in: { y: "0%", opacity: 1, filter: "blur(0px)", transition: { duration: 0.8, delay: li * 0.08 + wi * 0.05, ease } },
+                            exit: { y: "-60%", opacity: 0, filter: "blur(6px)", transition: { duration: 0.35, ease } },
+                          }}
+                        >
+                          {word}
+                        </motion.span>
+                      ))}
+                    </span>
+                  ))}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          </h1>
+
+          <div className="min-h-[7.5rem] max-w-xl space-y-3" aria-live="polite">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={slide}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.15, ease } }}
+                exit={{ opacity: 0, y: -6, transition: { duration: 0.25 } }}
+                className="space-y-3"
+              >
+                <p className="text-lg font-medium text-ink md:text-xl">{t(`slide${n}Subtitle`)}</p>
+                <p className="text-pretty text-base leading-relaxed text-muted md:text-lg">{t(`slide${n}Desc`)}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="#proyectos"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#00feff] px-6 py-3.5 text-sm font-semibold text-zinc-950 shadow-[0_0_40px_rgba(0,254,255,0.25)] transition hover:bg-[#7afcff] hover:shadow-[0_0_60px_rgba(0,254,255,0.4)]"
+            >
+              {t("ctaProjects")}
+              <svg viewBox="0 0 24 24" className="h-4 w-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M12 5v14M6 13l6 6 6-6" />
+              </svg>
+            </a>
+            <button
+              type="button"
+              onClick={() => setIsCVModalOpen(true)}
+              className="glass-surface inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-ink transition hover:text-accent-text light:hover:text-[#0e7490]"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+                <path d="M14 3v5h5M9 13h6M9 17h4" />
+              </svg>
+              {t("ctaCv")}
+            </button>
+          </div>
+
+          {/* Roles: tarjetas accionables que cambian la ilustración */}
+          <div className="mt-1 space-y-3">
+            <p className="flex items-center gap-2 text-xs font-medium text-faint">
+              <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4 text-accent-text light:text-[#0e7490]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.5a6 6 0 0 1-4.6-2.2L4.5 15a1.5 1.5 0 0 1 2.3-1.9L9 15" />
+              </svg>
+              {t("rolesHint")}
+            </p>
+            <div role="tablist" aria-label={t("rolesLabel")} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {SLIDES.map((sn, i) => {
+                const on = i === slide;
+                return (
+                  <button
+                    key={sn}
+                    role="tab"
+                    aria-selected={on}
+                    aria-controls="hero-visual"
+                    onClick={() => {
+                      setSlide(i);
+                    }}
+                    className={cn(
+                      "group relative flex min-h-[84px] cursor-pointer flex-col justify-between gap-3 overflow-hidden rounded-2xl border p-3 text-left transition-all duration-300",
+                      "hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00feff]/70",
+                      on
+                        ? "border-[#00feff]/60 bg-[#00feff]/[0.08] shadow-[0_18px_40px_-24px_rgba(0,254,255,0.8)] light:border-[#0e7490]/50 light:bg-[#0e7490]/[0.06]"
+                        : "border-line-strong bg-white/[0.02] hover:border-[#00feff]/40 hover:bg-white/[0.04] light:bg-white/60",
+                    )}
+                  >
+                    <span className="flex items-center justify-between">
+                      <span
+                        className={cn(
+                          "flex h-7 w-7 items-center justify-center rounded-full transition-colors",
+                          on ? "bg-[#00feff] text-zinc-950" : "bg-white/[0.06] text-soft group-hover:text-ink light:bg-zinc-900/[0.06]",
+                        )}
+                      >
+                        {ROLE_ICONS[i]}
+                      </span>
+                      <svg aria-hidden viewBox="0 0 16 16" className={cn("h-3.5 w-3.5 transition-all", on ? "text-accent-text light:text-[#0e7490]" : "-translate-x-1 text-faint opacity-0 group-hover:translate-x-0 group-hover:opacity-100")} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                        <path d="M3 8h10M9 4l4 4-4 4" />
+                      </svg>
+                    </span>
+                    <span className={cn("text-[13px] font-semibold leading-tight", on ? "text-ink" : "text-soft group-hover:text-ink")}>
+                      {t(`slide${sn}Title1`)} {t(`slide${sn}Title2`)}
+                    </span>
+                    {on && (
+                      <motion.span
+                        key={`p-${slide}-${paused}`}
+                        aria-hidden
+                        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-[#00feff]"
+                        initial={{ scaleX: reduced ? 1 : 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: reduced || paused ? 0 : SLIDE_MS / 1000, ease: "linear" }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <dl className="mt-2 grid grid-cols-[auto_1fr_1fr] divide-x divide-line border-t border-line pt-5 text-sm">
+            {stats.map((s, i) => (
+              <div key={i} className={cn("space-y-1 px-4 first:pl-0", i === 0 && "pr-6")}>
+                <dt className="text-[11px] text-faint">{s.l}</dt>
+                <dd className={cn("font-semibold text-ink", i === 0 ? "text-3xl tracking-tight text-accent-text light:text-[#0e7490]" : "text-[13px] leading-snug")}>{s.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div id="hero-visual" role="tabpanel" aria-label={`${t(`slide${n}Title1`)} ${t(`slide${n}Title2`)}`}>
+          <RoleVisual slide={slide} />
+        </div>
+      </div>
+
+      <ProfessionMarquee />
 
       <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
     </section>

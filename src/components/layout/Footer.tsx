@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { siteConfig } from "@/config/site";
+import { BrandMark } from "@/components/layout/Header";
 
 export function Footer() {
   const t = useTranslations("footer");
@@ -11,7 +12,10 @@ export function Footer() {
     <footer className="border-t border-line bg-canvas">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-14 md:flex-row md:items-end md:justify-between md:px-6">
         <div className="max-w-md space-y-4">
-          <p className="text-sm font-semibold text-ink">{t("title")}</p>
+          <div className="flex items-center gap-3">
+            <BrandMark className="h-11 w-11 text-ink" />
+            <p className="text-sm font-semibold text-ink">{t("title")}</p>
+          </div>
           <p className="text-sm leading-relaxed text-muted">{t("subtitle")}</p>
         </div>
         <div className="flex flex-wrap gap-6 text-sm text-muted">

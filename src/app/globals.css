@@ -1273,3 +1273,9 @@
 .cv-editor-panel {
   animation: cv-editor-in 0.18s ease-out;
 }
+
+/* ─── Propuesta 2026 · marquee de la profesión ──────────── */
+@keyframes ch-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
